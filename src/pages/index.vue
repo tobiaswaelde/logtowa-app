@@ -1,5 +1,8 @@
-<template>
-  <div>Home</div>
-  <v-btn>Button</v-btn>
-  <v-btn to="/projects">Projects</v-btn>
-</template>
+<template></template>
+
+<script setup lang="ts">
+const router = useRouter();
+onBeforeMount(() => {
+  router.replace('/groups');
+});
+</script>

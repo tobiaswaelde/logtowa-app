@@ -13,14 +13,14 @@
       </v-list-item>
     </template>
 
-    <project-group-item
+    <lazy-project-group-item
       v-for="child in children"
       :key="child.id"
       :value="child.id"
       :project-group="child"
     />
 
-    <project-item
+    <lazy-project-item
       v-for="project in projects"
       :key="project.id"
       :value="project.id"

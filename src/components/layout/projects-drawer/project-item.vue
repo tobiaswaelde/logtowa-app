@@ -1,5 +1,5 @@
 <template>
-  <v-menu v-model="contextMenuOpen" location="right center">
+  <v-menu v-model="contextMenuOpen" location="right top" scrim>
     <template v-slot:activator="{ props }">
       <v-list-item
         :value="value"
@@ -17,6 +17,11 @@
     </template>
 
     <v-list density="compact" style="padding: 0">
+      <v-list-item title="Edit" density="compact" @click="() => {}">
+        <template v-slot:prepend>
+          <IconEdit :size="20" style="margin-right: 8px" />
+        </template>
+      </v-list-item>
       <v-list-item title="Delete" density="compact" @click="() => {}">
         <template v-slot:prepend>
           <IconTrash :size="20" style="margin-right: 8px" />
@@ -27,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IconCube, IconTrash } from '@tabler/icons-vue';
+import { IconCube, IconEdit, IconTrash } from '@tabler/icons-vue';
 import { Project } from '../../../types/project';
 
 const props = defineProps<{

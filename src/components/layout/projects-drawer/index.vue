@@ -1,8 +1,8 @@
 <template>
-  <v-navigation-drawer :width="300">
+  <v-navigation-drawer :width="300" v-model="appStore.drawerOpen">
     <v-list v-model:opened="open">
       <v-list-subheader>Projects</v-list-subheader>
-      <project-group-item
+      <lazy-project-group-item
         v-for="projectGroup in projectGroups"
         :key="projectGroup.id"
         :value="projectGroup.id"
@@ -21,6 +21,8 @@
 <script lang="ts" setup>
 import { IconPlus } from '@tabler/icons-vue';
 import { ProjectGroup } from '@/types/project-group';
+
+const appStore = useAppStore();
 
 const open = ref<string[]>([]);
 

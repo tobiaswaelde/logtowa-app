@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/fonts/Comfortaa-VariableFont_wght.ttf');
+}
+
+* {
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+@import './lib/vuetify/index.scss';

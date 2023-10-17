@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <navbar />
-    <drawer />
+    <projects-drawer />
 
     <v-main>
       <slot></slot>

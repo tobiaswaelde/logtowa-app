@@ -2,7 +2,7 @@
   <v-navigation-drawer :width="300" v-model="appStore.drawerOpen">
     <v-list v-model:opened="open">
       <v-list-subheader>Projects</v-list-subheader>
-      <lazy-project-group-item
+      <lazy-project-group-list-item
         v-for="projectGroup in projectGroups"
         :key="projectGroup.id"
         :value="projectGroup.id"

@@ -1,6 +1,13 @@
 <template>
   <v-container>
     <v-row>
+      <v-col :cols="12">
+        <h1 class="text-h5">Projects</h1>
+      </v-col>
+    </v-row>
+    <v-divider style="margin-top: 10px; margin-bottom: 20px" />
+
+    <v-row>
       <v-col
         v-for="projectGroup in projectGroups"
         :key="projectGroup.id"
@@ -9,6 +16,10 @@
         :xl="4"
       >
         <project-group-item :projectGroup="projectGroup" />
+      </v-col>
+
+      <v-col :cols="12" :md="6" :xl="4">
+        <add-project-group-item />
       </v-col>
     </v-row>
   </v-container>

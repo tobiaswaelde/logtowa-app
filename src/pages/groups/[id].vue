@@ -7,7 +7,7 @@
       >
         <v-btn
           icon
-          @click="() => router.back()"
+          @click="goToParent"
           size="small"
           variant="flat"
           style="margin-right: 12px"
@@ -58,6 +58,14 @@ const router = useRouter();
 const http = useHttp();
 
 const projectGroup = ref<ProjectGroup>();
+
+const goToParent = () => {
+  if (projectGroup.value?.parent) {
+    router.push(`/groups/${projectGroup.value.parent.id}`);
+  } else {
+    router.push(`/groups`);
+  }
+};
 
 onBeforeMount(async () => {
   const id = route.params.id as string;

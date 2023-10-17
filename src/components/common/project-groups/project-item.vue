@@ -17,4 +17,6 @@ import { Project } from '@/types/project';
 const props = defineProps<{
   project: Project;
 }>();
+
+console.log(props.project);
 </script>

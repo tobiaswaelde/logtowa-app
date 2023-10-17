@@ -17,10 +17,6 @@
       >
         <project-group-item :projectGroup="projectGroup" />
       </v-col>
-
-      <v-col :cols="12" :md="6" :xl="4">
-        <add-project-group-item />
-      </v-col>
     </v-row>
   </v-container>
 </template>

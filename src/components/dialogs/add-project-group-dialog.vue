@@ -7,6 +7,27 @@
       <v-dialog v-model="dialogOpen" persistent>
         <v-card>
           <v-card-title>Create Project Group</v-card-title>
+          <v-divider />
+          <v-card-text>
+            <v-row>
+              <v-col :cols="12">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Name"
+                  hint="The name of the project group"
+                  required
+                  :maxlength="255"
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-divider />
+          <v-card-actions>
+            <v-spacer />
+            <v-btn color="error">Cancel</v-btn>
+            <v-btn variant="outlined" color="success">Save</v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </template>

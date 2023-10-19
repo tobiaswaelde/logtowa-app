@@ -1,10 +1,14 @@
 import { Project } from '../types/project';
-import { CreateProjectGroupDto, ProjectGroup } from '../types/project-group';
+import {
+  CreateProjectGroupDto,
+  ProjectGroup,
+  UpdateProjectGroupDto,
+} from '../types/project-group';
 
 export const useProjectGroups = defineStore('project-groups-store', () => {
   const http = useHttp();
 
-  const projectGroups = ref<ProjectGroup[]>([]);
+  const projectGroups = reactive<ProjectGroup[]>([]);
   const projectGroup = ref<ProjectGroup | null>(null);
 
   //#region state updates
@@ -16,6 +20,7 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
       updatedGroup: ProjectGroup,
     ) => {
       for (let i = 0; i < groups.length; i++) {
+        console.log(groups[i].id, updatedGroup.id);
         if (groups[i].id === updatedGroup.id) {
           // Replace the group with the updated group
           groups[i] = { ...updatedGroup };
@@ -40,7 +45,7 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
       // If the group doesn't exist anywhere in the object, check if the parent ID is set
       if (updatedGroup.parent?.id) {
         // Find the group with the parent ID and add the updated group as a child
-        const parentGroup = projectGroups.value.find(
+        const parentGroup = projectGroups.find(
           (group) => group.id === updatedGroup.parent!.id,
         );
 
@@ -48,11 +53,20 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
           if (!parentGroup.children) {
             parentGroup.children = [];
           }
+
+          const i = parentGroup.children.findIndex(
+            (x) => x.id === updatedGroup.id,
+          );
+          if (i !== -1) parentGroup.children.splice(i, 1);
+
           parentGroup.children.push(updatedGroup);
         }
       } else {
         // If the parent ID is not set, add it to the root
-        projectGroups.value.push(updatedGroup);
+        const i = projectGroups.findIndex((x) => x.id === updatedGroup.id);
+        if (i !== -1) projectGroups.splice(i, 1);
+
+        projectGroups.push(updatedGroup);
       }
     }
   };
@@ -84,7 +98,7 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
     };
 
     const foundAndUpdated = findAndUpdateGroup(
-      projectGroups.value,
+      projectGroups,
       project.group.id,
       project,
     );
@@ -113,7 +127,7 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
       }
     };
 
-    findAndDeleteRecursive(projectGroups.value, groupToDelete);
+    findAndDeleteRecursive(projectGroups, groupToDelete);
   };
   //#endregion
 
@@ -187,10 +201,29 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
   const createProjectGroup = async (data: CreateProjectGroupDto) => {
     try {
       const res = await http.post<ProjectGroup>(`/api/project-groups`, data);
-      const projectGroup = res.data;
+      const createdGroup = res.data;
 
-      updateState(projectGroup);
-      return projectGroup;
+      updateState(createdGroup);
+      return createdGroup;
+    } catch (err) {
+      return null;
+    }
+  };
+
+  const updateProjectGroup = async (
+    id: string,
+    data: UpdateProjectGroupDto,
+  ) => {
+    try {
+      const res = await http.patch<ProjectGroup>(
+        `/api/project-groups/${id}`,
+        data,
+      );
+      const updatedGroup = res.data;
+
+      updateState(updatedGroup);
+      projectGroup.value = updatedGroup;
+      return updatedGroup;
     } catch (err) {
       return null;
     }
@@ -198,7 +231,8 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
 
   onBeforeMount(async () => {
     console.log('before mount');
-    projectGroups.value = await getAllProjectGroups();
+    const groups = await getAllProjectGroups();
+    Object.assign(projectGroups, groups);
   });
 
   return {
@@ -209,5 +243,6 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
     findAndDeleteGroup,
     getProjectGroup,
     createProjectGroup,
+    updateProjectGroup,
   };
 });

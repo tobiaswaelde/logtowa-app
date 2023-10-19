@@ -13,7 +13,7 @@
       v-if="showRootGroupButtons || showGroupButtons"
     />
     <!-- <lazy-add-project-dialog v-if="showGroupButtons" /> -->
-    <!-- <lazy-edit-project-group-dialog v-if="showGroupButtons" /> -->
+    <lazy-edit-project-group-dialog v-if="showGroupButtons" />
     <!-- <lazy-edit-project-dialog v-if="showProjectButtons" /> -->
     <!-- <lazy-delete-project-group-dialog v-if="showGroupButtons" /> -->
     <!-- <lazy-delete-project-dialog v-if="showProjectButtons" /> -->

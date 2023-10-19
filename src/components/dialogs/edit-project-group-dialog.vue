@@ -23,7 +23,7 @@
               </v-col>
               <v-col :cols="12">
                 <v-text-field
-                  v-model="name"
+                  v-model="data.name"
                   variant="outlined"
                   density="compact"
                   label="Name"
@@ -50,41 +50,39 @@
 
 <script lang="ts" setup>
 import { IconEdit } from '@tabler/icons-vue';
-import { ProjectGroup } from '../../types/project-group';
 
-const route = useRoute();
-const http = useHttp();
+const projectGroupsStore = useProjectGroups();
+const { updateProjectGroup } = projectGroupsStore;
+const { projectGroup } = storeToRefs(projectGroupsStore);
 
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
-const name = ref<string>('');
+// const name = ref<string>('');
 
-watch([dialogOpen], async () => {
-  if (dialogOpen.value === true && route.name === 'groups-id') {
-    const id = route.params.id;
-    const res = await http.get<ProjectGroup>(`/api/project-groups/${id}`);
-    if (res) {
-      name.value = res.data.name;
-    }
+watch([projectGroup.value], () => {
+  if (projectGroup.value) {
+    data.name = projectGroup.value.name;
   }
+});
+const data = reactive({
+  name: projectGroup.value?.name ?? '',
 });
 
 const handleClose = () => {
-  name.value = '';
+  // name.value = projectGroup.value?.name ?? '';
+  data.name = projectGroup.value?.name ?? '';
   dialogOpen.value = false;
   error.value = false;
 };
-
 const handleSave = async () => {
-  try {
-    const id = route.params.id;
-    await http.patch<ProjectGroup>(`/api/project-groups/${id}`, {
-      name: name.value,
-    });
-    window.location.reload();
+  const id = projectGroup.value?.id;
+  if (!id) return;
+  const updatedGroup = await updateProjectGroup(id, data);
+  if (updatedGroup) {
     handleClose();
-  } catch (err) {
+    // window.location.reload();
+  } else {
     error.value = true;
   }
 };

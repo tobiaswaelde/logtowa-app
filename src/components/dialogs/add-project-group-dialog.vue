@@ -50,11 +50,8 @@
 
 <script lang="ts" setup>
 import { IconExclamationCircle, IconFolderPlus } from '@tabler/icons-vue';
-import { ProjectGroup } from '../../types/project-group';
 
 const router = useRouter();
-const route = useRoute();
-const http = useHttp();
 
 const projectGroupsStore = useProjectGroups();
 const { createProjectGroup } = projectGroupsStore;
@@ -64,13 +61,6 @@ const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
 const name = ref<string>('');
-
-const parent = computed<string | undefined>(() => {
-  if (route.name === 'groups-id') {
-    return route.params.id as string;
-  }
-  return undefined;
-});
 
 const handleClose = () => {
   name.value = '';

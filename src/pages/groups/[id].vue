@@ -1,25 +1,10 @@
 <template>
+  <project-groups-breadcrumb
+    v-if="projectGroup"
+    :project-group="projectGroup"
+  />
+  <v-divider />
   <v-container>
-    <v-row>
-      <v-col
-        :cols="12"
-        style="display: flex; flex-direction: row; align-items: center"
-      >
-        <v-btn
-          icon
-          @click="goToParent"
-          size="small"
-          variant="flat"
-          style="margin-right: 12px"
-        >
-          <IconArrowLeft />
-        </v-btn>
-        <h1 class="text-h5">
-          {{ projectGroup?.name }}
-        </h1>
-      </v-col>
-    </v-row>
-    <v-divider style="margin-top: 10px; margin-bottom: 20px" />
     <div
       v-if="
         projectGroup &&
@@ -50,31 +35,17 @@
 </template>
 
 <script lang="ts" setup>
-import { IconArrowLeft } from '@tabler/icons-vue';
-import { ProjectGroup } from '../../types/project-group';
+import { useProjectGroups } from '../../stores/project-groups';
 
 const route = useRoute();
-const router = useRouter();
-const http = useHttp();
 
-const projectGroup = ref<ProjectGroup>();
-
-const goToParent = () => {
-  if (projectGroup.value?.parent) {
-    router.push(`/groups/${projectGroup.value.parent.id}`);
-  } else {
-    router.push(`/groups`);
-  }
-};
+const projectGroupsStore = useProjectGroups();
+const { getProjectGroup } = projectGroupsStore;
+const { projectGroup } = storeToRefs(projectGroupsStore);
 
 onBeforeMount(async () => {
   const id = route.params.id as string;
-
-  const res = await http.get<ProjectGroup>(`/api/project-groups/${id}`);
-  projectGroup.value = res.data;
-
-  useHead({
-    title: projectGroup.value.name,
-  });
+  await getProjectGroup(id);
+  useHead({ title: projectGroup.value?.name });
 });
 </script>

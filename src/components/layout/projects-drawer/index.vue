@@ -20,15 +20,9 @@
 
 <script lang="ts" setup>
 import { IconPlus } from '@tabler/icons-vue';
-import { ProjectGroup } from '@/types/project-group';
 
 const appStore = useAppStore();
+const { projectGroups } = storeToRefs(useProjectGroups());
 
 const open = ref<string[]>([]);
-
-const projectGroups = ref<ProjectGroup[]>([]);
-
-const http = useHttp();
-const res = await http.get<ProjectGroup[]>('/api/project-groups');
-projectGroups.value = res.data;
 </script>

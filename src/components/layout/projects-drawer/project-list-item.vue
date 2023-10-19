@@ -15,13 +15,8 @@
 import { IconCube } from '@tabler/icons-vue';
 import { Project } from '../../../types/project';
 
-const props = defineProps<{
+defineProps<{
   value: string;
   project: Project;
 }>();
-
-const http = useHttp();
-const res = await http.get<Project>(`/api/projects/${props.project.id}`);
-
-const _project = res.data;
 </script>

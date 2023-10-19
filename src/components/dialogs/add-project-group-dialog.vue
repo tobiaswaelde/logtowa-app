@@ -56,6 +56,10 @@ const router = useRouter();
 const route = useRoute();
 const http = useHttp();
 
+const projectGroupsStore = useProjectGroups();
+const { createProjectGroup } = projectGroupsStore;
+const { projectGroup } = storeToRefs(projectGroupsStore);
+
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
@@ -74,14 +78,14 @@ const handleClose = () => {
   error.value = false;
 };
 const handleSave = async () => {
-  try {
-    const res = await http.post<ProjectGroup>(`/api/project-groups`, {
-      name: name.value,
-      parent: parent.value,
-    });
-    router.push(`/groups/${res.data.id}`);
+  const createdGroup = await createProjectGroup({
+    name: name.value,
+    parent: projectGroup.value?.id,
+  });
+  if (createdGroup) {
+    router.push(`/api/project-groups/${createdGroup.id}`);
     handleClose();
-  } catch (err) {
+  } else {
     error.value = true;
   }
 };

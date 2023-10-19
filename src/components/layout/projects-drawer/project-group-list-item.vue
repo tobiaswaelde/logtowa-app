@@ -14,14 +14,14 @@
     </template>
 
     <lazy-project-group-list-item
-      v-for="child in children"
+      v-for="child in projectGroup.children"
       :key="child.id"
       :value="child.id"
       :project-group="child"
     />
 
     <lazy-project-list-item
-      v-for="project in projects"
+      v-for="project in projectGroup.projects"
       :key="project.id"
       :value="project.id"
       :project="project"
@@ -36,23 +36,12 @@ import {
   IconFolder,
   IconFolderOpen,
 } from '@tabler/icons-vue';
-import { Project } from '../../../types/project';
 import { ProjectGroup } from '../../../types/project-group';
 
-const props = defineProps<{
+defineProps<{
   value: string;
   projectGroup: ProjectGroup;
 }>();
-
-const children = ref<ProjectGroup[]>([]);
-const projects = ref<Project[]>([]);
-
-const http = useHttp();
-const res = await http.get<ProjectGroup>(
-  `/api/project-groups/${props.projectGroup.id}`,
-);
-children.value = res.data.children;
-projects.value = res.data.projects;
 </script>
 
 <style lang="scss">

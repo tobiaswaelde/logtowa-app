@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IconEdit } from '@tabler/icons-vue';
+import { IconEdit, IconExclamationCircle } from '@tabler/icons-vue';
 
 const projectGroupsStore = useProjectGroups();
 const { updateProjectGroup } = projectGroupsStore;

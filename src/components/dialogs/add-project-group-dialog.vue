@@ -83,7 +83,7 @@ const handleSave = async () => {
     parent: projectGroup.value?.id,
   });
   if (createdGroup) {
-    router.push(`/api/project-groups/${createdGroup.id}`);
+    router.push(`/groups/${createdGroup.id}`);
     handleClose();
   } else {
     error.value = true;

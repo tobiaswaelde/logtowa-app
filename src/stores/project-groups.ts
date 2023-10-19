@@ -7,23 +7,10 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
   const projectGroups = ref<ProjectGroup[]>([]);
   const projectGroup = ref<ProjectGroup | null>(null);
 
-  // const updateState = (projectGroup: ProjectGroup) => {
-  //   const update = (updatedGroup: ProjectGroup, state: ProjectGroup[]) => {
-  //     for (const group of state) {
-  //       if (group.id === updatedGroup.id) {
-  //         group.name = updatedGroup.name;
-  //         group.parent = updatedGroup.parent;
-  //       } else {
-  //         update(updatedGroup, group.children);
-  //       }
-  //     }
-  //     return state;
-  //   };
-
-  //   return update(projectGroup, projectGroups.value);
-  // };
-
+  //#region state updates
   const updateState = (updatedGroup: ProjectGroup) => {
+    let found = false;
+
     const findAndUpdateGroup = (
       groups: ProjectGroup[],
       updatedGroup: ProjectGroup,
@@ -38,6 +25,7 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
             groups[i].parent = updatedGroup.parent;
           }
 
+          found = true;
           return;
         }
 
@@ -48,17 +36,62 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
       }
     };
 
-    // Check if the group exists in the state
-    const existingGroupIndex = projectGroups.value.findIndex(
-      (group) => group.id === updatedGroup.id,
+    if (!found) {
+      // If the group doesn't exist anywhere in the object, check if the parent ID is set
+      if (updatedGroup.parent?.id) {
+        // Find the group with the parent ID and add the updated group as a child
+        const parentGroup = projectGroups.value.find(
+          (group) => group.id === updatedGroup.parent!.id,
+        );
+
+        if (parentGroup) {
+          if (!parentGroup.children) {
+            parentGroup.children = [];
+          }
+          parentGroup.children.push(updatedGroup);
+        }
+      } else {
+        // If the parent ID is not set, add it to the root
+        projectGroups.value.push(updatedGroup);
+      }
+    }
+  };
+
+  const addProject = (project: Project) => {
+    const findAndUpdateGroup = (
+      groups: ProjectGroup[],
+      projectId: string,
+      projectToAdd: Project,
+    ) => {
+      for (const group of groups) {
+        if (group.id === projectId) {
+          // Check if the group has a projects array, and if not, create one
+          if (!group.projects) {
+            group.projects = [];
+          }
+
+          // Add the project to the group's projects
+          group.projects.push(projectToAdd);
+          return true; // Found and updated the group
+        } else if (
+          group.children &&
+          findAndUpdateGroup(group.children, projectId, projectToAdd)
+        ) {
+          return true; // Found and updated the group in the children
+        }
+      }
+      return false; // Group not found in this branch
+    };
+
+    const foundAndUpdated = findAndUpdateGroup(
+      projectGroups.value,
+      project.group.id,
+      project,
     );
 
-    if (existingGroupIndex !== -1) {
-      // If the group exists, update it
-      findAndUpdateGroup(projectGroups.value, updatedGroup);
-    } else {
-      // If the group doesn't exist, add it to the root level
-      projectGroups.value.push(updatedGroup);
+    if (!foundAndUpdated) {
+      // Handle the case where the group with the given ID is not found
+      console.error('Group not found for project:', project.name);
     }
   };
 
@@ -82,6 +115,7 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
 
     findAndDeleteRecursive(projectGroups.value, groupToDelete);
   };
+  //#endregion
 
   const findGroupPath = (
     groups: ProjectGroup[],
@@ -147,12 +181,16 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
     } catch (err) {
       projectGroup.value = null;
     }
+    return projectGroup.value;
   };
 
   const createProjectGroup = async (data: CreateProjectGroupDto) => {
     try {
       const res = await http.post<ProjectGroup>(`/api/project-groups`, data);
-      return res.data;
+      const projectGroup = res.data;
+
+      updateState(projectGroup);
+      return projectGroup;
     } catch (err) {
       return null;
     }
@@ -167,6 +205,8 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
     projectGroups,
     projectGroup: projectGroup,
     findGroupPath,
+    addProject,
+    findAndDeleteGroup,
     getProjectGroup,
     createProjectGroup,
   };

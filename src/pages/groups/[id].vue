@@ -45,7 +45,7 @@ const { projectGroup } = storeToRefs(projectGroupsStore);
 
 onBeforeMount(async () => {
   const id = route.params.id as string;
-  await getProjectGroup(id);
-  useHead({ title: projectGroup.value?.name });
+  const pg = await getProjectGroup(id);
+  useHead({ title: pg?.name });
 });
 </script>

@@ -14,18 +14,13 @@ const props = defineProps<{ projectGroup?: ProjectGroup }>();
 
 const projectGroupsStore = useProjectGroups();
 const { findGroupPath, projectGroups } = projectGroupsStore;
-// const { projectGroups } = storeToRefs(projectGroupsStore);
-
-console.log('GROUPS:', projectGroups);
 
 const items = computed(() => {
-  console.log('update breadcrumb', projectGroups);
   const items = [{ title: 'Projects', to: '/groups' }];
 
   if (props.projectGroup) {
     const path = findGroupPath(projectGroups, props.projectGroup.id);
     if (path) {
-      console.log('PATH:', path);
       const subitems = path.map((x) => ({
         title: x.name,
         to: `/groups/${x.id}`,

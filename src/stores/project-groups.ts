@@ -42,33 +42,67 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
     };
 
     if (!found) {
-      // If the group doesn't exist anywhere in the object, check if the parent ID is set
-      if (updatedGroup.parent?.id) {
-        // Find the group with the parent ID and add the updated group as a child
-        const parentGroup = projectGroups.find(
-          (group) => group.id === updatedGroup.parent!.id,
-        );
+      console.log('NOT FOUND', updatedGroup);
 
-        if (parentGroup) {
-          if (!parentGroup.children) {
-            parentGroup.children = [];
+      // // If the group doesn't exist anywhere in the object, check if the parent ID is set
+      // if (updatedGroup.parent?.id) {
+      //   // Find the group with the parent ID and add the updated group as a child
+      //   const parentGroup = projectGroups.find(
+      //     (group) => group.id === updatedGroup.parent!.id,
+      //   );
+
+      //   if (parentGroup) {
+      //     if (!parentGroup.children) {
+      //       parentGroup.children = [];
+      //     }
+
+      //     const i = parentGroup.children.findIndex(
+      //       (x) => x.id === updatedGroup.id,
+      //     );
+      //     if (i !== -1) parentGroup.children.splice(i, 1);
+
+      //     parentGroup.children.push(updatedGroup);
+      //   }
+      // } else {
+      //   // If the parent ID is not set, add it to the root
+      //   const i = projectGroups.findIndex((x) => x.id === updatedGroup.id);
+      //   if (i !== -1) projectGroups.splice(i, 1);
+
+      //   projectGroups.push(updatedGroup);
+      // }
+
+      const updateGroupInArray = (
+        groups: ProjectGroup[],
+        updatedGroup: ProjectGroup,
+      ) => {
+        for (const element of groups) {
+          if (element.id === updatedGroup.id) {
+            // Replace the group with the updated group
+            Object.assign(element, updatedGroup);
+
+            // If the parent has changed, update the parent reference
+            if (element.parent?.id !== updatedGroup.parent?.id) {
+              element.parent = updatedGroup.parent;
+            }
+
+            found = true;
+            return;
           }
 
-          const i = parentGroup.children.findIndex(
-            (x) => x.id === updatedGroup.id,
-          );
-          if (i !== -1) parentGroup.children.splice(i, 1);
-
-          parentGroup.children.push(updatedGroup);
+          // Recursively search for the group in children
+          if (element.children) {
+            updateGroupInArray(element.children, updatedGroup);
+            if (found) {
+              return;
+            }
+          }
         }
-      } else {
-        // If the parent ID is not set, add it to the root
-        const i = projectGroups.findIndex((x) => x.id === updatedGroup.id);
-        if (i !== -1) projectGroups.splice(i, 1);
+      };
 
-        projectGroups.push(updatedGroup);
-      }
+      updateGroupInArray(projectGroups, updatedGroup);
     }
+
+    console.log({ projectGroups });
   };
 
   const addProject = (project: Project) => {

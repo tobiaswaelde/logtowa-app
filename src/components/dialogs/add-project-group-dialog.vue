@@ -23,7 +23,7 @@
               </v-col>
               <v-col :cols="12">
                 <v-text-field
-                  v-model="name"
+                  v-model="data.name"
                   variant="outlined"
                   density="compact"
                   label="Name"
@@ -60,16 +60,16 @@ const { projectGroup } = storeToRefs(projectGroupsStore);
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
-const name = ref<string>('');
+const data = reactive({ name: '' });
 
 const handleClose = () => {
-  name.value = '';
+  data.name = '';
   dialogOpen.value = false;
   error.value = false;
 };
 const handleSave = async () => {
   const createdGroup = await createProjectGroup({
-    name: name.value,
+    ...data,
     parent: projectGroup.value?.id,
   });
   if (createdGroup) {

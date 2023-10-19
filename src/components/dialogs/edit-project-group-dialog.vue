@@ -58,19 +58,17 @@ const { projectGroup } = storeToRefs(projectGroupsStore);
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
-// const name = ref<string>('');
-
-watch([projectGroup.value], () => {
-  if (projectGroup.value) {
-    data.name = projectGroup.value.name;
-  }
-});
 const data = reactive({
   name: projectGroup.value?.name ?? '',
 });
 
+watch([projectGroup], () => {
+  if (projectGroup.value) {
+    data.name = projectGroup.value.name;
+  }
+});
+
 const handleClose = () => {
-  // name.value = projectGroup.value?.name ?? '';
   data.name = projectGroup.value?.name ?? '';
   dialogOpen.value = false;
   error.value = false;
@@ -81,7 +79,6 @@ const handleSave = async () => {
   const updatedGroup = await updateProjectGroup(id, data);
   if (updatedGroup) {
     handleClose();
-    // window.location.reload();
   } else {
     error.value = true;
   }

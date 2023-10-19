@@ -15,7 +15,13 @@
         <v-col :cols="12">
           <h2 class="text-h6">Groups</h2>
         </v-col>
-        <v-col v-for="subgroup in projectGroup.children" :key="subgroup.id">
+        <v-col
+          v-for="subgroup in projectGroup.children"
+          :key="subgroup.id"
+          :cols="12"
+          :md="6"
+          :xl="4"
+        >
           <project-group-item :project-group="subgroup" />
         </v-col>
       </v-row>
@@ -23,7 +29,13 @@
         <v-col :cols="12">
           <h2 class="text-h6">Projects</h2>
         </v-col>
-        <v-col v-for="project in projectGroup.projects" :key="project.id">
+        <v-col
+          v-for="project in projectGroup.projects"
+          :key="project.id"
+          :cols="12"
+          :md="6"
+          :xl="4"
+        >
           <project-item :project="project" />
         </v-col>
       </v-row>

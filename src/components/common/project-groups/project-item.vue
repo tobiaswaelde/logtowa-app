@@ -14,9 +14,7 @@ import projectGroupItemVue from './project-group-item.vue';
 import { IconCube } from '@tabler/icons-vue';
 import { Project } from '@/types/project';
 
-const props = defineProps<{
+defineProps<{
   project: Project;
 }>();
-
-console.log(props.project);
 </script>

@@ -12,14 +12,13 @@ import { ProjectGroup } from '../../../../types/project-group';
 
 const props = defineProps<{ projectGroup?: ProjectGroup }>();
 
-const projectGroupsStore = useProjectGroups();
-const { findGroupPath, projectGroups } = projectGroupsStore;
+const { findGroupPath } = useProjectGroups();
 
 const items = computed(() => {
   const items = [{ title: 'Projects', to: '/groups' }];
 
   if (props.projectGroup) {
-    const path = findGroupPath(projectGroups, props.projectGroup.id);
+    const path = findGroupPath(props.projectGroup.id);
     if (path) {
       const subitems = path.map((x) => ({
         title: x.name,

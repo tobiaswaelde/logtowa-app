@@ -1,243 +1,64 @@
-import { Project } from '../types/project';
 import {
   CreateProjectGroupDto,
   ProjectGroup,
   UpdateProjectGroupDto,
 } from '../types/project-group';
 
-export const useProjectGroups = defineStore('project-groups-store', () => {
+export const useProjectGroups = defineStore('project-groups-store2', () => {
   const http = useHttp();
+  const route = useRoute();
 
-  const projectGroups = reactive<ProjectGroup[]>([]);
+  const projectGroups = reactive<Map<string, ProjectGroup>>(new Map());
   const projectGroup = ref<ProjectGroup | null>(null);
 
-  //#region state updates
-  const updateState = (updatedGroup: ProjectGroup) => {
-    let found = false;
-
-    const findAndUpdateGroup = (
-      groups: ProjectGroup[],
-      updatedGroup: ProjectGroup,
-    ) => {
-      for (let i = 0; i < groups.length; i++) {
-        console.log(groups[i].id, updatedGroup.id);
-        if (groups[i].id === updatedGroup.id) {
-          // Replace the group with the updated group
-          groups[i] = { ...updatedGroup };
-
-          // If the parent has changed, update the parent reference
-          if (groups[i].parent?.id !== updatedGroup.parent?.id) {
-            groups[i].parent = updatedGroup.parent;
-          }
-
-          found = true;
-          return;
-        }
-
-        // Recursively search for the group in children
-        if (groups[i].children) {
-          findAndUpdateGroup(groups[i].children, updatedGroup);
-        }
-      }
-    };
-
-    if (!found) {
-      console.log('NOT FOUND', updatedGroup);
-
-      // // If the group doesn't exist anywhere in the object, check if the parent ID is set
-      // if (updatedGroup.parent?.id) {
-      //   // Find the group with the parent ID and add the updated group as a child
-      //   const parentGroup = projectGroups.find(
-      //     (group) => group.id === updatedGroup.parent!.id,
-      //   );
-
-      //   if (parentGroup) {
-      //     if (!parentGroup.children) {
-      //       parentGroup.children = [];
-      //     }
-
-      //     const i = parentGroup.children.findIndex(
-      //       (x) => x.id === updatedGroup.id,
-      //     );
-      //     if (i !== -1) parentGroup.children.splice(i, 1);
-
-      //     parentGroup.children.push(updatedGroup);
-      //   }
-      // } else {
-      //   // If the parent ID is not set, add it to the root
-      //   const i = projectGroups.findIndex((x) => x.id === updatedGroup.id);
-      //   if (i !== -1) projectGroups.splice(i, 1);
-
-      //   projectGroups.push(updatedGroup);
-      // }
-
-      const updateGroupInArray = (
-        groups: ProjectGroup[],
-        updatedGroup: ProjectGroup,
-      ) => {
-        for (const element of groups) {
-          if (element.id === updatedGroup.id) {
-            // Replace the group with the updated group
-            Object.assign(element, updatedGroup);
-
-            // If the parent has changed, update the parent reference
-            if (element.parent?.id !== updatedGroup.parent?.id) {
-              element.parent = updatedGroup.parent;
-            }
-
-            found = true;
-            return;
-          }
-
-          // Recursively search for the group in children
-          if (element.children) {
-            updateGroupInArray(element.children, updatedGroup);
-            if (found) {
-              return;
-            }
-          }
-        }
-      };
-
-      updateGroupInArray(projectGroups, updatedGroup);
-    }
-
-    console.log({ projectGroups });
-  };
-
-  const addProject = (project: Project) => {
-    const findAndUpdateGroup = (
-      groups: ProjectGroup[],
-      projectId: string,
-      projectToAdd: Project,
-    ) => {
-      for (const group of groups) {
-        if (group.id === projectId) {
-          // Check if the group has a projects array, and if not, create one
-          if (!group.projects) {
-            group.projects = [];
-          }
-
-          // Add the project to the group's projects
-          group.projects.push(projectToAdd);
-          return true; // Found and updated the group
-        } else if (
-          group.children &&
-          findAndUpdateGroup(group.children, projectId, projectToAdd)
-        ) {
-          return true; // Found and updated the group in the children
-        }
-      }
-      return false; // Group not found in this branch
-    };
-
-    const foundAndUpdated = findAndUpdateGroup(
-      projectGroups,
-      project.group.id,
-      project,
-    );
-
-    if (!foundAndUpdated) {
-      // Handle the case where the group with the given ID is not found
-      console.error('Group not found for project:', project.name);
-    }
-  };
-
-  const findAndDeleteGroup = (groupToDelete: ProjectGroup) => {
-    const findAndDeleteRecursive = (
-      groups: ProjectGroup[],
-      groupToDelete: ProjectGroup,
-    ) => {
-      for (let i = 0; i < groups.length; i++) {
-        if (groups[i].id === groupToDelete.id) {
-          // Delete the group by splicing it out of the array
-          groups.splice(i, 1);
-          return;
-        }
-
-        if (groups[i].children) {
-          findAndDeleteRecursive(groups[i].children, groupToDelete);
-        }
-      }
-    };
-
-    findAndDeleteRecursive(projectGroups, groupToDelete);
-  };
-  //#endregion
-
-  const findGroupPath = (
-    groups: ProjectGroup[],
-    groupId: string,
-  ): ProjectGroup[] | null => {
-    const findGroupPathRecursive = (
-      currentGroup: ProjectGroup,
-      targetId: string,
-    ): ProjectGroup[] | null => {
-      if (currentGroup.id === targetId) {
-        return [currentGroup];
-      }
-
-      for (const childGroup of currentGroup.children) {
-        const pathFromChild = findGroupPathRecursive(childGroup, targetId);
-        if (pathFromChild) {
-          return [currentGroup, ...pathFromChild];
-        }
-      }
-
-      return null;
-    };
-
-    for (const group of groups) {
-      const groupPath = findGroupPathRecursive(group, groupId);
-      if (groupPath) {
-        return groupPath;
-      }
-    }
-
-    return null;
-  };
-
-  const getGroupWithChildren = async (id: string): Promise<ProjectGroup> => {
+  const getProjectGroups = async () => {
     try {
-      const res = await http.get<ProjectGroup>(`/api/project-groups/${id}`);
-      const group = res.data;
+      const res = await http.get<ProjectGroup[]>(`/api/project-groups`);
+      const groups = res.data;
 
-      let children: ProjectGroup[] = [];
-      for (const child of group.children) {
-        const g = await getGroupWithChildren(child.id);
-        children.push(g);
+      for (const group of groups) {
+        projectGroups.set(group.id, group);
       }
 
-      return { ...group, children };
-    } catch (err) {
-      console.log(err);
-      throw new Error('Error getting group with children.');
-    }
-  };
-  const getAllProjectGroups = async (): Promise<ProjectGroup[]> => {
-    const res = await http.get<ProjectGroup[]>(`/api/project-groups`);
-    const groups = await Promise.all(
-      res.data.map((group) => getGroupWithChildren(group.id)),
-    );
-    return groups;
+      return groups;
+    } catch (err) {}
   };
 
   const getProjectGroup = async (id: string) => {
     try {
-      const res = await http.get(`/api/project-groups/${id}`);
-      projectGroup.value = res.data;
-    } catch (err) {
-      projectGroup.value = null;
-    }
-    return projectGroup.value;
+      const res = await http.get<ProjectGroup>(`/api/project-groups/${id}`);
+      const group = res.data;
+
+      projectGroups.set(group.id, group);
+
+      return group;
+    } catch (err) {}
   };
 
+  const findGroupPath = (id: string): ProjectGroup[] => {
+    const path: ProjectGroup[] = [];
+
+    const currentGroup = projectGroups.get(id);
+    if (currentGroup) {
+      const parentId = currentGroup.parent?.id;
+      if (parentId) {
+        const parentPath = findGroupPath(parentId);
+        return [...parentPath, currentGroup];
+      } else {
+        return [currentGroup];
+      }
+    }
+
+    return path;
+  };
+
+  //#region CRUD
   const createProjectGroup = async (data: CreateProjectGroupDto) => {
     try {
       const res = await http.post<ProjectGroup>(`/api/project-groups`, data);
       const createdGroup = res.data;
 
-      updateState(createdGroup);
+      projectGroups.set(createdGroup.id, createdGroup);
       return createdGroup;
     } catch (err) {
       return null;
@@ -255,28 +76,47 @@ export const useProjectGroups = defineStore('project-groups-store', () => {
       );
       const updatedGroup = res.data;
 
-      updateState(updatedGroup);
-      projectGroup.value = updatedGroup;
+      projectGroups.set(id, updatedGroup);
       return updatedGroup;
     } catch (err) {
       return null;
     }
   };
 
+  const deleteProjectGroup = async (id: string) => {
+    try {
+      const res = await http.delete<ProjectGroup>(`/api/project-groups/${id}`);
+      const deletedGroup = res.data;
+
+      projectGroups.delete(deletedGroup.id);
+      return deletedGroup;
+    } catch (err) {
+      return null;
+    }
+  };
+  //#endregion
+
+  watch([route], () => {
+    if (route.name === 'groups-id') {
+      const id = route.params.id as string;
+      console.log(id);
+    } else {
+      console.log('reset current project');
+    }
+  });
+
   onBeforeMount(async () => {
-    console.log('before mount');
-    const groups = await getAllProjectGroups();
-    Object.assign(projectGroups, groups);
+    await getProjectGroups();
   });
 
   return {
     projectGroups,
-    projectGroup: projectGroup,
-    findGroupPath,
-    addProject,
-    findAndDeleteGroup,
+    projectGroup,
+    getProjectGroups,
     getProjectGroup,
+    findGroupPath,
     createProjectGroup,
     updateProjectGroup,
+    deleteProjectGroup,
   };
 });

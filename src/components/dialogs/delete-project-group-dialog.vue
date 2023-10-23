@@ -43,7 +43,8 @@
 
 <script lang="ts" setup>
 import { IconExclamationCircle, IconTrash } from '@tabler/icons-vue';
-import { ProjectGroup } from '../../types/project-group';
+
+const { deleteProjectGroup } = useProjectGroups();
 
 const router = useRouter();
 const route = useRoute();
@@ -57,20 +58,20 @@ watch([dialogOpen], () => {
 });
 
 const handleDelete = async () => {
-  try {
-    const id = route.params.id as string;
-    if (!id) return;
-    const res = await http.delete<ProjectGroup>(`/api/project-groups/${id}`);
+  const id = route.params.id as string;
+  if (!id) return;
 
-    if (res.data.parent) {
-      router.replace(`/groups/${res.data.parent.id}`);
+  const deletedGroup = await deleteProjectGroup(id);
+  if (deletedGroup) {
+    if (deletedGroup.parent) {
+      router.replace(`/groups/${deletedGroup.parent.id}`);
     } else {
       router.replace('/groups');
     }
 
     error.value = false;
     dialogOpen.value = false;
-  } catch (err) {
+  } else {
     error.value = true;
   }
 };

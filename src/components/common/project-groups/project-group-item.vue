@@ -13,7 +13,7 @@
 import { IconFolder } from '@tabler/icons-vue';
 import { ProjectGroup } from '@/types/project-group';
 
-const props = defineProps<{
+defineProps<{
   projectGroup: ProjectGroup;
 }>();
 </script>

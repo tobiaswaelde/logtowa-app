@@ -2,10 +2,10 @@
   <project-groups-breadcrumb />
   <v-divider />
   <v-container>
-    <div v-if="projectGroups.length > 0">
+    <div v-if="groups.length > 0">
       <v-row>
         <v-col
-          v-for="projectGroup in projectGroups"
+          v-for="projectGroup in groups"
           :key="projectGroup.id"
           :cols="12"
           :md="6"
@@ -22,19 +22,20 @@
 </template>
 
 <script lang="ts" setup>
-// const projectGroupsStore = useProjectGroups();
-// const { projectGroups, projectGroup } = storeToRefs(projectGroupsStore);
+import compareBy from 'compare-by';
 
-// onBeforeMount(async () => {
-//   projectGroup.value = null;
-//   useHead({ title: 'Project Groups' });
-// });
-
-const projectGroupsStore = useProjectGroups2();
+const projectGroupsStore = useProjectGroups();
 const { projectGroups } = projectGroupsStore;
 const { projectGroup } = storeToRefs(projectGroupsStore);
 
-// onBeforeMount(() => {
-//   projectGroup.value = null;
-// });
+const groups = computed(() =>
+  Array.from(projectGroups.values())
+    .filter((x) => !x.parent)
+    .sort(compareBy({ key: 'name' })),
+);
+
+onBeforeMount(() => {
+  useHead({ title: 'Projects' });
+  projectGroup.value = null;
+});
 </script>

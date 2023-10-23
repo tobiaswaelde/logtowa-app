@@ -50,6 +50,7 @@
 
 <script lang="ts" setup>
 import { IconEdit, IconExclamationCircle } from '@tabler/icons-vue';
+import { UpdateProjectGroupDto } from '../../types/project-group';
 
 const projectGroupsStore = useProjectGroups();
 const { updateProjectGroup } = projectGroupsStore;
@@ -58,11 +59,12 @@ const { projectGroup } = storeToRefs(projectGroupsStore);
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
-const data = reactive({
+const data = reactive<UpdateProjectGroupDto>({
   name: projectGroup.value?.name ?? '',
 });
 
 watch([projectGroup], () => {
+  console.log(projectGroup.value);
   if (projectGroup.value) {
     data.name = projectGroup.value.name;
   }
@@ -76,9 +78,11 @@ const handleClose = () => {
 const handleSave = async () => {
   const id = projectGroup.value?.id;
   if (!id) return;
+
   const updatedGroup = await updateProjectGroup(id, data);
   if (updatedGroup) {
     handleClose();
+    projectGroup.value = updatedGroup;
   } else {
     error.value = true;
   }

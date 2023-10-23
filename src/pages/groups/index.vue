@@ -22,11 +22,19 @@
 </template>
 
 <script lang="ts" setup>
-const projectGroupsStore = useProjectGroups();
-const { projectGroups, projectGroup } = storeToRefs(projectGroupsStore);
+// const projectGroupsStore = useProjectGroups();
+// const { projectGroups, projectGroup } = storeToRefs(projectGroupsStore);
 
-onBeforeMount(async () => {
-  projectGroup.value = null;
-  useHead({ title: 'Project Groups' });
-});
+// onBeforeMount(async () => {
+//   projectGroup.value = null;
+//   useHead({ title: 'Project Groups' });
+// });
+
+const projectGroupsStore = useProjectGroups2();
+const { projectGroups } = projectGroupsStore;
+const { projectGroup } = storeToRefs(projectGroupsStore);
+
+// onBeforeMount(() => {
+//   projectGroup.value = null;
+// });
 </script>

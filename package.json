@@ -20,6 +20,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@tabler/icons-vue": "^2.39.0",
     "axios": "^1.5.1",
+    "compare-by": "^2.1.0",
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
     "sass": "^1.69.3",

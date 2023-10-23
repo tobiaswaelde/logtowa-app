@@ -1961,6 +1961,11 @@ commondir@^1.0.1:
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
   integrity sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==
 
+compare-by@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/compare-by/-/compare-by-2.1.0.tgz#46f273dbfdaac446b73aaa884da812fc287a8973"
+  integrity sha512-1c6NXzWEy4+9TlBEPvz4Pxm6nfDSEMuDThFFQF8uLM4BA4XzE2WsUn9I+ghzuR9pOEL/NG2QKIicOP6K40eftg==
+
 compress-commons@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/compress-commons/-/compress-commons-5.0.1.tgz#e46723ebbab41b50309b27a0e0f6f3baed2d6590"

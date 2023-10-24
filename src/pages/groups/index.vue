@@ -24,6 +24,8 @@
 <script lang="ts" setup>
 import compareBy from 'compare-by';
 
+definePageMeta({ layout: 'project-groups' });
+
 const projectGroupsStore = useProjectGroups();
 const { projectGroups } = projectGroupsStore;
 const { projectGroup } = storeToRefs(projectGroupsStore);

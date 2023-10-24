@@ -45,6 +45,8 @@
 import compareBy from 'compare-by';
 import { ProjectGroup } from '../../types/project-group';
 
+definePageMeta({ layout: 'project-group' });
+
 const route = useRoute();
 const id = route.params.id as string;
 

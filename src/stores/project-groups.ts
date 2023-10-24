@@ -6,7 +6,6 @@ import {
 
 export const useProjectGroups = defineStore('project-groups-store2', () => {
   const http = useHttp();
-  const route = useRoute();
 
   const projectGroups = reactive<Map<string, ProjectGroup>>(new Map());
   const projectGroup = ref<ProjectGroup | null>(null);

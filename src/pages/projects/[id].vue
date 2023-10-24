@@ -8,6 +8,8 @@
 <script lang="ts" setup>
 import { Socket, io } from 'socket.io-client';
 
+definePageMeta({ layout: 'project' });
+
 const route = useRoute();
 
 const config = useRuntimeConfig();

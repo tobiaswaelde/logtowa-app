@@ -96,15 +96,6 @@ export const useProjectGroups = defineStore('project-groups-store2', () => {
   };
   //#endregion
 
-  watch([route], () => {
-    if (route.name === 'groups-id') {
-      const id = route.params.id as string;
-      console.log(id);
-    } else {
-      console.log('reset current project');
-    }
-  });
-
   onBeforeMount(async () => {
     await getProjectGroups();
   });

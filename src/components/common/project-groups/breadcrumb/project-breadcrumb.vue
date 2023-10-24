@@ -12,16 +12,12 @@ import { Project } from '../../../../types/project';
 
 const props = defineProps<{ project: Project }>();
 
-const projectsStore = useProjects();
-const { findProjectPath } = projectsStore;
-const { projectGroups } = storeToRefs(useProjectGroups());
+const { findProjectPath } = useProjects();
 
 const items = computed(() => {
-  console.log('update breadcrumb');
   const items = [{ title: 'Projects', to: '/groups' }];
 
-  const path = findProjectPath(projectGroups.value, props.project.id);
-  console.log('PATH:', path);
+  const path = findProjectPath(props.project);
   if (path) {
     const subitems = path.map((x) => ({
       title: x.name,

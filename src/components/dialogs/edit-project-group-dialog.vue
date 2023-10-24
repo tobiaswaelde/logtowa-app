@@ -64,7 +64,6 @@ const data = reactive<UpdateProjectGroupDto>({
 });
 
 watch([projectGroup], () => {
-  console.log(projectGroup.value);
   if (projectGroup.value) {
     data.name = projectGroup.value.name;
   }

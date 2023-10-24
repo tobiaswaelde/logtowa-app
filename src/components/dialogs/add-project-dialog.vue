@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IconCubePlus } from '@tabler/icons-vue';
+import { IconExclamationCircle, IconCubePlus } from '@tabler/icons-vue';
 import { CreateProjectDto } from '../../types/project';
 
 const router = useRouter();

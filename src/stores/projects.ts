@@ -1,4 +1,4 @@
-import { Project } from './../types/project';
+import { CreateProjectDto, Project } from './../types/project';
 import { useHttp } from './../composables/http';
 import { ProjectGroup } from '../types/project-group';
 
@@ -55,9 +55,19 @@ export const useProjects = defineStore('projects-store', () => {
     }
   };
 
+  const createProject = async (data: CreateProjectDto) => {
+    try {
+      const res = await http.post<Project>(`/api/projects`, data);
+      return res.data;
+    } catch (err) {
+      return null;
+    }
+  };
+
   return {
     project,
     findProjectPath,
     getProject,
+    createProject,
   };
 });

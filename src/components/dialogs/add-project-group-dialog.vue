@@ -54,9 +54,6 @@ import { CreateProjectGroupDto } from '../../types/project-group';
 
 const router = useRouter();
 
-// const projectGroupsStore = useProjectGroups();
-// const { createProjectGroup } = projectGroupsStore;
-// const { projectGroup } = storeToRefs(projectGroupsStore);
 const { createProjectGroup } = useProjectGroups();
 const { projectGroup } = storeToRefs(useProjectGroups());
 
@@ -66,24 +63,6 @@ const error = ref<boolean>(false);
 const data = reactive<CreateProjectGroupDto>({
   name: '',
 });
-
-// const handleClose = () => {
-//   data.name = '';
-//   dialogOpen.value = false;
-//   error.value = false;
-// };
-// const handleSave = async () => {
-//   const createdGroup = await createProjectGroup({
-//     ...data,
-//     parent: projectGroup.value?.id,
-//   });
-//   if (createdGroup) {
-//     router.push(`/groups/${createdGroup.id}`);
-//     handleClose();
-//   } else {
-//     error.value = true;
-//   }
-// };
 
 const handleClose = () => {
   data.name = '';

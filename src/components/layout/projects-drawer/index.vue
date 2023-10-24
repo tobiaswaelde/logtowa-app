@@ -9,17 +9,10 @@
         :project-group="projectGroup"
       />
     </v-list>
-
-    <div style="padding: 0px 8px; width: 100%">
-      <v-btn style="width: 100%" variant="outlined" color="primary">
-        <IconPlus />
-      </v-btn>
-    </div>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>
-import { IconPlus } from '@tabler/icons-vue';
 import compareBy from 'compare-by';
 
 const appStore = useAppStore();

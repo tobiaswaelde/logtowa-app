@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     public: {
       apiUrl: process.env.API_URL,
       apiToken: process.env.API_TOKEN,
+      socketToken: process.env.SOCKET_TOKEN,
     },
   },
 });

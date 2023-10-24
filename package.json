@@ -24,6 +24,7 @@
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
     "sass": "^1.69.3",
+    "socket.io-client": "^4.7.2",
     "vue-code-highlight": "^0.7.8",
     "vuetify": "^3.3.21"
   }

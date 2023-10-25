@@ -2,9 +2,8 @@
   <v-app>
     <navbar>
       <template v-slot:actions>
-        <v-btn icon>
-          <IconCode />
-        </v-btn>
+        <lazy-show-implementation-dialog />
+
         <v-btn icon>
           <IconDownload />
         </v-btn>

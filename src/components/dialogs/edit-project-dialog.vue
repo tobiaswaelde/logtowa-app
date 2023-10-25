@@ -4,15 +4,45 @@
       <v-btn icon v-bind="props" @click="dialogOpen = true">
         <IconEdit />
       </v-btn>
-      <v-dialog v-model="dialogOpen" persistent>
+      <v-dialog v-model="dialogOpen" persistent :max-width="500">
         <v-card>
           <v-card-title>Edit Project</v-card-title>
           <v-divider />
           <v-card-text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid,
-            rerum nam. Recusandae omnis soluta fuga amet reiciendis tempora
-            nihil, consequuntur voluptatem obcaecati repellendus quia et
-            doloremque modi ex dolor incidunt?
+            <v-row>
+              <v-col :cols="12" v-if="error">
+                <v-alert
+                  type="error"
+                  variant="elevated"
+                  title="Something went wrong"
+                >
+                  <template v-slot:prepend>
+                    <IconExclamationCircle />
+                  </template>
+                </v-alert>
+              </v-col>
+              <v-col :cols="12">
+                <v-text-field
+                  v-model="data.name"
+                  variant="outlined"
+                  density="compact"
+                  label="Name"
+                  hint="The name of the project"
+                  required
+                  :maxlength="255"
+                />
+              </v-col>
+              <v-col :cols="12">
+                <v-text-field
+                  v-model="data.repoUrl"
+                  variant="outlined"
+                  density="compact"
+                  label="Repository URL"
+                  hint="The URL to the projects repository"
+                  :maxlength="255"
+                />
+              </v-col>
+            </v-row>
           </v-card-text>
           <v-divider />
           <v-card-actions>
@@ -29,11 +59,11 @@
 </template>
 
 <script lang="ts" setup>
-import { IconEdit } from '@tabler/icons-vue';
+import { IconEdit, IconExclamationCircle } from '@tabler/icons-vue';
 import { UpdateProjectDto } from '../../types/project';
 
 const projectsStore = useProjects();
-const {} = projectsStore;
+const { updateProject } = projectsStore;
 const { project } = storeToRefs(projectsStore);
 
 const dialogOpen = ref<boolean>(false);
@@ -42,6 +72,13 @@ const error = ref<boolean>(false);
 const data = reactive<UpdateProjectDto>({
   name: project.value?.name ?? '',
   repoUrl: project.value?.repoUrl ?? '',
+});
+
+watch([project], () => {
+  if (project.value) {
+    data.name = project.value.name;
+    data.repoUrl = project.value.repoUrl;
+  }
 });
 
 const handleClose = () => {
@@ -54,12 +91,12 @@ const handleSave = async () => {
   const id = project.value?.id;
   if (!id) return;
 
-  // const updatedGroup = await updateProjectGroup(id, data);
-  // if (updatedGroup) {
-  //   handleClose();
-  //   projectGroup.value = updatedGroup;
-  // } else {
-  //   error.value = true;
-  // }
+  const updatedProject = await updateProject(id, data);
+  if (updatedProject) {
+    handleClose();
+    project.value = updatedProject;
+  } else {
+    error.value = true;
+  }
 };
 </script>

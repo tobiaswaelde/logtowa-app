@@ -6,6 +6,21 @@
 * {
   user-select: none;
 }
+pre {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100%;
+
+  code {
+    margin: 0 !important;
+    top: 0px !important;
+  }
+}
+pre code.hljs,
+pre code.hljs * {
+  user-select: text !important;
+  font-family: monospace !important;
+}
 
 ::-webkit-scrollbar {
   display: none;

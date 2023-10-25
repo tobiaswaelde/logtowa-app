@@ -16,7 +16,11 @@ export default defineNuxtConfig({
       { autoImports: ['defineStore', ['defineStore', 'definePiniaStore']] },
     ],
   ],
-  css: ['vuetify/styles/main.sass', '~/styles/main.scss'],
+  css: [
+    'vuetify/styles/main.sass',
+    '~/styles/main.scss',
+    'prismjs/themes/prism.min.css',
+  ],
   build: {
     transpile: ['vuetify'],
   },

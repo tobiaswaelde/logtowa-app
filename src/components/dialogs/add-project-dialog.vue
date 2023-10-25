@@ -32,6 +32,16 @@
                   :maxlength="255"
                 />
               </v-col>
+              <v-col :cols="12">
+                <v-text-field
+                  v-model="data.repoUrl"
+                  variant="outlined"
+                  density="compact"
+                  label="Repository URL"
+                  hint="The URL to the projects repository"
+                  :maxlength="255"
+                />
+              </v-col>
             </v-row>
           </v-card-text>
           <v-divider />

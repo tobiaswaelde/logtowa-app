@@ -1,5 +1,9 @@
 import { useProjectGroups } from './project-groups';
-import { CreateProjectDto, Project } from './../types/project';
+import {
+  CreateProjectDto,
+  Project,
+  UpdateProjectDto,
+} from './../types/project';
 import { useHttp } from './../composables/http';
 import { ProjectGroup } from '../types/project-group';
 
@@ -34,10 +38,20 @@ export const useProjects = defineStore('projects-store', () => {
     }
   };
 
+  const updateProject = async (id: string, data: UpdateProjectDto) => {
+    try {
+      const res = await http.patch<Project>(`/api/projects/${id}`, data);
+      return res.data;
+    } catch (err) {
+      return null;
+    }
+  };
+
   return {
     project,
     findProjectPath,
     getProject,
     createProject,
+    updateProject,
   };
 });

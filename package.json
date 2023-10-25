@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@types/prismjs": "^1.26.2",
     "nuxt": "^3.7.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
@@ -23,9 +24,11 @@
     "compare-by": "^2.1.0",
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
+    "prismjs": "^1.29.0",
     "sass": "^1.69.3",
     "socket.io-client": "^4.7.2",
-    "vue-code-highlight": "^0.7.8",
+    "vue-prismjs": "^1.2.0",
+    "vue3-highlightjs": "^1.0.5",
     "vuetify": "^3.3.21"
   }
 }

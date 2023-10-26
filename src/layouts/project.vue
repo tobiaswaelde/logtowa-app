@@ -25,5 +25,5 @@
 </template>
 
 <script setup lang="ts">
-import { IconCode, IconDownload } from '@tabler/icons-vue';
+import { IconDownload } from '@tabler/icons-vue';
 </script>

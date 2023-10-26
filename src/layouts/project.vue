@@ -2,6 +2,13 @@
   <v-app>
     <navbar>
       <template v-slot:actions>
+        <v-btn icon @click="toggleConnection">
+          <v-badge :color="connected ? 'success' : 'warning'" dot>
+            <IconPlayerPause v-if="connected" />
+            <IconPlayerPlay v-else />
+          </v-badge>
+        </v-btn>
+
         <lazy-show-implementation-dialog />
 
         <v-btn icon>
@@ -25,5 +32,20 @@
 </template>
 
 <script setup lang="ts">
-import { IconDownload } from '@tabler/icons-vue';
+import {
+  IconDownload,
+  IconPlayerPlay,
+  IconPlayerPause,
+} from '@tabler/icons-vue';
+
+const { connect, disconnect } = useLogs();
+const { connected } = storeToRefs(useLogs());
+
+const toggleConnection = () => {
+  if (connected.value) {
+    disconnect();
+  } else {
+    connect();
+  }
+};
 </script>

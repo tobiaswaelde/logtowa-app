@@ -12,6 +12,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@types/prismjs": "^1.26.2",
+    "@types/socket.io-client": "^3.0.0",
     "nuxt": "^3.7.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"

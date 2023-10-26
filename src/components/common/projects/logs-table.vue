@@ -69,6 +69,17 @@ import { LogMessage } from '@/types/log';
 //@ts-ignore
 import colors from 'vuetify/lib/util/colors';
 import moment from 'moment';
+import { useLogs } from '../../../stores/logs';
+
+const route = useRoute();
+const id = route.params.id as string;
+const logsStore = useLogs();
+const { logs } = storeToRefs(logsStore);
+logsStore.$state = { logs: [], projectId: id, connected: false };
+
+onMounted(() => {
+  logsStore.connect();
+});
 
 const HEADERS = [
   // { key: 'id', title: 'ID' },
@@ -135,7 +146,7 @@ const itemCount = ref<number>(0);
 const items = ref<LogMessage[]>([]);
 
 onMounted(async () => {
-  const res = await http.get<Paginated<LogMessage>>(`/api/logs`);
+  const res = await http.get<Paginated<LogMessage>>(`/api/projects/${id}/logs`);
   console.log(res.data.items[0]);
   itemCount.value = res.data.meta.itemCount;
   items.value.push(...res.data.items);

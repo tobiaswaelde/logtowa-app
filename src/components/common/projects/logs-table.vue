@@ -25,7 +25,7 @@
     </v-infinite-scroll>
   </v-data-table> -->
 
-  <v-data-table
+  <v-data-table-virtual
     fixed-header
     fixed-footer
     density="compact"
@@ -33,8 +33,7 @@
     :sort-desc-icon="IconArrowDown"
     :height="tableHeight"
     :headers="HEADERS"
-    :items-length="itemCount"
-    :items="items"
+    :items="logs"
     @click:row="
       (e, row) => {
         console.log(row.item);
@@ -43,10 +42,12 @@
   >
     <template v-slot:item="{ props, item }" style="cursor: pointer">
       <tr v-bind="props">
-        <td style="cursor: pointer">
+        <td style="cursor: pointer; font-family: monospace !important">
           {{ getTimestamp(item.timestamp) }}
         </td>
-        <td style="cursor: pointer">{{ item.scope }}</td>
+        <td style="cursor: pointer; font-family: monospace !important">
+          {{ item.scope }}
+        </td>
         <td style="cursor: pointer">
           <v-chip
             density="comfortable"
@@ -56,10 +57,12 @@
             {{ item.level }}
           </v-chip>
         </td>
-        <td style="cursor: pointer">{{ item.message }}</td>
+        <td style="cursor: pointer; font-family: monospace !important">
+          {{ item.message }}
+        </td>
       </tr>
     </template>
-  </v-data-table>
+  </v-data-table-virtual>
 </template>
 
 <script setup lang="ts">
@@ -75,7 +78,12 @@ const route = useRoute();
 const id = route.params.id as string;
 const logsStore = useLogs();
 const { logs } = storeToRefs(logsStore);
-logsStore.$state = { logs: [], projectId: id, connected: false };
+logsStore.$state = {
+  logs: [],
+  projectId: id,
+  connected: false,
+  listening: false,
+};
 
 onMounted(() => {
   logsStore.connect();
@@ -135,20 +143,20 @@ const tableHeight = computed(() => {
     headerHeight -
     breadcrumbHeight -
     filterHeight -
-    paginationHeight -
+    // paginationHeight -
     2
   );
 });
 
-const http = useHttp();
+// const http = useHttp();
 
-const itemCount = ref<number>(0);
-const items = ref<LogMessage[]>([]);
+// const itemCount = ref<number>(0);
+// const items = ref<LogMessage[]>([]);
 
-onMounted(async () => {
-  const res = await http.get<Paginated<LogMessage>>(`/api/projects/${id}/logs`);
-  console.log(res.data.items[0]);
-  itemCount.value = res.data.meta.itemCount;
-  items.value.push(...res.data.items);
-});
+// onMounted(async () => {
+//   const res = await http.get<Paginated<LogMessage>>(`/api/projects/${id}/logs`);
+//   console.log(res.data.items[0]);
+//   itemCount.value = res.data.meta.itemCount;
+//   items.value.push(...res.data.items);
+// });
 </script>

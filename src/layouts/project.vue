@@ -4,7 +4,7 @@
       <template v-slot:actions>
         <v-btn icon @click="toggleConnection">
           <v-badge :color="connected ? 'success' : 'warning'" dot>
-            <IconPlayerPause v-if="connected" />
+            <IconPlayerPause v-if="listening" />
             <IconPlayerPlay v-else />
           </v-badge>
         </v-btn>
@@ -38,14 +38,14 @@ import {
   IconPlayerPause,
 } from '@tabler/icons-vue';
 
-const { connect, disconnect } = useLogs();
-const { connected } = storeToRefs(useLogs());
+const { startListening, stopListening } = useLogs();
+const { connected, listening } = storeToRefs(useLogs());
 
 const toggleConnection = () => {
-  if (connected.value) {
-    disconnect();
+  if (listening.value) {
+    stopListening();
   } else {
-    connect();
+    startListening();
   }
 };
 </script>

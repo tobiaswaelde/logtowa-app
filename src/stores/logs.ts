@@ -10,10 +10,11 @@ export const useLogs = defineStore('logs-store', () => {
   const logs = ref<LogMessage[]>([]);
 
   const connected = ref<boolean>(false);
+  const listening = ref<boolean>(false);
 
   const connect = () => {
     console.log('try to connect', projectId.value);
-    if (!projectId.value) return;
+    if (!projectId.value || connected.value) return;
 
     socket.value = io(config.public.apiUrl, {
       autoConnect: true,
@@ -35,34 +36,50 @@ export const useLogs = defineStore('logs-store', () => {
         console.log('socket disconnected');
       });
     socket.value.connect();
-
-    socket.value.on(projectId.value, (x) => {
-      logs.value.push(x);
-    });
   };
   const disconnect = () => {
     if (socket.value) {
       if (socket.value.connected) {
         socket.value.disconnect();
       }
+      listening.value = false;
     }
   };
   const reconnect = () => {
     disconnect();
     connect();
+    startListening();
+  };
+
+  const startListening = () => {
+    if (socket.value && connected.value && projectId.value) {
+      socket.value.off(projectId.value);
+      socket.value.on(projectId.value, (x: LogMessage) => {
+        logs.value.push(x);
+      });
+      listening.value = true;
+    }
+  };
+  const stopListening = () => {
+    if (socket.value && projectId.value) {
+      socket.value.off(projectId.value);
+    }
+    socket.value?.offAny();
+    listening.value = false;
   };
 
   watch([projectId.value], () => {
     reconnect();
   });
 
-  // onMounted(() => {
-  //   connect();
-  //   console.log('mounted', projectId.value);
-  // });
-  // onUnmounted(() => {
-  //   disconnect();
-  // });
-
-  return { projectId, logs, connected, connect, disconnect };
+  return {
+    projectId,
+    logs,
+    connected,
+    listening,
+    connect,
+    disconnect,
+    startListening,
+    stopListening,
+  };
 });

@@ -67,8 +67,6 @@
 
 <script setup lang="ts">
 import { IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
-import { Paginated } from '@/types/pagination';
-import { LogMessage } from '@/types/log';
 //@ts-ignore
 import colors from 'vuetify/lib/util/colors';
 import moment from 'moment';
@@ -82,11 +80,12 @@ logsStore.$state = {
   logs: [],
   projectId: id,
   connected: false,
-  listening: false,
+  listening: true,
 };
 
 onMounted(() => {
   logsStore.connect();
+  logsStore.startListening();
 });
 
 const HEADERS = [

@@ -30,6 +30,10 @@ export const useLogs = defineStore('logs-store', () => {
       .on('connect', () => {
         connected.value = true;
         console.log('socket connected');
+
+        if (listening.value) {
+          startListening();
+        }
       })
       .on('disconnect', () => {
         connected.value = false;
@@ -52,7 +56,9 @@ export const useLogs = defineStore('logs-store', () => {
   };
 
   const startListening = () => {
+    console.log('start listening');
     if (socket.value && connected.value && projectId.value) {
+      console.log('subscribe');
       socket.value.off(projectId.value);
       socket.value.on(projectId.value, (x: LogMessage) => {
         logs.value.push(x);

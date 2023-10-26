@@ -1,8 +1,7 @@
 <template>
   <project-breadcrumb v-if="project" :project="project" />
   <v-divider />
-  <div>Project</div>
-  {{ logs }}
+  <project-logs />
 </template>
 
 <script lang="ts" setup>

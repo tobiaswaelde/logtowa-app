@@ -4,13 +4,25 @@ import * as directives from 'vuetify/directives';
 //@ts-ignore
 import colors from 'vuetify/lib/util/colors';
 
+// components
 import { VInfiniteScroll } from 'vuetify/labs/VInfiniteScroll';
+import {
+  VDataTable,
+  VDataTableServer,
+  VDataTableVirtual,
+} from 'vuetify/labs/VDataTable';
 
 export default defineNuxtPlugin((nuxt) => {
   const vuetify = createVuetify({
     ssr: true,
     directives,
-    components: { ...components, VInfiniteScroll },
+    components: {
+      ...components,
+      VInfiniteScroll,
+      VDataTable,
+      VDataTableServer,
+      VDataTableVirtual,
+    },
 
     theme: {
       defaultTheme: 'dark',

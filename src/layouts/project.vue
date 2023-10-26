@@ -12,7 +12,11 @@
         <lazy-delete-project-dialog />
       </template>
     </navbar>
+
     <projects-drawer />
+    <v-navigation-drawer :width="500" permanent location="end">
+      Log meta information
+    </v-navigation-drawer>
 
     <v-main>
       <slot></slot>

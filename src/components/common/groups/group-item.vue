@@ -1,19 +1,20 @@
 <template>
-  <v-card :to="`/groups/${projectGroup.id}`">
+  <v-card :to="`/groups/${group.id}`">
     <v-card-title
       style="display: flex; flex-direction: row; align-items: center"
     >
       <IconFolder style="margin-right: 12px" />
-      {{ projectGroup.name }}
+      {{ group.name }}
     </v-card-title>
   </v-card>
 </template>
 
 <script lang="ts" setup>
 import { IconFolder } from '@tabler/icons-vue';
-import { ProjectGroup } from '@/types/project-group';
+import { Group } from '@/types/group';
 
 defineProps<{
-  projectGroup: ProjectGroup;
+  group: Group;
 }>();
 </script>
+~/types/group

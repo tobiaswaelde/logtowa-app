@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { IconCode } from '@tabler/icons-vue';
-import { Project } from '../../types/project';
+import { App } from '@/types/app';
 
 const dialogOpen = ref<boolean>(false);
 const tab = ref<'node' | 'python' | 'java'>('node');
@@ -53,22 +53,22 @@ const data = reactive({
 });
 
 const config = useRuntimeConfig();
-const { project } = storeToRefs(useProjects());
+const { app } = storeToRefs(useApps());
 
 onBeforeMount(async () => {
-  if (!project.value) return;
-  data.codeNode = await getNodeImplementation(project.value);
+  if (!app.value) return;
+  data.codeNode = await getNodeImplementation(app.value);
 });
 
-watch([project], async () => {
-  if (!project.value) return;
-  data.codeNode = await getNodeImplementation(project.value);
+watch([app], async () => {
+  if (!app.value) return;
+  data.codeNode = await getNodeImplementation(app.value);
 });
 
-const getNodeImplementation = async (project: Project): Promise<string> => {
+const getNodeImplementation = async (app: App): Promise<string> => {
   const apiEndpoint = config.public.apiUrl;
   const apiToken = config.public.apiToken;
-  const projectKey = project.id;
+  const appKey = app.id;
 
   const res = `import { CloudLoggerTransport } from 'cloud-logger-transport';
 import winston from 'winston'
@@ -76,13 +76,13 @@ import winston from 'winston'
 // This information can be found in the web UI
 const HOST = '${apiEndpoint}';
 const API_TOKEN = '${apiToken}';
-const PROJECT_KEY = '${projectKey}';
+const APP_KEY = '${appKey}';
 
 // create the transport
 const cloudLoggerTransport = new CloudLoggerTransport({
   host: HOST,
   token: API_TOKEN,
-  projectKey: PROJECT_KEY,
+  appKey: APP_KEY,
 });
 
 // create the logger

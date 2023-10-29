@@ -15,12 +15,12 @@
           <IconDownload />
         </v-btn>
 
-        <lazy-edit-project-dialog />
-        <lazy-delete-project-dialog />
+        <lazy-edit-app-dialog />
+        <lazy-delete-app-dialog />
       </template>
     </navbar>
 
-    <projects-drawer />
+    <apps-drawer />
     <v-navigation-drawer :width="500" permanent location="end">
       Log meta information
       {{ selectedLog }}

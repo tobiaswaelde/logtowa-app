@@ -1,26 +1,26 @@
 <template>
-  <project-breadcrumb v-if="project" :project="project" />
+  <app-breadcrumb v-if="app" :app="app" />
   <v-divider />
-  <project-logs />
+  <app-logs />
 </template>
 
 <script lang="ts" setup>
 // import { Socket, io } from 'socket.io-client';
 
-definePageMeta({ layout: 'project' });
+definePageMeta({ layout: 'app' });
 
 const route = useRoute();
 
 // const config = useRuntimeConfig();
 
-const projectsStore = useProjects();
-const { getProject } = projectsStore;
-const { project } = storeToRefs(projectsStore);
+const appsStore = useApps();
+const { getApp } = appsStore;
+const { app } = storeToRefs(appsStore);
 
 onBeforeMount(async () => {
   const id = route.params.id as string;
-  await getProject(id);
-  useHead({ title: project.value?.name });
+  await getApp(id);
+  useHead({ title: app.value?.name });
 });
 
 // const logs = ref<any[]>([]);

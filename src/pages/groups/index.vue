@@ -1,22 +1,22 @@
 <template>
-  <project-groups-breadcrumb />
+  <groups-breadcrumb />
   <v-divider />
   <v-container>
     <div v-if="groups.length > 0">
       <v-row>
         <v-col
-          v-for="projectGroup in groups"
-          :key="projectGroup.id"
+          v-for="group in groups"
+          :key="group.id"
           :cols="12"
           :md="6"
           :xl="4"
         >
-          <project-group-item :projectGroup="projectGroup" />
+          <group-item :group="group" />
         </v-col>
       </v-row>
     </div>
     <div v-else>
-      <em>No groups or projects yet.</em>
+      <em>No groups or apps yet.</em>
     </div>
   </v-container>
 </template>
@@ -24,11 +24,11 @@
 <script lang="ts" setup>
 import compareBy from 'compare-by';
 
-definePageMeta({ layout: 'project-groups' });
+definePageMeta({ layout: 'groups' });
 
-const projectGroupsStore = useProjectGroups();
-const { projectGroups } = projectGroupsStore;
-const { projectGroup } = storeToRefs(projectGroupsStore);
+const groupsStore = useGroups();
+const { groups: projectGroups } = groupsStore;
+const { group } = storeToRefs(groupsStore);
 
 const groups = computed(() =>
   Array.from(projectGroups.values())
@@ -38,6 +38,6 @@ const groups = computed(() =>
 
 onBeforeMount(() => {
   useHead({ title: 'Projects' });
-  projectGroup.value = null;
+  group.value = null;
 });
 </script>

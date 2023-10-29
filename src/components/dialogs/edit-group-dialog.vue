@@ -1,12 +1,12 @@
 <template>
-  <v-tooltip text="Add Project" location="bottom">
+  <v-tooltip text="Edit Project Group" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="dialogOpen = true">
-        <IconCubePlus />
+        <IconEdit />
       </v-btn>
       <v-dialog v-model="dialogOpen" persistent :max-width="500">
         <v-card>
-          <v-card-title>Create Project</v-card-title>
+          <v-card-title>Edit Project Group</v-card-title>
           <v-divider />
           <v-card-text>
             <v-row>
@@ -27,18 +27,8 @@
                   variant="outlined"
                   density="compact"
                   label="Name"
-                  hint="The name of the project"
+                  hint="The name of the project group"
                   required
-                  :maxlength="255"
-                />
-              </v-col>
-              <v-col :cols="12">
-                <v-text-field
-                  v-model="data.repoUrl"
-                  variant="outlined"
-                  density="compact"
-                  label="Repository URL"
-                  hint="The URL to the projects repository"
                   :maxlength="255"
                 />
               </v-col>
@@ -59,38 +49,39 @@
 </template>
 
 <script lang="ts" setup>
-import { IconExclamationCircle, IconCubePlus } from '@tabler/icons-vue';
-import { CreateProjectDto } from '../../types/project';
+import { IconEdit, IconExclamationCircle } from '@tabler/icons-vue';
+import { UpdateGroupDto } from '@/types/group';
 
-const router = useRouter();
-
-const { createProject } = useProjects();
-const { projectGroup } = storeToRefs(useProjectGroups());
+const projectGroupsStore = useGroups();
+const { updateGroup } = projectGroupsStore;
+const { group } = storeToRefs(projectGroupsStore);
 
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
-const data = reactive<Omit<CreateProjectDto, 'group'>>({
-  name: '',
-  repoUrl: '',
+const data = reactive<UpdateGroupDto>({
+  name: group.value?.name ?? '',
+});
+
+watch([group], () => {
+  if (group.value) {
+    data.name = group.value.name;
+  }
 });
 
 const handleClose = () => {
-  data.name = '';
-  data.repoUrl = '';
+  data.name = group.value?.name ?? '';
   dialogOpen.value = false;
   error.value = false;
 };
 const handleSave = async () => {
-  if (!projectGroup.value?.id) return;
+  const id = group.value?.id;
+  if (!id) return;
 
-  const createdProject = await createProject({
-    ...data,
-    group: projectGroup.value.id,
-  });
-  if (createdProject) {
-    router.push(`/projects/${createdProject.id}`);
+  const updatedGroup = await updateGroup(id, data);
+  if (updatedGroup) {
     handleClose();
+    group.value = updatedGroup;
   } else {
     error.value = true;
   }

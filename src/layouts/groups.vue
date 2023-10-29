@@ -2,10 +2,10 @@
   <v-app>
     <navbar>
       <template v-slot:actions>
-        <lazy-add-project-group-dialog />
+        <lazy-add-group-dialog />
       </template>
     </navbar>
-    <projects-drawer />
+    <apps-drawer />
 
     <v-main>
       <slot></slot>

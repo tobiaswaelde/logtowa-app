@@ -95,7 +95,7 @@ export const useLogs = defineStore('logs-store', () => {
         sort: [{ field: 'timestamp', direction: 'DESC' }],
       });
       const res = await http.get<Paginated<LogMessage>>(
-        `/api/projects/${projectId.value}/logs?${q}`,
+        `/api/apps/${projectId.value}/logs?${q}`,
       );
       console.log(res.data);
       logs.value = res.data.items;

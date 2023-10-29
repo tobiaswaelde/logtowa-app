@@ -8,17 +8,17 @@
 
 <script lang="ts" setup>
 import { IconChevronRight } from '@tabler/icons-vue';
-import { ProjectGroup } from '../../../../types/project-group';
+import { Group } from '../../../../types/group';
 
-const props = defineProps<{ projectGroup?: ProjectGroup }>();
+const props = defineProps<{ group?: Group }>();
 
-const { findGroupPath } = useProjectGroups();
+const { findGroupPath } = useGroups();
 
 const items = computed(() => {
   const items = [{ title: 'Projects', to: '/groups' }];
 
-  if (props.projectGroup) {
-    const path = findGroupPath(props.projectGroup.id);
+  if (props.group) {
+    const path = findGroupPath(props.group.id);
     if (path) {
       const subitems = path.map((x) => ({
         title: x.name,

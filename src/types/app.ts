@@ -1,19 +1,19 @@
-import { ProjectGroup } from './project-group';
+import { Group } from './group';
 
-export type Project = {
+export type App = {
   id: string;
   name: string;
   repoUrl?: string;
-  group: ProjectGroup;
+  group: Group;
 };
 
-export type CreateProjectDto = {
+export type CreateAppDto = {
   group: string;
   name: string;
   repoUrl?: string;
 };
 
-export type UpdateProjectDto = {
+export type UpdateAppDto = {
   group?: string;
   name?: string;
   repoUrl?: string;

@@ -1,12 +1,12 @@
 <template>
-  <v-tooltip text="Delete Project Group" location="bottom">
+  <v-tooltip text="Delete Group" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="dialogOpen = true">
         <IconTrash />
       </v-btn>
       <v-dialog v-model="dialogOpen" :max-width="500">
         <v-card>
-          <v-card-title>Delete Project Group</v-card-title>
+          <v-card-title>Delete Group</v-card-title>
           <v-divider />
           <v-card-text>
             <v-row>
@@ -23,7 +23,7 @@
                 </v-alert>
               </v-col>
               <v-col :cols="12">
-                Dou you really want to delete the project group?
+                Dou you really want to delete the group?
               </v-col>
             </v-row>
           </v-card-text>
@@ -44,7 +44,7 @@
 <script lang="ts" setup>
 import { IconExclamationCircle, IconTrash } from '@tabler/icons-vue';
 
-const { deleteProjectGroup } = useProjectGroups();
+const { deleteGroup } = useGroups();
 
 const router = useRouter();
 const route = useRoute();
@@ -61,7 +61,7 @@ const handleDelete = async () => {
   const id = route.params.id as string;
   if (!id) return;
 
-  const deletedGroup = await deleteProjectGroup(id);
+  const deletedGroup = await deleteGroup(id);
   if (deletedGroup) {
     if (deletedGroup.parent) {
       router.replace(`/groups/${deletedGroup.parent.id}`);

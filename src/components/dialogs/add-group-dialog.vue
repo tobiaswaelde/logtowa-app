@@ -1,12 +1,12 @@
 <template>
-  <v-tooltip text="Add Project Group" location="bottom">
+  <v-tooltip text="Add Group" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="dialogOpen = true">
         <IconFolderPlus />
       </v-btn>
       <v-dialog v-model="dialogOpen" persistent :max-width="500">
         <v-card>
-          <v-card-title>Create Project Group</v-card-title>
+          <v-card-title>Create Group</v-card-title>
           <v-divider />
           <v-card-text>
             <v-row>
@@ -27,7 +27,7 @@
                   variant="outlined"
                   density="compact"
                   label="Name"
-                  hint="The name of the project group"
+                  hint="The name of the group"
                   required
                   :maxlength="255"
                 />
@@ -50,17 +50,17 @@
 
 <script lang="ts" setup>
 import { IconExclamationCircle, IconFolderPlus } from '@tabler/icons-vue';
-import { CreateProjectGroupDto } from '../../types/project-group';
+import { CreateGroupDto } from '@/types/group';
 
 const router = useRouter();
 
-const { createProjectGroup } = useProjectGroups();
-const { projectGroup } = storeToRefs(useProjectGroups());
+const { createGroup } = useGroups();
+const { projectGroup } = storeToRefs(useGroups());
 
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
-const data = reactive<CreateProjectGroupDto>({
+const data = reactive<CreateGroupDto>({
   name: '',
 });
 
@@ -70,7 +70,7 @@ const handleClose = () => {
   error.value = false;
 };
 const handleSave = async () => {
-  const createdGroup = await createProjectGroup({
+  const createdGroup = await createGroup({
     ...data,
     parent: projectGroup.value?.id,
   });

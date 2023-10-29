@@ -1,43 +1,4 @@
 <template>
-  <!-- <v-data-table-virtual
-    fixed-header
-    fixed-footer
-    density="compact"
-    :sort-asc-icon="IconArrowUp"
-    :sort-desc-icon="IconArrowDown"
-    :height="tableHeight"
-    :headers="HEADERS"
-    :items="logs"
-    @click:row="
-      (e, row) => {
-        console.log(row.item);
-      }
-    "
-  >
-    <template v-slot:item="{ props, item }" style="cursor: pointer">
-      <tr v-bind="props">
-        <td style="cursor: pointer; font-family: monospace !important">
-          {{ getTimestamp(item.timestamp) }}
-        </td>
-        <td style="cursor: pointer; font-family: monospace !important">
-          {{ item.scope }}
-        </td>
-        <td style="cursor: pointer">
-          <v-chip
-            density="comfortable"
-            variant="flat"
-            :color="getColorFromLevel(item.level)"
-          >
-            {{ item.level }}
-          </v-chip>
-        </td>
-        <td style="cursor: pointer; font-family: monospace !important">
-          {{ item.message }}
-        </td>
-      </tr>
-    </template>
-  </v-data-table-virtual> -->
-
   <v-data-table
     disable-pagination
     fixed-header

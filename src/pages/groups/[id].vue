@@ -1,11 +1,8 @@
 <template>
-  <project-groups-breadcrumb
-    v-if="projectGroup"
-    :project-group="projectGroup"
-  />
+  <groups-breadcrumb v-if="group" :group="group" />
   <v-divider />
   <v-container>
-    <div v-if="projectGroup">
+    <div v-if="group">
       <v-row v-if="children.length > 0">
         <v-col :cols="12">
           <h2 class="text-h6">Groups</h2>
@@ -17,21 +14,15 @@
           :md="6"
           :xl="4"
         >
-          <project-group-item :project-group="subgroup" />
+          <group-item :group="subgroup" />
         </v-col>
       </v-row>
-      <v-row v-if="projects.length > 0">
+      <v-row v-if="apps.length > 0">
         <v-col :cols="12">
           <h2 class="text-h6">Projects</h2>
         </v-col>
-        <v-col
-          v-for="project in projects"
-          :key="project.id"
-          :cols="12"
-          :md="6"
-          :xl="4"
-        >
-          <project-item :project="project" />
+        <v-col v-for="app in apps" :key="app.id" :cols="12" :md="6" :xl="4">
+          <app-item :app="app" />
         </v-col>
       </v-row>
     </div>
@@ -43,36 +34,36 @@
 
 <script lang="ts" setup>
 import compareBy from 'compare-by';
-import { ProjectGroup } from '../../types/project-group';
+import { Group } from '@/types/group';
 
-definePageMeta({ layout: 'project-group' });
+definePageMeta({ layout: 'group' });
 
 const route = useRoute();
 const id = route.params.id as string;
 
-const projectGroupsStore = useProjectGroups();
-const { getProjectGroup } = projectGroupsStore;
-const { projectGroup } = storeToRefs(projectGroupsStore);
+const groupsStore = useGroups();
+const { getGroup } = groupsStore;
+const { group } = storeToRefs(groupsStore);
 
 const children = computed(
-  () => projectGroup.value?.children.sort(compareBy({ key: 'name' })) ?? [],
+  () => group.value?.children.sort(compareBy({ key: 'name' })) ?? [],
 );
-const projects = computed(
-  () => projectGroup.value?.projects.sort(compareBy({ key: 'name' })) ?? [],
+const apps = computed(
+  () => group.value?.apps.sort(compareBy({ key: 'name' })) ?? [],
 );
 
-const update = async (group?: ProjectGroup | null) => {
-  projectGroup.value = group ?? null;
+const update = async (updatedGroup?: Group | null) => {
+  group.value = updatedGroup ?? null;
   useHead({
-    title: group?.name,
+    title: updatedGroup?.name,
   });
 };
 
 onBeforeMount(async () => {
-  const group = await getProjectGroup(id);
-  await update(group);
+  const g = await getGroup(id);
+  await update(g);
 });
-watch([projectGroup], async () => {
-  await update(projectGroup.value);
+watch([group], async () => {
+  await update(group.value);
 });
 </script>

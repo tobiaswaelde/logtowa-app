@@ -13,18 +13,18 @@
       </v-list-item>
     </template>
 
-    <lazy-project-group-list-item
+    <lazy-group-list-item
       v-for="child in children"
       :key="child.id"
       :value="child.id"
-      :project-group="child"
+      :group="child"
     />
 
-    <lazy-project-list-item
-      v-for="project in projects"
-      :key="project.id"
-      :value="project.id"
-      :project="project"
+    <lazy-app-list-item
+      v-for="app in apps"
+      :key="app.id"
+      :value="app.id"
+      :app="app"
     />
   </v-list-group>
 </template>
@@ -36,31 +36,29 @@ import {
   IconFolder,
   IconFolderOpen,
 } from '@tabler/icons-vue';
-import { ProjectGroup } from '../../../types/project-group';
+import { Group } from '@/types/group';
 import compareBy from 'compare-by';
 
-const projectGroupsStore = useProjectGroups();
-const { projectGroups } = projectGroupsStore;
+const groupsStore = useGroups();
+const { groups } = groupsStore;
 
 const props = defineProps<{
   value: string;
-  projectGroup: ProjectGroup;
+  group: Group;
 }>();
 
-const name = computed(() => props.projectGroup.name);
+const name = computed(() => props.group.name);
 const children = computed(
   () =>
-    projectGroups.get(props.value)?.children.sort(compareBy({ key: 'name' })) ??
-    [],
+    groups.get(props.value)?.children.sort(compareBy({ key: 'name' })) ?? [],
 );
-const projects = computed(
+const apps = computed(
   () =>
-    projectGroups.get(props.value)?.projects.sort(compareBy({ key: 'name' })) ??
-    [],
+    groups.get(props.value)?.projects.sort(compareBy({ key: 'name' })) ?? [],
 );
 
 onBeforeMount(async () => {
-  await projectGroupsStore.getProjectGroup(props.value);
+  await groupsStore.getGroups(props.value);
 });
 </script>
 

@@ -1,20 +1,20 @@
 import projectGroupItemVue from './project-group-item.vue';
 <template>
-  <v-card :to="`/projects/${project.id}`">
+  <v-card :to="`/apps/${app.id}`">
     <v-card-title
       style="display: flex; flex-direction: row; align-items: center"
     >
       <IconCube style="margin-right: 12px" />
-      {{ project.name }}
+      {{ app.name }}
     </v-card-title>
   </v-card>
 </template>
 
 <script lang="ts" setup>
 import { IconCube } from '@tabler/icons-vue';
-import { Project } from '@/types/project';
+import { App } from '@/types/app';
 
 defineProps<{
-  project: Project;
+  app: App;
 }>();
 </script>

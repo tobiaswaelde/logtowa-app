@@ -1,12 +1,12 @@
 <template>
-  <v-tooltip text="Edit Project" location="bottom">
+  <v-tooltip text="Edit App" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="dialogOpen = true">
         <IconEdit />
       </v-btn>
       <v-dialog v-model="dialogOpen" persistent :max-width="500">
         <v-card>
-          <v-card-title>Edit Project</v-card-title>
+          <v-card-title>Edit App</v-card-title>
           <v-divider />
           <v-card-text>
             <v-row>
@@ -27,7 +27,7 @@
                   variant="outlined"
                   density="compact"
                   label="Name"
-                  hint="The name of the project"
+                  hint="The name of the app"
                   required
                   :maxlength="255"
                 />
@@ -38,7 +38,7 @@
                   variant="outlined"
                   density="compact"
                   label="Repository URL"
-                  hint="The URL to the projects repository"
+                  hint="The URL to the app repository"
                   :maxlength="255"
                 />
               </v-col>
@@ -60,41 +60,41 @@
 
 <script lang="ts" setup>
 import { IconEdit, IconExclamationCircle } from '@tabler/icons-vue';
-import { UpdateProjectDto } from '../../types/project';
+import { UpdateAppDto } from '@/types/app';
 
-const projectsStore = useProjects();
-const { updateProject } = projectsStore;
-const { project } = storeToRefs(projectsStore);
+const appsStore = useApps();
+const { updateApp } = appsStore;
+const { app } = storeToRefs(appsStore);
 
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
 
-const data = reactive<UpdateProjectDto>({
-  name: project.value?.name ?? '',
-  repoUrl: project.value?.repoUrl ?? '',
+const data = reactive<UpdateAppDto>({
+  name: app.value?.name ?? '',
+  repoUrl: app.value?.repoUrl ?? '',
 });
 
-watch([project], () => {
-  if (project.value) {
-    data.name = project.value.name;
-    data.repoUrl = project.value.repoUrl;
+watch([app], () => {
+  if (app.value) {
+    data.name = app.value.name;
+    data.repoUrl = app.value.repoUrl;
   }
 });
 
 const handleClose = () => {
-  data.name = project.value?.name ?? '';
-  data.repoUrl = project.value?.repoUrl ?? '';
+  data.name = app.value?.name ?? '';
+  data.repoUrl = app.value?.repoUrl ?? '';
   dialogOpen.value = false;
   error.value = false;
 };
 const handleSave = async () => {
-  const id = project.value?.id;
+  const id = app.value?.id;
   if (!id) return;
 
-  const updatedProject = await updateProject(id, data);
-  if (updatedProject) {
+  const updatedApp = await updateApp(id, data);
+  if (updatedApp) {
     handleClose();
-    project.value = updatedProject;
+    app.value = updatedApp;
   } else {
     error.value = true;
   }

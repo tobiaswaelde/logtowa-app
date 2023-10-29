@@ -1,9 +1,9 @@
 <template>
   <v-list-item
     :value="value"
-    :title="project.name"
+    :title="app.name"
     density="compact"
-    :to="`/projects/${project.id}`"
+    :to="`/apps/${app.id}`"
   >
     <template v-slot:prepend>
       <IconCube :size="20" style="margin-right: 8px" />
@@ -13,10 +13,10 @@
 
 <script lang="ts" setup>
 import { IconCube } from '@tabler/icons-vue';
-import { Project } from '../../../types/project';
+import { App } from '@/types/app';
 
 defineProps<{
   value: string;
-  project: Project;
+  app: App;
 }>();
 </script>

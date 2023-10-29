@@ -53,12 +53,11 @@ const children = computed(
     groups.get(props.value)?.children.sort(compareBy({ key: 'name' })) ?? [],
 );
 const apps = computed(
-  () =>
-    groups.get(props.value)?.projects.sort(compareBy({ key: 'name' })) ?? [],
+  () => groups.get(props.value)?.apps.sort(compareBy({ key: 'name' })) ?? [],
 );
 
 onBeforeMount(async () => {
-  await groupsStore.getGroups(props.value);
+  await groupsStore.getGroup(props.value);
 });
 </script>
 

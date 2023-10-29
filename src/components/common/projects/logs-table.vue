@@ -1,31 +1,5 @@
 <template>
   <!-- <v-data-table-virtual
-    :height="tableHeight"
-    density="compact"
-    fixed-header
-    :headers="HEADERS"
-    :items="items"
-    item-value="id"
-    @click:row="
-      (e, row) => {
-        console.log(row.item);
-      }
-    "
-    :sort-asc-icon="IconArrowUp"
-    :sort-desc-icon="IconArrowDown"
-  >
-  </v-data-table-virtual> -->
-
-  <!-- <v-data-table>
-    <v-data-table-row> </v-data-table-row>
-    <v-infinite-scroll>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum quasi, esse
-      vitae magni quibusdam amet repellat unde sed at. Incidunt ducimus ex optio
-      odit voluptas recusandae vero aliquam ullam tenetur!
-    </v-infinite-scroll>
-  </v-data-table> -->
-
-  <v-data-table-virtual
     fixed-header
     fixed-footer
     density="compact"
@@ -62,26 +36,85 @@
         </td>
       </tr>
     </template>
-  </v-data-table-virtual>
+  </v-data-table-virtual> -->
+
+  <v-data-table
+    disable-pagination
+    fixed-header
+    density="comfortable"
+    :headers="HEADERS"
+    :items="logs"
+    :sort-asc-icon="IconArrowUp"
+    :sort-desc-icon="IconArrowDown"
+    :height="tableHeight"
+    v-model:sort-by="sortOptions"
+    :loading="loading"
+    @click:row="
+      (e, row) => {
+        console.log(row.item);
+        getLog(row.item.id);
+      }
+    "
+    :items-per-page="-1"
+  >
+    <!-- required to hide the footer -->
+    <template v-slot:bottom>
+      <div :ref="bottomRef">
+        <v-btn>Load More</v-btn>
+      </div>
+    </template>
+
+    <template v-slot:item="{ props, item }" style="cursor: pointer">
+      <tr v-bind="props">
+        <td style="cursor: pointer; font-family: monospace !important">
+          {{ getTimestamp(item.timestamp) }}
+        </td>
+        <td style="cursor: pointer">
+          <log-level-chip :value="item.level" />
+        </td>
+        <td style="cursor: pointer; font-family: monospace !important">
+          {{ item.scope }}
+        </td>
+        <td style="cursor: pointer; font-family: monospace !important">
+          {{ item.message }}
+        </td>
+      </tr>
+    </template>
+  </v-data-table>
 </template>
 
 <script setup lang="ts">
 import { IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
-//@ts-ignore
-import colors from 'vuetify/lib/util/colors';
 import moment from 'moment';
 import { useLogs } from '../../../stores/logs';
+import { useElementVisibility } from '@vueuse/core';
 
 const route = useRoute();
 const id = route.params.id as string;
 const logsStore = useLogs();
-const { logs } = storeToRefs(logsStore);
+const { getLog } = logsStore;
+const { logs, sortOptions, loading, moreAvailable } = storeToRefs(logsStore);
 logsStore.$state = {
   logs: [],
   projectId: id,
   connected: false,
   listening: true,
+  sortOptions: [{ key: 'timestamp', order: 'desc' }],
+  loading: false,
+  moreAvailable: true,
+  logsCount: 0,
+  selectedLog: null,
 };
+
+const bottomRef = ref<any>(null);
+const bottomVisible = useElementVisibility(bottomRef.value);
+
+watch([bottomRef], () => {
+  console.log('bottomRef:', bottomRef.value);
+});
+watch([bottomVisible], () => {
+  console.log('bottomVisible:', bottomVisible.value);
+});
 
 onMounted(() => {
   logsStore.connect();
@@ -90,55 +123,38 @@ onMounted(() => {
 
 const HEADERS = [
   // { key: 'id', title: 'ID' },
-  { key: 'timestamp', title: 'Timestamp', width: 200 },
-  { key: 'scope', title: 'Scope', sortable: false, width: 200 },
+  { key: 'timestamp', title: 'Timestamp', sortable: false, width: 200 },
   { key: 'level', title: 'Level', sortable: false, width: 100 },
+  { key: 'scope', title: 'Scope', sortable: false, width: 200 },
   { key: 'message', title: 'Message', sortable: false },
 ];
 
 const getTimestamp = (timestamp: string) => {
   const time = moment(timestamp);
   if (time.isAfter(moment().startOf('day'))) {
-    return time.format('mm:ss.SSS');
+    return time.format('HH:mm:ss.SSS');
   } else if (time.isAfter(moment().startOf('day').subtract(1, 'week'))) {
-    return time.format('ddd, mm:ss.SSS');
+    return time.format('ddd, HH:mm:ss.SSS');
   } else {
-    return time.format('DD.MM., mm:ss.SSS');
+    return time.format('DD.MM., HH:mm:ss.SSS');
   }
 };
 
-const getColorFromLevel = (level: string) => {
-  switch (level) {
-    case 'error':
-      return colors.red.base;
-    case 'success':
-      return colors.green.base;
-    case 'warn':
-      return colors.orange.darken1;
-    case 'info':
-      return colors.blue.base;
-    case 'http':
-      return colors.pink.base;
-    case 'verbose':
-      return colors.cyan.darken1;
-    case 'debug':
-      return colors.teal.base;
-    case 'silly':
-      return colors.brown.base;
-
-    default:
-      return undefined;
-  }
+const windowHeight = ref<number>(0);
+const handleResize = () => {
+  windowHeight.value = window.innerHeight;
 };
+onMounted(() => {
+  handleResize();
+});
 
 const tableHeight = computed(() => {
-  const containerHeight = window.innerHeight;
   const headerHeight = 56;
   const breadcrumbHeight = 38;
   const filterHeight = 24;
   const paginationHeight = 48;
   return (
-    containerHeight -
+    windowHeight.value -
     headerHeight -
     breadcrumbHeight -
     filterHeight -
@@ -146,16 +162,4 @@ const tableHeight = computed(() => {
     2
   );
 });
-
-// const http = useHttp();
-
-// const itemCount = ref<number>(0);
-// const items = ref<LogMessage[]>([]);
-
-// onMounted(async () => {
-//   const res = await http.get<Paginated<LogMessage>>(`/api/projects/${id}/logs`);
-//   console.log(res.data.items[0]);
-//   itemCount.value = res.data.meta.itemCount;
-//   items.value.push(...res.data.items);
-// });
 </script>

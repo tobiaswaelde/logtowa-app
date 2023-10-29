@@ -1,5 +1,8 @@
 import { Socket, io } from 'socket.io-client';
-import { LogMessage } from '../types/log';
+import { LogMessage, LogMessageWithMeta } from '../types/log';
+import { SortItem } from '../types/vuetify';
+import { Paginated } from '../types/pagination';
+import qs from 'qs';
 
 export const useLogs = defineStore('logs-store', () => {
   const http = useHttp();
@@ -8,9 +11,15 @@ export const useLogs = defineStore('logs-store', () => {
 
   const projectId = ref<string | null>(null);
   const logs = ref<LogMessage[]>([]);
+  const logsCount = ref<number>(0);
+  const sortOptions = ref<SortItem[]>([{ key: 'timestamp', order: 'desc' }]);
+  const loading = ref<boolean>(false);
+  const moreAvailable = ref<boolean>(true);
 
   const connected = ref<boolean>(false);
   const listening = ref<boolean>(false);
+
+  const selectedLog = ref<LogMessageWithMeta | null>(null);
 
   const connect = () => {
     console.log('try to connect', projectId.value);
@@ -61,7 +70,7 @@ export const useLogs = defineStore('logs-store', () => {
       console.log('subscribe');
       socket.value.off(projectId.value);
       socket.value.on(projectId.value, (x: LogMessage) => {
-        logs.value.push(x);
+        logs.value.unshift(x);
       });
       listening.value = true;
     }
@@ -78,14 +87,58 @@ export const useLogs = defineStore('logs-store', () => {
     reconnect();
   });
 
+  const loadData = async () => {
+    if (!projectId.value) return;
+    try {
+      loading.value = true;
+      const q = qs.stringify({
+        sort: [{ field: 'timestamp', direction: 'DESC' }],
+      });
+      const res = await http.get<Paginated<LogMessage>>(
+        `/api/projects/${projectId.value}/logs?${q}`,
+      );
+      console.log(res.data);
+      logs.value = res.data.items;
+    } catch (err) {
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const loadMoreData = async () => {
+    //
+    console.log('load more data');
+  };
+
+  watch([sortOptions], () => {
+    loadData();
+  });
+
+  const getLog = async (id: string) => {
+    try {
+      const res = await http.get<LogMessageWithMeta>(`/api/logs/${id}`);
+      console.log(res.data);
+      selectedLog.value = res.data;
+    } catch (err) {
+      return null;
+    }
+  };
+
   return {
     projectId,
     logs,
+    logsCount,
     connected,
     listening,
     connect,
     disconnect,
     startListening,
     stopListening,
+    sortOptions,
+    loading,
+    moreAvailable,
+    loadMoreData,
+    getLog,
+    selectedLog,
   };
 });

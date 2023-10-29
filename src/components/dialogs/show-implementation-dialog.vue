@@ -9,7 +9,7 @@
           <v-card-title>How to use</v-card-title>
           <v-divider />
 
-          <v-tabs v-model="tab" density="compact" grow>
+          <v-tabs v-model="tab" density="comfortable" grow>
             <v-tab value="node"> Node </v-tab>
             <v-tab value="python"> Python </v-tab>
             <v-tab value="java"> Java </v-tab>
@@ -17,9 +17,11 @@
 
           <v-window v-model="tab">
             <v-window-item value="node">
-              <pre v-highlightjs>
-                <code class='typescript'>{{ data.codeNode }}</code>
-              </pre>
+              <div>
+                <pre v-highlightjs>
+                  <code class='typescript'>{{ data.codeNode }}</code>
+                </pre>
+              </div>
             </v-window-item>
             <v-window-item value="python">
               <v-card-actions> python implementation </v-card-actions>

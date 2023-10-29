@@ -5,3 +5,7 @@ export type LogMessage = {
   scope: string;
   message: string;
 };
+
+export type LogMessageWithMeta = LogMessage & {
+  meta: object;
+};

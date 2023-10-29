@@ -11,6 +11,7 @@ import {
   VDataTableServer,
   VDataTableVirtual,
 } from 'vuetify/labs/VDataTable';
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
 
 export default defineNuxtPlugin((nuxt) => {
   const vuetify = createVuetify({
@@ -22,6 +23,7 @@ export default defineNuxtPlugin((nuxt) => {
       VDataTable,
       VDataTableServer,
       VDataTableVirtual,
+      VSkeletonLoader,
     },
 
     theme: {

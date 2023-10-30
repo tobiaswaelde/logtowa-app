@@ -1,79 +1,97 @@
 <template>
-  <v-data-table
-    disable-pagination
-    fixed-header
-    density="comfortable"
-    :headers="HEADERS"
-    :items="logs"
-    :sort-asc-icon="IconArrowUp"
-    :sort-desc-icon="IconArrowDown"
-    v-model:sort-by="sortOptions"
-    v-model="selected"
-    :loading="loading"
-    @click:row="
-      (e, row) => {
-        getLog(row.item.id);
-      }
-    "
-    :items-per-page="-1"
-    ref="tableRef"
-    :height="tableHeight"
-  >
-    <!-- required to hide the footer -->
-    <template v-slot:bottom></template>
+  <div style="position: relative">
+    <v-table
+      fixed-header
+      :height="tableHeight"
+      density="comfortable"
+      ref="tableRef"
+    >
+      <thead>
+        <tr>
+          <th v-for="header of HEADERS" :key="header.key" scope="col">
+            {{ header.title }}
+          </th>
+        </tr>
+      </thead>
 
-    <template v-slot:item="{ props, item }" style="cursor: pointer">
-      <tr
-        v-bind="props"
-        :key="item.id"
-        :ref="
-          logs.findIndex((x) => x.id === item.id) === logs.length - 1
-            ? `lastRow`
-            : undefined
-        "
-      >
-        <td
-          style="cursor: pointer; font-family: monospace !important"
-          :class="{
-            'bg-background': item.id !== selectedLog?.id,
-            'bg-background-darken1': item.id === selectedLog?.id,
-          }"
+      <tbody>
+        <tr
+          v-for="item of logs"
+          :key="item.id"
+          :ref="
+            logs.findIndex((x) => x.id === item.id) === logs.length - 1
+              ? `lastRow`
+              : undefined
+          "
+          @click="
+            (e) => {
+              getLog(item.id);
+            }
+          "
         >
-          {{ getTimestamp(item.timestamp) }}
-        </td>
+          <td
+            style="cursor: pointer; font-family: monospace !important"
+            :class="{
+              'bg-background': item.id !== selectedLog?.id,
+              'bg-background-darken1': item.id === selectedLog?.id,
+            }"
+          >
+            {{ getTimestamp(item.timestamp) }}
+          </td>
 
-        <td
-          style="cursor: pointer"
-          :class="{
-            'bg-background': item.id !== selectedLog?.id,
-            'bg-background-darken1': item.id === selectedLog?.id,
-          }"
-        >
-          <log-level-chip :value="item.level" />
-        </td>
+          <td
+            style="cursor: pointer"
+            :class="{
+              'bg-background': item.id !== selectedLog?.id,
+              'bg-background-darken1': item.id === selectedLog?.id,
+            }"
+          >
+            <log-level-chip :value="item.level" />
+          </td>
 
-        <td
-          style="cursor: pointer; font-family: monospace !important"
-          :class="{
-            'bg-background': item.id !== selectedLog?.id,
-            'bg-background-darken1': item.id === selectedLog?.id,
-          }"
-        >
-          {{ item.scope }}
-        </td>
+          <td
+            style="cursor: pointer; font-family: monospace !important"
+            :class="{
+              'bg-background': item.id !== selectedLog?.id,
+              'bg-background-darken1': item.id === selectedLog?.id,
+            }"
+          >
+            {{ item.scope }}
+          </td>
 
-        <td
-          style="cursor: pointer; font-family: monospace !important"
-          :class="{
-            'bg-background': item.id !== selectedLog?.id,
-            'bg-background-darken1': item.id === selectedLog?.id,
-          }"
+          <td
+            style="cursor: pointer; font-family: monospace !important"
+            :class="{
+              'bg-background': item.id !== selectedLog?.id,
+              'bg-background-darken1': item.id === selectedLog?.id,
+            }"
+          >
+            {{ item.message }}
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+
+    <div style="position: absolute; right: 8px; bottom: 8px">
+      <v-scale-transition :hide-on-leave="false" mode="in-out">
+        <v-btn
+          v-show="tableScrolled"
+          icon
+          color="error"
+          @click="
+            () => {
+              const tbody = tableRef.$el.querySelector('.v-table__wrapper');
+              console.log(tbody);
+              tbody.scroll({ top: 0, behavior: 'smooth' });
+              // tableRef.$el.scrollTop = 0;
+            }
+          "
         >
-          {{ item.message }}
-        </td>
-      </tr>
-    </template>
-  </v-data-table>
+          <IconArrowUp />
+        </v-btn>
+      </v-scale-transition>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -81,8 +99,6 @@ import { IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
 import moment from 'moment';
 import { useLogs } from '../../../stores/logs';
 import { useElementVisibility } from '@vueuse/core';
-
-const selected = ref<any[]>([]);
 
 const route = useRoute();
 const id = route.params.id as string;
@@ -104,6 +120,9 @@ logsStore.$state = {
   },
 };
 
+const tableRef = ref<any>(null);
+const tableScrolled = ref<boolean>(false);
+
 const lastRow = ref<any>(null);
 const lastRowVisible = useElementVisibility(lastRow);
 
@@ -112,7 +131,17 @@ onMounted(() => {
   logsStore.startListening();
 });
 
+watch([tableRef], () => {
+  if (!tableRef.value) return;
+  const wrapper = tableRef.value.$el.querySelector('.v-table__wrapper');
+  wrapper.addEventListener('scroll', (e: any) => {
+    const scrollTop = e.target.scrollTop;
+    tableScrolled.value = scrollTop > 50;
+  });
+});
+
 watch([lastRowVisible], () => {
+  console.log(lastRowVisible.value);
   if (lastRowVisible.value === true) {
     loadMoreData();
   }

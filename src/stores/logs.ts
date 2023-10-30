@@ -14,7 +14,7 @@ export const useLogs = defineStore('logs-store', () => {
   const logsCount = ref<number>(0);
   const sortOptions = ref<SortItem[]>([{ key: 'timestamp', order: 'desc' }]);
   const loading = ref<boolean>(false);
-  const moreAvailable = ref<boolean>(true);
+  const nextPage = ref<number>(-1);
 
   const filter = reactive<{
     levels: string[];
@@ -110,7 +110,13 @@ export const useLogs = defineStore('logs-store', () => {
       const res = await http.get<Paginated<LogMessage>>(
         `/api/apps/${projectId.value}/logs?${q}`,
       );
-      console.log(res.data);
+
+      if (res.data.meta.hasNextPage) {
+        nextPage.value = res.data.meta.page + 1;
+      } else {
+        nextPage.value = -1;
+      }
+
       logs.value = res.data.items;
     } catch (err) {
     } finally {
@@ -121,6 +127,30 @@ export const useLogs = defineStore('logs-store', () => {
   const loadMoreData = async () => {
     //
     console.log('load more data');
+    try {
+      loading.value = true;
+      const q = qs.stringify({
+        sort: [{ field: 'timestamp', direction: 'DESC' }],
+        page: nextPage.value,
+      });
+      const res = await http.get<Paginated<LogMessage>>(
+        `/api/apps/${projectId.value}/logs?${q}`,
+      );
+
+      if (res.data.meta.hasNextPage) {
+        nextPage.value = res.data.meta.page + 1;
+      } else {
+        nextPage.value = -1;
+      }
+
+      logs.value.push(...res.data.items);
+      console.log(logs.value.length);
+    } catch (err) {
+      //
+      console.log(err);
+    } finally {
+      loading.value = false;
+    }
   };
 
   watch([sortOptions], () => {
@@ -167,7 +197,6 @@ export const useLogs = defineStore('logs-store', () => {
     stopListening,
     sortOptions,
     loading,
-    moreAvailable,
     loadMoreData,
     getLog,
     selectedLog,

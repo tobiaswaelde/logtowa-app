@@ -7,7 +7,6 @@
     :items="logs"
     :sort-asc-icon="IconArrowUp"
     :sort-desc-icon="IconArrowDown"
-    :height="tableHeight"
     v-model:sort-by="sortOptions"
     v-model="selected"
     :loading="loading"
@@ -17,16 +16,22 @@
       }
     "
     :items-per-page="-1"
+    ref="tableRef"
+    :height="tableHeight"
   >
     <!-- required to hide the footer -->
-    <template v-slot:bottom>
-      <div :ref="bottomRef">
-        <span>Loading more data...</span>
-      </div>
-    </template>
+    <template v-slot:bottom></template>
 
     <template v-slot:item="{ props, item }" style="cursor: pointer">
-      <tr v-bind="props" :key="item.id">
+      <tr
+        v-bind="props"
+        :key="item.id"
+        :ref="
+          logs.findIndex((x) => x.id === item.id) === logs.length - 1
+            ? `lastRow`
+            : undefined
+        "
+      >
         <td
           style="cursor: pointer; font-family: monospace !important"
           :class="{
@@ -82,16 +87,14 @@ const selected = ref<any[]>([]);
 const route = useRoute();
 const id = route.params.id as string;
 const logsStore = useLogs();
-const { getLog } = logsStore;
-const { logs, sortOptions, loading, moreAvailable, selectedLog } =
-  storeToRefs(logsStore);
+const { getLog, loadMoreData } = logsStore;
+const { logs, sortOptions, loading, selectedLog } = storeToRefs(logsStore);
 logsStore.$state = {
   projectId: id,
   connected: false,
   listening: true,
   sortOptions: [{ key: 'timestamp', order: 'desc' }],
   loading: false,
-  moreAvailable: true,
   logsCount: 0,
   selectedLog: null,
   filter: {
@@ -101,25 +104,18 @@ logsStore.$state = {
   },
 };
 
-const tableRef = ref<any>(null);
-
-const bottomRef = ref<any>(null);
-const bottomVisible = useElementVisibility(bottomRef.value);
-
-watch([bottomRef], () => {
-  console.log('bottomRef:', bottomRef.value);
-});
-watch([bottomVisible], () => {
-  console.log('bottomVisible:', bottomVisible.value);
-});
+const lastRow = ref<any>(null);
+const lastRowVisible = useElementVisibility(lastRow);
 
 onMounted(() => {
   logsStore.connect();
   logsStore.startListening();
 });
 
-watch([tableRef.value], () => {
-  console.log(tableRef);
+watch([lastRowVisible], () => {
+  if (lastRowVisible.value === true) {
+    loadMoreData();
+  }
 });
 
 const HEADERS = [
@@ -160,7 +156,6 @@ const tableHeight = computed(() => {
     breadcrumbHeight -
     filterHeight -
     // paginationHeight -
-    24 -
     2
   );
 });

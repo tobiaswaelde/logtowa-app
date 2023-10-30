@@ -9,10 +9,10 @@
     :sort-desc-icon="IconArrowDown"
     :height="tableHeight"
     v-model:sort-by="sortOptions"
+    v-model="selected"
     :loading="loading"
     @click:row="
       (e, row) => {
-        console.log(row.item);
         getLog(row.item.id);
       }
     "
@@ -21,22 +21,49 @@
     <!-- required to hide the footer -->
     <template v-slot:bottom>
       <div :ref="bottomRef">
-        <v-btn>Load More</v-btn>
+        <span>Loading more data...</span>
       </div>
     </template>
 
     <template v-slot:item="{ props, item }" style="cursor: pointer">
-      <tr v-bind="props">
-        <td style="cursor: pointer; font-family: monospace !important">
+      <tr v-bind="props" :key="item.id">
+        <td
+          style="cursor: pointer; font-family: monospace !important"
+          :class="{
+            'bg-background': item.id !== selectedLog?.id,
+            'bg-background-darken1': item.id === selectedLog?.id,
+          }"
+        >
           {{ getTimestamp(item.timestamp) }}
         </td>
-        <td style="cursor: pointer">
+
+        <td
+          style="cursor: pointer"
+          :class="{
+            'bg-background': item.id !== selectedLog?.id,
+            'bg-background-darken1': item.id === selectedLog?.id,
+          }"
+        >
           <log-level-chip :value="item.level" />
         </td>
-        <td style="cursor: pointer; font-family: monospace !important">
+
+        <td
+          style="cursor: pointer; font-family: monospace !important"
+          :class="{
+            'bg-background': item.id !== selectedLog?.id,
+            'bg-background-darken1': item.id === selectedLog?.id,
+          }"
+        >
           {{ item.scope }}
         </td>
-        <td style="cursor: pointer; font-family: monospace !important">
+
+        <td
+          style="cursor: pointer; font-family: monospace !important"
+          :class="{
+            'bg-background': item.id !== selectedLog?.id,
+            'bg-background-darken1': item.id === selectedLog?.id,
+          }"
+        >
           {{ item.message }}
         </td>
       </tr>
@@ -50,13 +77,15 @@ import moment from 'moment';
 import { useLogs } from '../../../stores/logs';
 import { useElementVisibility } from '@vueuse/core';
 
+const selected = ref<any[]>([]);
+
 const route = useRoute();
 const id = route.params.id as string;
 const logsStore = useLogs();
 const { getLog } = logsStore;
-const { logs, sortOptions, loading, moreAvailable } = storeToRefs(logsStore);
+const { logs, sortOptions, loading, moreAvailable, selectedLog } =
+  storeToRefs(logsStore);
 logsStore.$state = {
-  logs: [],
   projectId: id,
   connected: false,
   listening: true,
@@ -65,7 +94,14 @@ logsStore.$state = {
   moreAvailable: true,
   logsCount: 0,
   selectedLog: null,
+  filter: {
+    levels: ['error', 'warn', 'info'],
+    scope: '',
+    message: '',
+  },
 };
+
+const tableRef = ref<any>(null);
 
 const bottomRef = ref<any>(null);
 const bottomVisible = useElementVisibility(bottomRef.value);
@@ -80,6 +116,10 @@ watch([bottomVisible], () => {
 onMounted(() => {
   logsStore.connect();
   logsStore.startListening();
+});
+
+watch([tableRef.value], () => {
+  console.log(tableRef);
 });
 
 const HEADERS = [
@@ -112,7 +152,7 @@ onMounted(() => {
 const tableHeight = computed(() => {
   const headerHeight = 56;
   const breadcrumbHeight = 38;
-  const filterHeight = 24;
+  const filterHeight = 66;
   const paginationHeight = 48;
   return (
     windowHeight.value -
@@ -120,6 +160,7 @@ const tableHeight = computed(() => {
     breadcrumbHeight -
     filterHeight -
     // paginationHeight -
+    24 -
     2
   );
 });

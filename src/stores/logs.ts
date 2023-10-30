@@ -16,6 +16,16 @@ export const useLogs = defineStore('logs-store', () => {
   const loading = ref<boolean>(false);
   const moreAvailable = ref<boolean>(true);
 
+  const filter = reactive<{
+    levels: string[];
+    scope: string;
+    message: string;
+  }>({
+    levels: ['error', 'warn', 'info'],
+    scope: '',
+    message: '',
+  });
+
   const connected = ref<boolean>(false);
   const listening = ref<boolean>(false);
 
@@ -30,7 +40,7 @@ export const useLogs = defineStore('logs-store', () => {
       transports: ['websocket'],
       auth: {
         token: config.public.socketToken,
-        projectkey: projectId.value,
+        appkey: projectId.value,
       },
     })
       .on('error', (err) => {
@@ -77,9 +87,12 @@ export const useLogs = defineStore('logs-store', () => {
   };
   const stopListening = () => {
     if (socket.value && projectId.value) {
+      console.log('unsubscribe');
       socket.value.off(projectId.value);
     }
     socket.value?.offAny();
+
+    console.log('stop listening');
     listening.value = false;
   };
 
@@ -117,16 +130,34 @@ export const useLogs = defineStore('logs-store', () => {
   const getLog = async (id: string) => {
     try {
       const res = await http.get<LogMessageWithMeta>(`/api/logs/${id}`);
-      console.log(res.data);
       selectedLog.value = res.data;
     } catch (err) {
       return null;
     }
   };
 
+  watch([filter], () => {
+    console.log('FILTER:', filter);
+  });
+
+  const displayLogs = computed(() => {
+    return logs.value.filter(
+      (x) =>
+        filter.levels.includes(x.level) &&
+        (filter.scope !== ''
+          ? x.scope.toLocaleLowerCase() === filter.scope.toLocaleLowerCase()
+          : true) &&
+        (filter.message !== ''
+          ? x.message
+              .toLocaleLowerCase()
+              .includes(filter.message.toLocaleLowerCase())
+          : true),
+    );
+  });
+
   return {
     projectId,
-    logs,
+    logs: displayLogs,
     logsCount,
     connected,
     listening,
@@ -140,5 +171,6 @@ export const useLogs = defineStore('logs-store', () => {
     loadMoreData,
     getLog,
     selectedLog,
+    filter,
   };
 });

@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   },
   components: [{ path: '~/components', pathPrefix: false }],
   modules: [
+    ['@vueuse/nuxt', {}],
     ['@nuxtjs/robots', { rules: { UserAgent: '', Disallow: '*' } }],
     [
       '@pinia/nuxt',

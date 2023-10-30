@@ -34,7 +34,7 @@ export default defineNuxtPlugin((nuxt) => {
           dark: true,
           colors: {
             background: COLORS.background,
-            surface: COLORS.background,
+            surface: COLORS.backgroundDarken1,
             primary: COLORS.backgroundDarken1, // colors.indigo.base,
             secondary: COLORS.red, // colors.red.base,
             error: COLORS.red, // colors.red.base,

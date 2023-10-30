@@ -21,10 +21,7 @@
     </navbar>
 
     <apps-drawer />
-    <v-navigation-drawer :width="500" permanent location="end">
-      Log meta information
-      {{ selectedLog }}
-    </v-navigation-drawer>
+    <log-info-drawer />
 
     <v-main>
       <slot></slot>
@@ -40,7 +37,7 @@ import {
 } from '@tabler/icons-vue';
 
 const { startListening, stopListening } = useLogs();
-const { connected, listening, selectedLog } = storeToRefs(useLogs());
+const { connected, listening } = storeToRefs(useLogs());
 
 const toggleConnection = () => {
   if (listening.value) {

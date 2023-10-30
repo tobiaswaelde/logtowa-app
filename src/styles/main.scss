@@ -3,17 +3,28 @@
   src: url('/fonts/Comfortaa-VariableFont_wght.ttf');
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+::selection {
+  background-color: #424858;
+}
+
 * {
   user-select: none;
 }
+
 pre {
   padding: 0 !important;
   margin: 0 !important;
   width: 100%;
+  display: flex !important;
 
   code {
     margin: 0 !important;
     top: 0px !important;
+    flex-grow: 1 !important;
   }
 }
 pre code.hljs,
@@ -22,8 +33,11 @@ pre code.hljs * {
   font-family: monospace !important;
 }
 
-::-webkit-scrollbar {
-  display: none;
+.font-monospace {
+  font-family: monospace !important;
+}
+.select {
+  user-select: text !important;
 }
 
 @import './lib/vuetify/index.scss';

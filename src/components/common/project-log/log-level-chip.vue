@@ -5,29 +5,28 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
-import colors from 'vuetify/lib/util/colors';
+import { COLORS } from '../../../config/colors';
 
 const props = defineProps<{ value: string }>();
 
 const color = computed(() => {
   switch (props.value) {
     case 'error':
-      return colors.red.base;
+      return COLORS.red;
     case 'success':
-      return colors.green.base;
+      return COLORS.green;
     case 'warn':
-      return colors.orange.darken1;
+      return COLORS.yellow;
     case 'info':
-      return colors.blue.base;
+      return COLORS.blue;
     case 'http':
-      return colors.pink.base;
+      return COLORS.purple;
     case 'verbose':
-      return colors.cyan.darken1;
+      return COLORS.text;
     case 'debug':
-      return colors.teal.base;
+      return COLORS.orange;
     case 'silly':
-      return colors.brown.base;
+      return COLORS.gray;
 
     default:
       return undefined;

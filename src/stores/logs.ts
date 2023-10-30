@@ -127,6 +127,7 @@ export const useLogs = defineStore('logs-store', () => {
   const loadMoreData = async () => {
     //
     console.log('load more data');
+    if (nextPage.value === -1) return;
     try {
       loading.value = true;
       const q = qs.stringify({

@@ -62,12 +62,14 @@ onMounted(() => {
 const tableHeight = computed(() => {
   const headerHeight = 56;
   const breadcrumbHeight = 38;
+  const chartHeight = 101;
   const filterHeight = 66;
   const dividersHeight = 2;
   return (
     windowHeight.value -
     headerHeight -
     breadcrumbHeight -
+    chartHeight -
     filterHeight -
     dividersHeight
   );

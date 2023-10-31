@@ -8,6 +8,14 @@
     <v-spacer />
 
     <slot name="actions"></slot>
+
+    <v-progress-linear
+      v-if="loading"
+      indeterminate
+      style="position: absolute; bottom: 0"
+      :height="3"
+      color="info"
+    />
   </v-app-bar>
 </template>
 
@@ -15,4 +23,5 @@
 import { IconMenu2 } from '@tabler/icons-vue';
 import { useAppStore } from '../../stores/app';
 const appStore = useAppStore();
+const { loading } = storeToRefs(appStore);
 </script>

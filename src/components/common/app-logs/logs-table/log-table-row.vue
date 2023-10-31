@@ -6,8 +6,8 @@
         : undefined
     "
     @click="
-      (e) => {
-        getLog(item.id);
+      () => {
+        handleRowClick(item);
       }
     "
   >
@@ -58,6 +58,7 @@ import moment from 'moment';
 import { LogMessage } from '../../../../types/log';
 
 const props = defineProps<{ item: LogMessage }>();
+// const isSelected = props.item.id !== selectedLog.value?.id;
 
 const { getLog, loadMoreData } = useLogs();
 const { logs, selectedLog } = storeToRefs(useLogs());
@@ -71,6 +72,14 @@ watch([lastRowVisible], () => {
     loadMoreData();
   }
 });
+
+const handleRowClick = (item: LogMessage) => {
+  if (item.id !== selectedLog.value?.id) {
+    getLog(item.id);
+  } else {
+    selectedLog.value = null;
+  }
+};
 
 const getTimestamp = (timestamp: string) => {
   const time = moment(timestamp);

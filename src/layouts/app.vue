@@ -37,7 +37,7 @@ import {
 } from '@tabler/icons-vue';
 
 const { startListening, stopListening } = useLogs();
-const { connected, listening } = storeToRefs(useLogs());
+const { connected, listening, loading } = storeToRefs(useLogs());
 
 const toggleConnection = () => {
   if (listening.value) {

@@ -6,6 +6,7 @@
       :height="tableHeight"
       fixed-header
       ref="tableRef"
+      density="comfortable"
     >
       <template v-slot:item="{ item }">
         <log-table-row :item="item" />

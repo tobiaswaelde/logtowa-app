@@ -55,7 +55,7 @@ import { CreateGroupDto } from '@/types/group';
 const router = useRouter();
 
 const { createGroup } = useGroups();
-const { projectGroup } = storeToRefs(useGroups());
+const { group } = storeToRefs(useGroups());
 
 const dialogOpen = ref<boolean>(false);
 const error = ref<boolean>(false);
@@ -72,7 +72,7 @@ const handleClose = () => {
 const handleSave = async () => {
   const createdGroup = await createGroup({
     ...data,
-    parent: projectGroup.value?.id,
+    parent: group.value?.id,
   });
   if (createdGroup) {
     router.push(`/groups/${createdGroup.id}`);

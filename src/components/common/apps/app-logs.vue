@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex; flex-direction: column">
-    <ClientOnly>
+    <!-- <ClientOnly>
       <logs-chart />
       <v-divider />
-    </ClientOnly>
+    </ClientOnly> -->
 
     <logs-filter />
 

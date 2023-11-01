@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative">
-    <v-data-table-virtual
+    <!-- <v-data-table-virtual
       :headers="HEADERS"
       :items="logs"
       :height="tableHeight"
@@ -13,6 +13,26 @@
       </template>
     </v-data-table-virtual>
 
+    <scroll-to-top-button :visible="tableScrolled" @click="scrollToTop" /> -->
+
+    <v-data-table-server
+      density="comfortable"
+      fixed-header
+      fixed-footer
+      :height="tableHeight"
+      :headers="HEADERS"
+      :items-length="logsCount"
+      :items="logs"
+      item-value="id"
+      v-model:page="pagination.page"
+      v-model:items-per-page="pagination.itemsPerPage"
+      v-model:sort-by="sortOptions"
+    >
+      <template v-slot:item="{ item }">
+        <log-table-row :item="item" />
+      </template>
+    </v-data-table-server>
+
     <scroll-to-top-button :visible="tableScrolled" @click="scrollToTop" />
   </div>
 </template>
@@ -22,32 +42,28 @@ const route = useRoute();
 const id = route.params.id as string;
 
 const logsStore = useLogs();
-const { logs } = storeToRefs(logsStore);
-logsStore.$state = {
-  projectId: id,
-  connected: false,
-  listening: true,
-  sortOptions: [{ key: 'timestamp', order: 'desc' }],
-  loading: false,
-  logsCount: 0,
-  selectedLog: null,
-  filter: {
-    levels: ['error', 'warn', 'info'],
-    scope: '',
-    message: '',
-  },
-};
+const { logs, logsCount, pagination, sortOptions } = storeToRefs(logsStore);
+logsStore.appId = id;
 
 const HEADERS = [
-  { key: 'timestamp', title: 'Timestamp', sortable: false, width: 200 },
-  { key: 'level', title: 'Level', sortable: false, width: 100 },
-  { key: 'scope', title: 'Scope', sortable: false, width: 200 },
-  { key: 'message', title: 'Message', sortable: false },
+  { key: 'timestamp', title: 'Timestamp', sortable: true, width: 220 },
+  { key: 'level', title: 'Level', sortable: true, width: 100 },
+  { key: 'scope', title: 'Scope', sortable: true, width: 200 },
+  { key: 'message', title: 'Message', sortable: true, width: 'auto' },
 ];
 
-onMounted(() => {
-  logsStore.connect();
-  logsStore.startListening();
+onMounted(async () => {
+  logsStore.getLogCount();
+
+  const connected = await logsStore.connect();
+  if (connected) {
+    // logsStore.startListening();
+  }
+
+  await logsStore.loadData();
+});
+onUnmounted(() => {
+  logsStore.disconnect();
 });
 
 //#region table height
@@ -64,6 +80,7 @@ const tableHeight = computed(() => {
   const breadcrumbHeight = 38;
   const chartHeight = 101;
   const filterHeight = 66;
+  const paginationHeight = 48;
   const dividersHeight = 2;
   return (
     windowHeight.value -
@@ -71,6 +88,7 @@ const tableHeight = computed(() => {
     breadcrumbHeight -
     chartHeight -
     filterHeight -
+    paginationHeight -
     dividersHeight
   );
 });

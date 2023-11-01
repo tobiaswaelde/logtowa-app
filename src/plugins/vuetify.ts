@@ -1,4 +1,5 @@
 import { createVuetify } from 'vuetify';
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 //@ts-ignore
@@ -25,6 +26,14 @@ export default defineNuxtPlugin((nuxt) => {
       VDataTableServer,
       VDataTableVirtual,
       VSkeletonLoader,
+    },
+
+    icons: {
+      defaultSet: 'mdi',
+      aliases,
+      sets: {
+        mdi,
+      },
     },
 
     theme: {

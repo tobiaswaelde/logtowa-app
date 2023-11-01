@@ -1,10 +1,5 @@
 <template>
   <tr
-    :ref="
-      logs.findIndex((x) => x.id === item.id) === logs.length - 1
-        ? `lastRow`
-        : undefined
-    "
     @click="
       () => {
         handleRowClick(item);
@@ -60,22 +55,12 @@ import { LogMessage } from '../../../../types/log';
 const props = defineProps<{ item: LogMessage }>();
 // const isSelected = props.item.id !== selectedLog.value?.id;
 
-const { getLog, loadMoreData } = useLogs();
-const { logs, selectedLog } = storeToRefs(useLogs());
-
-const lastRow = ref<any>(null);
-const lastRowVisible = useElementVisibility(lastRow);
-
-watch([lastRowVisible], () => {
-  console.log(lastRowVisible.value);
-  if (lastRowVisible.value === true) {
-    loadMoreData();
-  }
-});
+const { selectLog } = useLogs();
+const { selectedLog } = storeToRefs(useLogs());
 
 const handleRowClick = (item: LogMessage) => {
   if (item.id !== selectedLog.value?.id) {
-    getLog(item.id);
+    selectLog(item.id);
   } else {
     selectedLog.value = null;
   }

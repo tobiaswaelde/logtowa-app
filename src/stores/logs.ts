@@ -9,56 +9,44 @@ export const useLogs = defineStore('logs-store', () => {
   const socket = ref<Socket>();
   const config = useRuntimeConfig();
 
-  const projectId = ref<string | null>(null);
-  const logs = ref<LogMessage[]>([]);
-  const logsCount = ref<number>(0);
-  const sortOptions = ref<SortItem[]>([{ key: 'timestamp', order: 'desc' }]);
-  const loading = ref<boolean>(false);
-  const nextPage = ref<number>(-1);
+  const appId = ref<string | null>(null);
 
-  const filter = reactive<{
-    levels: string[];
-    scope: string;
-    message: string;
-  }>({
-    levels: ['error', 'warn', 'info'],
-    scope: '',
-    message: '',
-  });
-
+  //#region socket
   const connected = ref<boolean>(false);
   const listening = ref<boolean>(false);
 
-  const selectedLog = ref<LogMessageWithMeta | null>(null);
+  const connect = async () => {
+    return new Promise((resolve, reject) => {
+      console.log('try to connect', appId.value);
+      if (!appId.value || connected.value) resolve(false);
 
-  const connect = () => {
-    console.log('try to connect', projectId.value);
-    if (!projectId.value || connected.value) return;
-
-    socket.value = io(config.public.apiUrl, {
-      autoConnect: true,
-      transports: ['websocket'],
-      auth: {
-        token: config.public.socketToken,
-        appkey: projectId.value,
-      },
-    })
-      .on('error', (err) => {
-        console.log('connection error', err);
+      socket.value = io(config.public.apiUrl, {
+        autoConnect: true,
+        transports: ['websocket'],
+        auth: {
+          token: config.public.socketToken,
+          appkey: appId.value,
+        },
       })
-      .on('connect', () => {
-        connected.value = true;
-        console.log('socket connected');
+        .on('error', (err) => {
+          console.log('connection error', err);
+          reject(err);
+        })
+        .on('connect', () => {
+          connected.value = true;
+          console.log('socket connected');
 
-        if (listening.value) {
-          startListening();
-        }
-      })
-      .on('disconnect', () => {
-        connected.value = false;
-        console.log('socket disconnected');
-      });
-    socket.value.connect();
+          if (listening.value) {
+            startListening();
+          }
+          resolve(true);
+        })
+        .on('disconnect', () => {
+          connected.value = false;
+          console.log('socket disconnected');
+        });
+      socket.value.connect();
+    });
   };
   const disconnect = () => {
     if (socket.value) {
@@ -76,19 +64,20 @@ export const useLogs = defineStore('logs-store', () => {
 
   const startListening = () => {
     console.log('start listening');
-    if (socket.value && connected.value && projectId.value) {
+    if (socket.value && connected.value && appId.value) {
       console.log('subscribe');
-      socket.value.off(projectId.value);
-      socket.value.on(projectId.value, (x: LogMessage) => {
+      socket.value.off(appId.value);
+      socket.value.on(appId.value, (x: LogMessage) => {
         logs.value.unshift(x);
+        logsCount.value++;
       });
       listening.value = true;
     }
   };
   const stopListening = () => {
-    if (socket.value && projectId.value) {
+    if (socket.value && appId.value) {
       console.log('unsubscribe');
-      socket.value.off(projectId.value);
+      socket.value.off(appId.value);
     }
     socket.value?.offAny();
 
@@ -96,69 +85,12 @@ export const useLogs = defineStore('logs-store', () => {
     listening.value = false;
   };
 
-  watch([projectId.value], () => {
-    reconnect();
-  });
+  //#endregion
 
-  const loadData = async () => {
-    if (!projectId.value) return;
-    try {
-      loading.value = true;
-      const q = qs.stringify({
-        sort: [{ field: 'timestamp', direction: 'DESC' }],
-      });
-      const res = await http.get<Paginated<LogMessage>>(
-        `/api/apps/${projectId.value}/logs?${q}`,
-      );
+  //#region selection
+  const selectedLog = ref<LogMessageWithMeta | null>(null);
 
-      if (res.data.meta.hasNextPage) {
-        nextPage.value = res.data.meta.page + 1;
-      } else {
-        nextPage.value = -1;
-      }
-
-      logs.value = res.data.items;
-    } catch (err) {
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const loadMoreData = async () => {
-    //
-    console.log('load more data');
-    if (nextPage.value === -1) return;
-    try {
-      loading.value = true;
-      const q = qs.stringify({
-        sort: [{ field: 'timestamp', direction: 'DESC' }],
-        page: nextPage.value,
-      });
-      const res = await http.get<Paginated<LogMessage>>(
-        `/api/apps/${projectId.value}/logs?${q}`,
-      );
-
-      if (res.data.meta.hasNextPage) {
-        nextPage.value = res.data.meta.page + 1;
-      } else {
-        nextPage.value = -1;
-      }
-
-      logs.value.push(...res.data.items);
-      console.log(logs.value.length);
-    } catch (err) {
-      //
-      console.log(err);
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  watch([sortOptions], () => {
-    loadData();
-  });
-
-  const getLog = async (id: string) => {
+  const selectLog = async (id: string) => {
     try {
       const res = await http.get<LogMessageWithMeta>(`/api/logs/${id}`);
       selectedLog.value = res.data;
@@ -166,41 +98,115 @@ export const useLogs = defineStore('logs-store', () => {
       return null;
     }
   };
+  //#endregion
 
-  watch([filter], () => {
-    console.log('FILTER:', filter);
+  //#region data
+  const logs = ref<LogMessage[]>([]);
+  const logsCount = ref<number>(0);
+  const loading = ref<boolean>(false);
+  const nextPage = ref<number>(-1);
+
+  const filter = reactive<{
+    levels: string[];
+    scope: string;
+    message: string;
+  }>({
+    levels: ['error', 'warn', 'info'],
+    scope: '',
+    message: '',
   });
 
-  const displayLogs = computed(() => {
-    return logs.value.filter(
-      (x) =>
-        filter.levels.includes(x.level) &&
-        (filter.scope !== ''
-          ? x.scope.toLocaleLowerCase() === filter.scope.toLocaleLowerCase()
-          : true) &&
-        (filter.message !== ''
-          ? x.message
-              .toLocaleLowerCase()
-              .includes(filter.message.toLocaleLowerCase())
-          : true),
-    );
+  const pagination = reactive({
+    page: 1,
+    itemsPerPage: 20,
+  });
+  const sortOptions = ref<SortItem[]>([{ key: 'timestamp', order: 'desc' }]);
+
+  const getLogCount = async () => {
+    try {
+      const q = qs.stringify({
+        page: pagination.page,
+        perPage: pagination.itemsPerPage,
+        filter: { scope: filter.scope, level: { in: filter.levels } },
+      });
+      const res = await http.get<number>(
+        `/api/apps/${appId.value}/logs/count?${q}`,
+      );
+      logsCount.value = res.data;
+    } catch (err) {
+      console.log(err);
+      logsCount.value = 0;
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      loading.value = true;
+
+      const q = qs.stringify({
+        page: pagination.page,
+        perPage: pagination.itemsPerPage,
+        filter: {
+          level: { in: filter.levels },
+        },
+        // sort: sortOptions.value.map((sort) => ({
+        //   field: 'timestamp',
+        //   direction: 'desc',
+        // })),
+        // sort: [{ field: 'timestamp', direction: 'DESC' }],
+        sort: sortOptions.value
+          .filter((x) => x.order !== undefined)
+          .map((x) => ({
+            field: x.key,
+            direction: x.order === 'asc' ? 'ASC' : 'DESC',
+          })),
+      });
+      const res = await http.get<Paginated<LogMessage>>(
+        `/api/apps/${appId.value}/logs?${q}`,
+      );
+
+      logs.value = res.data.items;
+      logsCount.value = res.data.meta.itemCount;
+    } catch (err) {
+    } finally {
+      loading.value = false;
+    }
+  };
+  //#endregion
+
+  watch([appId.value], () => {
+    reconnect();
+    getLogCount();
+  });
+  watch([pagination], () => {
+    if (pagination.page > 1 && listening.value) {
+      stopListening();
+    }
+  });
+  watch([pagination, filter, sortOptions], () => {
+    loadData();
   });
 
   return {
-    projectId,
-    logs: displayLogs,
-    logsCount,
+    appId,
+    // socket
     connected,
     listening,
     connect,
     disconnect,
     startListening,
     stopListening,
+    // selection
+    selectLog,
+    selectedLog,
+    // data
+    logs: computed(() => [...logs.value]),
+    logsCount,
+    pagination,
     sortOptions,
     loading,
-    loadMoreData,
-    getLog,
-    selectedLog,
     filter,
+    getLogCount,
+    loadData,
   };
 });

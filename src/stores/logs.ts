@@ -10,6 +10,7 @@ export const useLogs = defineStore('logs-store', () => {
   const config = useRuntimeConfig();
 
   const appId = ref<string | null>(null);
+  const filterDrawerOpen = ref<boolean>(false);
 
   //#region socket
   const connected = ref<boolean>(false);
@@ -189,6 +190,7 @@ export const useLogs = defineStore('logs-store', () => {
 
   return {
     appId,
+    filterDrawerOpen,
     // socket
     connected,
     listening,

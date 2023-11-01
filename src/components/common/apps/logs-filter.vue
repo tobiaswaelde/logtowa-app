@@ -17,13 +17,6 @@
         <template v-slot:item="{ props, item }">
           <v-list-item v-bind="props" :title="undefined">
             <log-level-chip :value="item.value" v-bind="props" />
-            <template v-slot:prepend>
-              <v-checkbox-btn
-                :value="filter.levels.includes(item.value)"
-                :true-icon="IconSquareCheck"
-                :false-icon="IconSquare"
-              />
-            </template>
           </v-list-item>
         </template>
       </v-select>

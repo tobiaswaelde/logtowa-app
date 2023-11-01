@@ -41,11 +41,23 @@ export const useApps = defineStore('apps-store', () => {
     }
   };
 
+  const deleteApp = async (id: string) => {
+    try {
+      const res = await http.delete<App>(`/api/apps/${id}`);
+      const deletedApp = res.data;
+
+      return deletedApp;
+    } catch (err) {
+      return null;
+    }
+  };
+
   return {
     app,
     findProjectPath,
     getApp,
     createApp,
     updateApp,
+    deleteApp,
   };
 });

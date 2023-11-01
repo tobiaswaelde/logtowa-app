@@ -9,6 +9,12 @@
           </v-badge>
         </v-btn>
 
+        <v-btn icon @click="filterDrawerOpen = !filterDrawerOpen">
+          <v-badge color="error" dot>
+            <IconFilter />
+          </v-badge>
+        </v-btn>
+
         <lazy-show-implementation-dialog />
 
         <v-btn icon>
@@ -22,6 +28,7 @@
 
     <apps-drawer />
     <log-info-drawer />
+    <logs-filter-drawer />
 
     <v-main>
       <slot></slot>
@@ -32,12 +39,13 @@
 <script setup lang="ts">
 import {
   IconDownload,
+  IconFilter,
   IconPlayerPlay,
   IconPlayerPause,
 } from '@tabler/icons-vue';
 
 const { startListening, stopListening } = useLogs();
-const { connected, listening, loading } = storeToRefs(useLogs());
+const { connected, listening, filterDrawerOpen } = storeToRefs(useLogs());
 
 const toggleConnection = () => {
   if (listening.value) {

@@ -176,16 +176,20 @@ export const useLogs = defineStore('logs-store', () => {
   //#endregion
 
   watch([appId.value], () => {
-    reconnect();
-    getLogCount();
+    if (appId.value) {
+      reconnect();
+      getLogCount();
+    }
   });
   watch([pagination], () => {
     if (pagination.page > 1 && listening.value) {
       stopListening();
     }
   });
-  watch([pagination, filter, sortOptions], () => {
-    loadData();
+  watch([appId, pagination, filter, sortOptions], () => {
+    if (appId.value) {
+      loadData();
+    }
   });
 
   return {

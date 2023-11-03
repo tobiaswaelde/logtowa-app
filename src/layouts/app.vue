@@ -10,9 +10,10 @@
         </v-btn>
 
         <v-btn icon @click="filterDrawerOpen = !filterDrawerOpen">
-          <v-badge color="error" dot>
+          <v-badge color="error" dot v-if="!isDefaultFilter">
             <IconFilter />
           </v-badge>
+          <IconFilter v-else />
         </v-btn>
 
         <lazy-show-implementation-dialog />
@@ -28,7 +29,9 @@
 
     <apps-drawer />
     <log-info-drawer />
-    <logs-filter-drawer />
+    <ClientOnly>
+      <logs-filter-drawer />
+    </ClientOnly>
 
     <v-main>
       <slot></slot>
@@ -45,7 +48,10 @@ import {
 } from '@tabler/icons-vue';
 
 const { startListening, stopListening } = useLogs();
-const { connected, listening, filterDrawerOpen } = storeToRefs(useLogs());
+const { connected, listening } = storeToRefs(useLogs());
+const { drawerOpen: filterDrawerOpen, isDefaultFilter } = storeToRefs(
+  useLogsFilter(),
+);
 
 const toggleConnection = () => {
   if (listening.value) {

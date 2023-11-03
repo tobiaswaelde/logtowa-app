@@ -1,20 +1,5 @@
 <template>
   <div style="position: relative">
-    <!-- <v-data-table-virtual
-      :headers="HEADERS"
-      :items="logs"
-      :height="tableHeight"
-      fixed-header
-      ref="tableRef"
-      density="comfortable"
-    >
-      <template v-slot:item="{ item }">
-        <log-table-row :item="item" />
-      </template>
-    </v-data-table-virtual>
-
-    <scroll-to-top-button :visible="tableScrolled" @click="scrollToTop" /> -->
-
     <v-data-table-server
       density="comfortable"
       fixed-header
@@ -22,7 +7,7 @@
       :height="tableHeight"
       :headers="HEADERS"
       :items-length="logsCount"
-      :items="logs"
+      :items="logs.slice(0, pagination.itemsPerPage)"
       item-value="id"
       v-model:page="pagination.page"
       v-model:items-per-page="pagination.itemsPerPage"
@@ -57,7 +42,7 @@ onMounted(async () => {
 
   const connected = await logsStore.connect();
   if (connected) {
-    // logsStore.startListening();
+    logsStore.startListening();
   }
 
   await logsStore.loadData();
@@ -78,8 +63,7 @@ onMounted(() => {
 const tableHeight = computed(() => {
   const headerHeight = 56;
   const breadcrumbHeight = 38;
-  const chartHeight = 101;
-  const filterHeight = 66;
+  const chartHeight = 130 + 52;
   const paginationHeight = 48;
   const dividersHeight = 2;
   return (
@@ -87,7 +71,6 @@ const tableHeight = computed(() => {
     headerHeight -
     breadcrumbHeight -
     chartHeight -
-    filterHeight -
     paginationHeight -
     dividersHeight
   );

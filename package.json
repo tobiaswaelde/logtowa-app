@@ -12,6 +12,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@types/chart.js": "^2.9.39",
+    "@types/deep-equal": "^1.0.3",
     "@types/prismjs": "^1.26.2",
     "@types/qs": "^6.9.9",
     "@types/socket.io-client": "^3.0.0",
@@ -30,6 +31,7 @@
     "axios": "^1.5.1",
     "chart.js": "^4.4.0",
     "compare-by": "^2.1.0",
+    "deep-equal": "^2.2.2",
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
     "prismjs": "^1.29.0",

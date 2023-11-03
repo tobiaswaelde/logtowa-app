@@ -10,7 +10,7 @@ export const useLogs = defineStore('logs-store', () => {
   const config = useRuntimeConfig();
 
   const appId = ref<string | null>(null);
-  const filterDrawerOpen = ref<boolean>(false);
+  const { filter } = useLogsFilter();
 
   //#region socket
   const connected = ref<boolean>(false);
@@ -68,8 +68,8 @@ export const useLogs = defineStore('logs-store', () => {
     if (socket.value && connected.value && appId.value) {
       console.log('subscribe');
       socket.value.off(appId.value);
-      socket.value.on(appId.value, (x: LogMessage) => {
-        logs.value.unshift(x);
+      socket.value.on(appId.value, (newLog: LogMessage) => {
+        addLog(newLog);
         logsCount.value++;
       });
       listening.value = true;
@@ -84,6 +84,20 @@ export const useLogs = defineStore('logs-store', () => {
 
     console.log('stop listening');
     listening.value = false;
+  };
+
+  const addLog = (log: LogMessage) => {
+    if (!filter.levels.includes(log.level)) return;
+    if (filter.scope !== '' && log.scope !== filter.scope) return;
+    if (
+      filter.message !== '' &&
+      !log.message
+        .toLocaleLowerCase()
+        .includes(filter.message.toLocaleLowerCase())
+    )
+      return;
+
+    logs.value.unshift(log);
   };
 
   //#endregion
@@ -105,30 +119,30 @@ export const useLogs = defineStore('logs-store', () => {
   const logs = ref<LogMessage[]>([]);
   const logsCount = ref<number>(0);
   const loading = ref<boolean>(false);
-  const nextPage = ref<number>(-1);
-
-  const filter = reactive<{
-    levels: string[];
-    scope: string;
-    message: string;
-  }>({
-    levels: ['error', 'warn', 'info'],
-    scope: '',
-    message: '',
-  });
 
   const pagination = reactive({
     page: 1,
     itemsPerPage: 20,
   });
   const sortOptions = ref<SortItem[]>([{ key: 'timestamp', order: 'desc' }]);
+  const sort = computed(() =>
+    sortOptions.value
+      .filter((x) => x.order !== undefined)
+      .map((x) => ({
+        field: x.key,
+        direction: x.order === 'asc' ? 'ASC' : 'DESC',
+      })),
+  );
 
   const getLogCount = async () => {
     try {
       const q = qs.stringify({
         page: pagination.page,
         perPage: pagination.itemsPerPage,
-        filter: { scope: filter.scope, level: { in: filter.levels } },
+        filter: {
+          scope: filter.scope ? { eq: filter.scope } : undefined,
+          level: { in: filter.levels },
+        },
       });
       const res = await http.get<number>(
         `/api/apps/${appId.value}/logs/count?${q}`,
@@ -148,19 +162,10 @@ export const useLogs = defineStore('logs-store', () => {
         page: pagination.page,
         perPage: pagination.itemsPerPage,
         filter: {
+          scope: filter.scope ? { eq: filter.scope } : undefined,
           level: { in: filter.levels },
         },
-        // sort: sortOptions.value.map((sort) => ({
-        //   field: 'timestamp',
-        //   direction: 'desc',
-        // })),
-        // sort: [{ field: 'timestamp', direction: 'DESC' }],
-        sort: sortOptions.value
-          .filter((x) => x.order !== undefined)
-          .map((x) => ({
-            field: x.key,
-            direction: x.order === 'asc' ? 'ASC' : 'DESC',
-          })),
+        sort: sort.value,
       });
       const res = await http.get<Paginated<LogMessage>>(
         `/api/apps/${appId.value}/logs?${q}`,
@@ -194,7 +199,6 @@ export const useLogs = defineStore('logs-store', () => {
 
   return {
     appId,
-    filterDrawerOpen,
     // socket
     connected,
     listening,

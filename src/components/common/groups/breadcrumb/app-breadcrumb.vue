@@ -15,7 +15,7 @@ const props = defineProps<{ app: App }>();
 const { findProjectPath } = useApps();
 
 const items = computed(() => {
-  const items = [{ title: 'Projects', to: '/groups' }];
+  const items = [{ title: 'Apps', to: '/groups' }];
 
   const path = findProjectPath(props.app);
   if (path) {

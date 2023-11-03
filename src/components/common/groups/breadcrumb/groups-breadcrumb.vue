@@ -15,7 +15,7 @@ const props = defineProps<{ group?: Group }>();
 const { findGroupPath } = useGroups();
 
 const items = computed(() => {
-  const items = [{ title: 'Projects', to: '/groups' }];
+  const items = [{ title: 'Apps', to: '/groups' }];
 
   if (props.group) {
     const path = findGroupPath(props.group.id);

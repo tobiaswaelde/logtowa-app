@@ -1,6 +1,14 @@
 import { useLogsFilter } from './logs-filter';
-import { ChartData } from '../types/chart-data';
 import qs from 'qs';
+
+type ChartData = {
+  labels: string[];
+  levels: string[];
+  series: {
+    level: string;
+    data: number[];
+  }[];
+};
 
 export const useAppChartStore = defineStore('app-chart-store', () => {
   const http = useHttp();
@@ -19,7 +27,7 @@ export const useAppChartStore = defineStore('app-chart-store', () => {
 
     try {
       const q = qs.stringify({ levels: filter.levels });
-      const url = `/api/apps/${appId.value}/logs/charts/${timespan.value}?${q}`;
+      const url = `/api/apps/${appId.value}/charts/${timespan.value}?${q}`;
       const res = await http.get<ChartData>(url);
       chartData.value = res.data;
     } catch (err) {

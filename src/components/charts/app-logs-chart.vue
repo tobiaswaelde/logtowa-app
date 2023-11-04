@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import ApexCharts from 'vue3-apexcharts';
-import { getColorFromLevel } from '../../../util/color';
+import { getColorFromLevel } from '../../util/color';
 
 const chartStore = useAppChartStore();
 const { chartData, chartKey, timespan } = storeToRefs(chartStore);

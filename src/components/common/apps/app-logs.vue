@@ -1,7 +1,7 @@
 <template>
   <div style="display: flex; flex-direction: column">
     <ClientOnly>
-      <logs-chart v-if="app !== null" />
+      <app-logs-chart v-if="app !== null" />
       <v-divider />
     </ClientOnly>
 

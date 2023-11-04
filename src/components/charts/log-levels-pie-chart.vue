@@ -1,30 +1,27 @@
 <template>
   <div>
-    <div style="display: flex; padding: 8px">
-      <v-spacer />
-      <v-btn-toggle
-        variant="outlined"
-        density="compact"
-        v-model="timespan"
-        style="height: 30px"
-      >
-        <v-btn value="hour">1h</v-btn>
-        <v-btn value="day">24h</v-btn>
-        <v-btn value="month">30d</v-btn>
-      </v-btn-toggle>
-    </div>
     <ApexCharts
+      v-if="chartData"
       type="donut"
       :height="400"
+      :minHeight="400"
       :options="{
-        chart: { type: 'donut', foreColor: '#adb2be' },
+        chart: {
+          type: 'donut',
+          foreColor: '#adb2be',
+          width: '100%',
+          minHeight: 400,
+        },
         legend: { position: 'bottom' },
-        labels: ['error', 'warn', 'info', 'http', 'debug', 'silly', 'verbose'],
+        labels: chartData.labels,
         stroke: { colors: [COLORS.background] },
-        fill: { colors: ['#f00'] },
+        fill: {
+          colors: chartData.labels.map((level) => getColorFromLevel(level)),
+        },
+        colors: chartData.labels.map((level) => getColorFromLevel(level)),
         plotOptions: { pie: { donut: { size: '40%' } } },
       }"
-      :series="[1, 2, 3, 4, 5, 6, 7]"
+      :series="chartData.series"
     />
   </div>
 </template>
@@ -32,6 +29,12 @@
 <script setup lang="ts">
 import ApexCharts from 'vue3-apexcharts';
 import { COLORS } from '../../config/colors';
+import { getColorFromLevel } from '../../util/color';
 
-const timespan = ref<any>('hour');
+const logLevelsChartStore = useLogLevelsChartStore();
+const { chartData } = storeToRefs(logLevelsChartStore);
+
+onBeforeMount(async () => {
+  logLevelsChartStore.loadData();
+});
 </script>

@@ -10,25 +10,25 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
+    "@nuxt/devtools": "1.0.0",
     "@types/chart.js": "^2.9.39",
     "@types/deep-equal": "^1.0.3",
     "@types/prismjs": "^1.26.2",
     "@types/qs": "^6.9.9",
     "@types/socket.io-client": "^3.0.0",
-    "nuxt": "^3.7.4",
-    "vue": "^3.3.4",
+    "nuxt": "^3.8.0",
+    "vue": "^3.3.7",
     "vue-router": "^4.2.5"
   },
   "dependencies": {
     "@mdi/font": "^7.3.67",
     "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.5.1",
-    "@tabler/icons-vue": "^2.39.0",
+    "@tabler/icons-vue": "^2.40.0",
     "@vueuse/core": "^10.5.0",
     "@vueuse/nuxt": "^10.5.0",
     "apexcharts": "^3.44.0",
-    "axios": "^1.5.1",
+    "axios": "^1.6.0",
     "chart.js": "^4.4.0",
     "compare-by": "^2.1.0",
     "deep-equal": "^2.2.2",
@@ -36,12 +36,12 @@
     "pinia": "^2.1.7",
     "prismjs": "^1.29.0",
     "qs": "^6.11.2",
-    "sass": "^1.69.3",
+    "sass": "^1.69.5",
     "socket.io-client": "^4.7.2",
     "vue-apexcharts": "^1.6.2",
     "vue-prismjs": "^1.2.0",
     "vue3-apexcharts": "^1.4.4",
     "vue3-highlightjs": "^1.0.5",
-    "vuetify": "^3.3.21"
+    "vuetify": "^3.3.23"
   }
 }

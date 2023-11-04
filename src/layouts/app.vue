@@ -18,10 +18,6 @@
 
         <lazy-show-implementation-dialog />
 
-        <v-btn icon>
-          <IconDownload />
-        </v-btn>
-
         <lazy-edit-app-dialog />
         <lazy-delete-app-dialog />
       </template>

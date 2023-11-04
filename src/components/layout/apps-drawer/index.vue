@@ -1,6 +1,17 @@
 <template>
   <v-navigation-drawer :width="300" v-model="appStore.drawerOpen">
-    <v-list v-model:opened="open">
+    <v-list v-model:opened="open" density="comfortable">
+      <v-list-item title="Dashboard" to="/">
+        <template v-slot:prepend>
+          <IconHome2 :size="20" style="margin-right: 8px" />
+        </template>
+      </v-list-item>
+      <v-list-item title="Apps" to="/groups">
+        <template v-slot:prepend>
+          <IconCube :size="20" style="margin-right: 8px" />
+        </template>
+      </v-list-item>
+      <v-divider />
       <v-list-subheader>Apps</v-list-subheader>
       <lazy-group-list-item
         v-for="group in groups"
@@ -13,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+import { IconHome2, IconCube } from '@tabler/icons-vue';
 import compareBy from 'compare-by';
 
 const appStore = useAppStore();

@@ -1,8 +1,12 @@
-// Utilities
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
-export const useAppStore = defineStore('app', {
-  state: () => ({
-    //
-  }),
-})
+export const useAppStore = defineStore('app', () => {
+  const drawerOpen = ref<boolean>(false);
+
+  const toggleDrawer = () => {
+    drawerOpen.value = !drawerOpen.value;
+  };
+
+  return { drawerOpen, toggleDrawer };
+});

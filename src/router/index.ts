@@ -8,26 +8,29 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        name: 'Home',
+        name: 'dashboard',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "home" */ '@/views/dashboard.vue'),
+          import(/* webpackChunkName: "dashboard" */ '@/views/dashboard.vue'),
       },
     ],
   },
   {
     path: '/groups',
+    name: 'groups',
     children: [
       {
         path: '',
-        name: 'groups',
+        name: 'groups-list',
         component: () => import('@/layouts/groups.vue'),
         children: [
           {
             path: '',
-            component: () => import('@/views/groups.vue'),
+            name: 'groups-list-view',
+            component: () =>
+              import(/* webpackChunkName: "groups" */ '@/views/groups.vue'),
           },
         ],
       },
@@ -38,7 +41,9 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('@/views/group.vue'),
+            name: 'group-view',
+            component: () =>
+              import(/* webpackChunkName: "group" */ '@/views/group.vue'),
           },
         ],
       },
@@ -46,15 +51,18 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/apps',
+    name: 'apps',
     children: [
       {
         path: ':id',
+        name: 'app',
         component: () => import('@/layouts/app.vue'),
         children: [
           {
             path: '',
-            name: 'app',
-            component: () => import('@/views/app.vue'),
+            name: 'app-view',
+            component: () =>
+              import(/* webpackChunkName: "app" */ '@/views/app.vue'),
           },
         ],
       },

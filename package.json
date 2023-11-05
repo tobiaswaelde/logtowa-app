@@ -1,47 +1,31 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
+  "name": "frontend-vuetify",
+  "version": "0.0.0",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "@nuxt/devtools": "1.0.0",
-    "@types/chart.js": "^2.9.39",
-    "@types/deep-equal": "^1.0.3",
-    "@types/prismjs": "^1.26.2",
-    "@types/qs": "^6.9.9",
-    "@types/socket.io-client": "^3.0.0",
-    "nuxt": "^3.8.0",
-    "vue": "^3.3.7",
-    "vue-router": "^4.2.5"
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@mdi/font": "^7.3.67",
-    "@nuxtjs/robots": "^3.0.0",
-    "@pinia/nuxt": "^0.5.1",
-    "@tabler/icons-vue": "^2.40.0",
-    "@vueuse/core": "^10.5.0",
-    "@vueuse/nuxt": "^10.5.0",
-    "apexcharts": "^3.44.0",
-    "axios": "^1.6.0",
-    "chart.js": "^4.4.0",
-    "compare-by": "^2.1.0",
-    "deep-equal": "^2.2.2",
-    "moment": "^2.29.4",
-    "pinia": "^2.1.7",
-    "prismjs": "^1.29.0",
-    "qs": "^6.11.2",
-    "sass": "^1.69.5",
-    "socket.io-client": "^4.7.2",
-    "vue-apexcharts": "^1.6.2",
-    "vue-prismjs": "^1.2.0",
-    "vue3-apexcharts": "^1.4.4",
-    "vue3-highlightjs": "^1.0.5",
-    "vuetify": "^3.3.23"
+    "@mdi/font": "7.0.96",
+    "pinia": "^2.0.23",
+    "roboto-fontface": "*",
+    "vue": "^3.2.0",
+    "vue-router": "^4.0.0",
+    "vuetify": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.21.4",
+    "@types/node": "^18.15.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-vue": "^9.0.0",
+    "typescript": "^5.0.0",
+    "unplugin-fonts": "^1.0.3",
+    "vite": "^4.2.0",
+    "vite-plugin-vuetify": "^1.0.0",
+    "vue-tsc": "^1.2.0"
   }
 }

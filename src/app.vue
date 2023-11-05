@@ -1,6 +1,7 @@
 <template>
-  <NuxtLayout>
-    <NuxtLoadingIndicator color="#ff0000" :duration="2000" :throttle="2000" />
-    <NuxtPage />
-  </NuxtLayout>
+  <v-app>
+    <router-view />
+  </v-app>
 </template>
+
+<script setup lang="ts"></script>

@@ -1,62 +1,26 @@
-import { createVuetify } from 'vuetify';
-import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
-//@ts-ignore
-// import colors from 'vuetify/lib/util/colors';
+/**
+ * plugins/vuetify.ts
+ *
+ * Framework documentation: https://vuetifyjs.com`
+ */
 
-// components
-import { VInfiniteScroll } from 'vuetify/labs/VInfiniteScroll';
-import {
-  VDataTable,
-  VDataTableServer,
-  VDataTableVirtual,
-} from 'vuetify/labs/VDataTable';
-import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
-import { COLORS } from '../config/colors';
+// Styles
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
 
-export default defineNuxtPlugin((nuxt) => {
-  const vuetify = createVuetify({
-    ssr: true,
-    directives,
-    components: {
-      ...components,
-      VInfiniteScroll,
-      VDataTable,
-      VDataTableServer,
-      VDataTableVirtual,
-      VSkeletonLoader,
-    },
+// Composables
+import { createVuetify } from 'vuetify'
 
-    icons: {
-      defaultSet: 'mdi',
-      aliases,
-      sets: {
-        mdi,
-      },
-    },
-
-    theme: {
-      defaultTheme: 'dark',
-      themes: {
-        dark: {
-          dark: true,
-          colors: {
-            background: COLORS.background,
-            surface: COLORS.backgroundDarken1,
-            primary: COLORS.backgroundDarken1, // colors.indigo.base,
-            secondary: COLORS.red, // colors.red.base,
-            error: COLORS.red, // colors.red.base,
-            warning: COLORS.yellow,
-            success: COLORS.green,
-            info: COLORS.blue,
-            'on-background': COLORS.text,
-            'on-surface': COLORS.textLight,
-            // 'on-surface': colors.grey.lighten1,
-          },
+// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+export default createVuetify({
+  theme: {
+    themes: {
+      light: {
+        colors: {
+          primary: '#1867C0',
+          secondary: '#5CBBF6',
         },
       },
     },
-  });
-  nuxt.vueApp.use(vuetify);
-});
+  },
+})

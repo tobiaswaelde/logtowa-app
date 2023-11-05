@@ -1,17 +1,8 @@
 <template>
-  <v-app>
-    <navbar>
-      <template v-slot:actions>
-        <lazy-add-app-dialog />
-        <lazy-add-group-dialog />
-        <lazy-edit-group-dialog />
-        <lazy-delete-group-dialog />
-      </template>
-    </navbar>
-    <apps-drawer />
+  <span>navbar</span>
+  <span>apps drawer</span>
 
-    <v-main>
-      <slot></slot>
-    </v-main>
-  </v-app>
+  <v-main>
+    <router-view />
+  </v-main>
 </template>

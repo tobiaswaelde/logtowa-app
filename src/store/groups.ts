@@ -18,7 +18,9 @@ export const useGroups = defineStore('groups-store', () => {
       }
 
       return res.data;
-    } catch (err) {}
+    } catch (err) {
+      return [];
+    }
   };
 
   const getGroup = async (id: string) => {
@@ -29,7 +31,9 @@ export const useGroups = defineStore('groups-store', () => {
       groups.set(group.id, group);
 
       return group;
-    } catch (err) {}
+    } catch (err) {
+      return null;
+    }
   };
 
   const findGroupPath = (id: string): Group[] => {

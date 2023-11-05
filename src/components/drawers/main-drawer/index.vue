@@ -11,8 +11,16 @@
           <IconCube :size="20" style="margin-right: 8px" />
         </template>
       </v-list-item>
+
       <v-divider />
+
       <v-list-subheader>Apps</v-list-subheader>
+      <group-list-item
+        v-for="group of groups"
+        :key="group.id"
+        :value="group.id"
+        :group="group"
+      />
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -23,6 +31,7 @@ import { useAppStore } from '../../../store/app';
 import { useGroups } from '../../../store/groups';
 import { ref, computed } from 'vue';
 import { compareBy } from 'compare-by';
+import GroupListItem from './group-list-item.vue';
 
 const appStore = useAppStore();
 const groupsStore = useGroups();

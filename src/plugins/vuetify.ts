@@ -21,11 +21,11 @@ import {
 } from 'vuetify/labs/VDataTable';
 import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
 
+// theme
 import { COLORS } from '../config/colors';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
-  ssr: false,
   directives,
   components: {
     ...components,

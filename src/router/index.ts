@@ -3,19 +3,15 @@ import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    component: () => import('@/layouts/default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'dashboard',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "dashboard" */ '@/views/dashboard.vue'),
-      },
-    ],
+    path: '',
+    name: 'index',
+    redirect: { name: 'dashboard', replace: true },
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () =>
+      import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index.vue'),
   },
   {
     path: '/groups',
@@ -24,25 +20,24 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'groups',
         component: () =>
-          import(/* webpackChunkName: "groups" */ '@/views/groups.vue'),
+          import(/* webpackChunkName: "groups" */ '@/views/groups/index.vue'),
       },
       {
         path: ':id',
         name: 'group',
         component: () =>
-          import(/* webpackChunkName: "group" */ '@/views/group.vue'),
+          import(/* webpackChunkName: "group" */ '@/views/groups/[id].vue'),
       },
     ],
   },
   {
     path: '/apps',
-    name: 'apps',
     children: [
       {
         path: ':id',
         name: 'app',
         component: () =>
-          import(/* webpackChunkName: "app" */ '@/views/app.vue'),
+          import(/* webpackChunkName: "app" */ '@/views/apps/[id].vue'),
       },
     ],
   },

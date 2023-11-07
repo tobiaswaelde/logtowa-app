@@ -1,4 +1,4 @@
-import { Group } from '@/types/group';
+import { CreateGroupDto, Group } from '@/types/group';
 import { useHttp } from '@/composables/http';
 import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
@@ -62,11 +62,27 @@ export const useGroupsStore = defineStore('groups', () => {
     return path;
   };
 
+  //#region CRUD
+  const createGroup = async (data: CreateGroupDto) => {
+    try {
+      const res = await http.post<Group>(`/api/groups`, data);
+      const createdGroup = res.data;
+
+      groups.set(createdGroup.id, createdGroup);
+      return createdGroup;
+    } catch (err) {
+      throw new Error('Something went wrong.');
+    }
+  };
+  //#endregion
+
   return {
     loading,
     groups,
     getGroups,
     findGroupPath,
     getGroup,
+    // crud
+    createGroup,
   };
 });

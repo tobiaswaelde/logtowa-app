@@ -2,10 +2,14 @@
   <Navbar>
     <template v-slot:actions>
       <slot name="navbaractions"></slot>
-      <div v-if="route.name === 'dashboard'">dashboard links</div>
-      <div v-if="route.name === 'groups'">groups links</div>
-      <div v-if="route.name === 'group'">group links</div>
-      <div v-if="route.name === 'app'">app links</div>
+      <template v-if="route.name === 'dashboard'">dashboard links</template>
+      <template v-if="route.name === 'groups'">
+        <AddGroupDialog />
+      </template>
+      <template v-if="route.name === 'group'">
+        <AddGroupDialog :group-id="(route.params.id as string)" />
+      </template>
+      <template v-if="route.name === 'app'">app links</template>
     </template>
   </Navbar>
 
@@ -17,6 +21,7 @@
 <script setup lang="ts">
 import Navbar from '@/components/layout/navbar.vue';
 import MainDrawer from '@/components/layout/drawers/main-drawer/index.vue';
+import AddGroupDialog from '@/components/dialogs/add-group-dialog.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

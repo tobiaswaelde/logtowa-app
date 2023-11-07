@@ -39,7 +39,7 @@
 import GroupListItem from './groups-list-item.vue';
 import AppListItem from './app-list-item.vue';
 import { IconChevronUp, IconFolder, IconFolderOpen } from '@tabler/icons-vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import compareBy from 'compare-by';
 import { App } from '@/types/app';
 import { Group } from '@/types/group';

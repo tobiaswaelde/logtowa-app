@@ -11,28 +11,33 @@
         </v-row>
       </div>
       <div v-else>
-        <v-row v-if="children.length > 0">
-          <v-col :cols="12">
-            <h2 class="text-h6">Groups</h2>
-          </v-col>
-          <v-col
-            v-for="group of children"
-            :key="group.id"
-            :cols="12"
-            :md="6"
-            :xl="4"
-          >
-            <GroupItem :group="group" />
-          </v-col>
-        </v-row>
-        <v-row v-if="apps.length > 0">
-          <v-col :cols="12">
-            <h2 class="text-h6">Apps</h2>
-          </v-col>
-          <v-col v-for="app in apps" :key="app.id" :cols="12" :md="6" :xl="4">
-            <AppItem :app="app" />
-          </v-col>
-        </v-row>
+        <div v-if="children.length > 0 || apps.length > 0">
+          <v-row v-if="children.length > 0">
+            <v-col :cols="12">
+              <h2 class="text-h6">Groups</h2>
+            </v-col>
+            <v-col
+              v-for="group of children"
+              :key="group.id"
+              :cols="12"
+              :md="6"
+              :xl="4"
+            >
+              <GroupItem :group="group" />
+            </v-col>
+          </v-row>
+          <v-row v-if="apps.length > 0">
+            <v-col :cols="12">
+              <h2 class="text-h6">Apps</h2>
+            </v-col>
+            <v-col v-for="app in apps" :key="app.id" :cols="12" :md="6" :xl="4">
+              <AppItem :app="app" />
+            </v-col>
+          </v-row>
+        </div>
+        <div v-else>
+          <em>No groups or apps yet.</em>
+        </div>
       </div>
     </v-container>
   </v-main>
@@ -42,12 +47,12 @@
 import GroupsBreadcrumb from '@/components/layout/breadcrumbs/groups-breadcrumb.vue';
 import GroupItem from '@/components/ui/groups/group-item.vue';
 import AppItem from '@/components/ui/apps/app-item.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUpdated, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { Group } from '../../types/group';
-import { App } from '../../types/app';
-import { useGroupsStore } from '../../store/groups';
 import compareBy from 'compare-by';
+import { Group } from '@/types/group';
+import { App } from '@/types/app';
+import { useGroupsStore } from '@/store/groups';
 
 const route = useRoute();
 const id = computed(() => route.params.id as string);
@@ -69,7 +74,9 @@ const update = async () => {
 };
 
 onMounted(() => {
-  console.log('mounted');
+  update();
+});
+onUpdated(() => {
   update();
 });
 </script>

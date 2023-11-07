@@ -1,4 +1,4 @@
-import { CreateGroupDto, Group } from '@/types/group';
+import { CreateGroupDto, Group, UpdateGroupDto } from '@/types/group';
 import { useHttp } from '@/composables/http';
 import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
@@ -31,13 +31,13 @@ export const useGroupsStore = defineStore('groups', () => {
     }
   };
 
-  const getGroup = async (parentId: string) => {
+  const getGroup = async (id: string) => {
     try {
-      const res = await http.get<Group>(`/api/groups/${parentId}`);
+      const res = await http.get<Group>(`/api/groups/${id}`);
 
       DELAY && (await wait(DELAY));
 
-      groups.set(parentId, res.data);
+      groups.set(id, res.data);
 
       return res.data;
     } catch (err) {
@@ -74,6 +74,17 @@ export const useGroupsStore = defineStore('groups', () => {
       throw new Error('Something went wrong.');
     }
   };
+  const updateGroup = async (id: string, data: UpdateGroupDto) => {
+    try {
+      const res = await http.patch<Group>(`/api/groups/${id}`, data);
+      const updatedGroup = res.data;
+
+      groups.set(updatedGroup.id, updatedGroup);
+      return updatedGroup;
+    } catch (err) {
+      throw new Error('Something went wrong.');
+    }
+  };
   //#endregion
 
   return {
@@ -84,5 +95,6 @@ export const useGroupsStore = defineStore('groups', () => {
     getGroup,
     // crud
     createGroup,
+    updateGroup,
   };
 });

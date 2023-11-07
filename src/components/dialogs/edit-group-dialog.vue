@@ -1,13 +1,13 @@
 <template>
-  <v-tooltip text="Add Group" location="bottom">
+  <v-tooltip text="Edit Group" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="state.open = true">
-        <IconFolderPlus />
+        <IconEdit />
       </v-btn>
 
       <v-dialog v-model="state.open" persistent :max-width="500">
         <v-card :loading="state.loading">
-          <v-card-title>Create Group</v-card-title>
+          <v-card-title>Edit Group</v-card-title>
           <v-divider />
           <v-card-text>
             <v-row>
@@ -51,13 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import { IconExclamationCircle, IconFolderPlus } from '@tabler/icons-vue';
+import { IconExclamationCircle, IconEdit } from '@tabler/icons-vue';
 import { reactive, watch } from 'vue';
-import { CreateGroupDto } from '../../types/group';
-import { useGroupsStore } from '../../store/groups';
+import { UpdateGroupDto } from '../../types/group';
 import { useRouter } from 'vue-router';
+import { useGroupsStore } from '../../store/groups';
+import { onBeforeMount } from 'vue';
 
-const props = defineProps<{ groupId?: string }>();
+const props = defineProps<{ id: string }>();
 
 const router = useRouter();
 const groupsStore = useGroupsStore();
@@ -68,25 +69,44 @@ const state = reactive<{
   error: string | null;
 }>({ open: false, loading: false, error: null });
 
-const data = reactive<CreateGroupDto>({ name: '', parent: props.groupId });
+const data = reactive<UpdateGroupDto>({ name: '', parent: undefined });
 
-watch([props], () => {
-  data.parent = props.groupId;
+const updateData = async () => {
+  const group = await groupsStore.getGroup(props.id);
+  if (group) {
+    data.name = group.name;
+    data.parent = group.parent?.id;
+  }
+};
+
+watch([props], async () => {
+  console.log('UPDATE DATA');
+  const group = await groupsStore.getGroup(props.id);
+  if (group) {
+    data.name = group.name;
+    data.parent = group.parent?.id;
+  }
+});
+
+onBeforeMount(async () => {
+  await updateData();
 });
 
 const handleClose = () => {
   state.open = false;
   state.loading = false;
   state.error = null;
-  data.name = '';
-  data.parent = props.groupId;
+  updateData();
 };
-
 const handleSave = async () => {
   state.loading = true;
   try {
-    const createdGroup = await groupsStore.createGroup({ ...data });
-    router.push({ name: 'group', params: { id: createdGroup.id } });
+    const updatedGroup = await groupsStore.updateGroup(props.id, data);
+    router.replace({
+      name: 'group',
+      params: { id: updatedGroup.id },
+      force: true,
+    });
 
     handleClose();
 

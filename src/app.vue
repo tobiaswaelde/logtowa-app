@@ -1,6 +1,8 @@
 <template>
   <v-app>
-    <router-view />
+    <Suspense>
+      <router-view />
+    </Suspense>
   </v-app>
 </template>
 

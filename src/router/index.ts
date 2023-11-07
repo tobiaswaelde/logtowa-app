@@ -3,41 +3,51 @@ import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '',
-    name: 'index',
-    redirect: { name: 'dashboard', replace: true },
-  },
-  {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: () =>
-      import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index.vue'),
-  },
-  {
-    path: '/groups',
+    path: '/',
+    component: () => import('@/layouts/default.vue'),
     children: [
       {
         path: '',
-        name: 'groups',
-        component: () =>
-          import(/* webpackChunkName: "groups" */ '@/views/groups/index.vue'),
+        name: 'index',
+        redirect: { name: 'dashboard', replace: true },
       },
       {
-        path: ':id',
-        name: 'group',
+        path: '/dashboard',
+        name: 'dashboard',
         component: () =>
-          import(/* webpackChunkName: "group" */ '@/views/groups/[id].vue'),
+          import(
+            /* webpackChunkName: "dashboard" */ '@/views/dashboard/index.vue'
+          ),
       },
-    ],
-  },
-  {
-    path: '/apps',
-    children: [
       {
-        path: ':id',
-        name: 'app',
-        component: () =>
-          import(/* webpackChunkName: "app" */ '@/views/apps/[id].vue'),
+        path: '/groups',
+        children: [
+          {
+            path: '',
+            name: 'groups',
+            component: () =>
+              import(
+                /* webpackChunkName: "groups" */ '@/views/groups/index.vue'
+              ),
+          },
+          {
+            path: ':id',
+            name: 'group',
+            component: () =>
+              import(/* webpackChunkName: "group" */ '@/views/groups/[id].vue'),
+          },
+        ],
+      },
+      {
+        path: '/apps',
+        children: [
+          {
+            path: ':id',
+            name: 'app',
+            component: () =>
+              import(/* webpackChunkName: "app" */ '@/views/apps/[id].vue'),
+          },
+        ],
       },
     ],
   },

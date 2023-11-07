@@ -23,6 +23,7 @@
   "devDependencies": {
     "@babel/types": "^7.21.4",
     "@types/node": "^18.15.0",
+    "@vite-pwa/assets-generator": "^0.0.10",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "eslint": "^8.0.0",
@@ -30,6 +31,7 @@
     "typescript": "^5.0.0",
     "unplugin-fonts": "^1.0.3",
     "vite": "^4.2.0",
+    "vite-plugin-pwa": "^0.16.7",
     "vite-plugin-vuetify": "^1.0.0",
     "vue-tsc": "^1.2.0"
   }

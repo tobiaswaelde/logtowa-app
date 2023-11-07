@@ -23,7 +23,7 @@ const items = computed(() => {
       for (const x of path) {
         items.push({
           title: x.name,
-          to: { name: 'groups', params: { id: x.id } },
+          to: { name: 'group', params: { id: x.id } },
         });
       }
     }

@@ -85,6 +85,17 @@ export const useGroupsStore = defineStore('groups', () => {
       throw new Error('Something went wrong.');
     }
   };
+  const deleteGroup = async (id: string) => {
+    try {
+      const res = await http.delete<Group>(`/api/groups/${id}`);
+      const deletedGroup = res.data;
+
+      groups.delete(deletedGroup.id);
+      return deletedGroup;
+    } catch (err) {
+      throw new Error('Something went wrong.');
+    }
+  };
   //#endregion
 
   return {
@@ -96,5 +107,6 @@ export const useGroupsStore = defineStore('groups', () => {
     // crud
     createGroup,
     updateGroup,
+    deleteGroup,
   };
 });

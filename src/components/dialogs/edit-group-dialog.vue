@@ -12,7 +12,12 @@
           <v-card-text>
             <v-row>
               <v-col :cols="12" v-if="state.error">
-                <v-alert type="error" variant="elevated" :title="state.error">
+                <v-alert
+                  type="error"
+                  variant="elevated"
+                  density="compact"
+                  :title="state.error"
+                >
                   <template v-slot:prepend>
                     <IconExclamationCircle />
                   </template>
@@ -52,11 +57,10 @@
 
 <script setup lang="ts">
 import { IconExclamationCircle, IconEdit } from '@tabler/icons-vue';
-import { reactive, watch } from 'vue';
-import { UpdateGroupDto } from '../../types/group';
+import { onBeforeMount, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { useGroupsStore } from '../../store/groups';
-import { onBeforeMount } from 'vue';
+import { UpdateGroupDto } from '@/types/group';
+import { useGroupsStore } from '@/store/groups';
 
 const props = defineProps<{ id: string }>();
 

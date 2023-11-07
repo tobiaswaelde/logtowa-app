@@ -1,0 +1,7 @@
+.v-overlay:has(.v-overlay__scrim) {
+	backdrop-filter: blur(5px);
+
+	.v-overlay__scrim {
+		background: #000 !important;
+	}
+}

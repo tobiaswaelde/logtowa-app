@@ -11,11 +11,29 @@ import 'vuetify/styles';
 // Composables
 import { createVuetify } from 'vuetify';
 
+// components
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+import {
+  VDataTable,
+  VDataTableServer,
+  VDataTableVirtual,
+} from 'vuetify/labs/VDataTable';
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
+
 import { COLORS } from '../config/colors';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   ssr: false,
+  directives,
+  components: {
+    ...components,
+    VDataTable,
+    VDataTableServer,
+    VDataTableVirtual,
+    VSkeletonLoader,
+  },
 
   theme: {
     defaultTheme: 'dark',

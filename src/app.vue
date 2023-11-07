@@ -1,7 +1,9 @@
 <template>
   <v-app>
-    <router-view />
+    <Suspense>
+      <router-view />
+    </Suspense>
   </v-app>
 </template>
 
-<script setup lang="ts"></script>
+<script lang="ts" setup></script>

@@ -17,12 +17,11 @@
         <log-table-row :item="item" />
       </template>
     </v-data-table-server>
-
-    <scroll-to-top-button :visible="tableScrolled" @click="scrollToTop" />
   </div>
 </template>
 
 <script setup lang="ts">
+import LogTableRow from './log-table-row.vue';
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
@@ -95,8 +94,5 @@ watch([tableRef], () => {
   });
 });
 
-const scrollToTop = () => {
-  tableWrapper.value?.scroll({ top: 0, behavior: 'smooth' });
-};
 //#endregion
 </script>

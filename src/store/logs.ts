@@ -184,7 +184,7 @@ export const useLogs = defineStore('logs-store', () => {
   };
   //#endregion
 
-  watch([appId.value], () => {
+  watch([appId], () => {
     if (appId.value) {
       reconnect();
       getLogCount();

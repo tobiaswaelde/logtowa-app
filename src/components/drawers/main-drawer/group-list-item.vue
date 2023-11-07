@@ -54,10 +54,12 @@ const props = defineProps<{
 const name = computed(() => props.group.name);
 const children = computed(
   () =>
-    groups.get(props.value)?.children.sort(compareBy({ key: 'name' })) ?? [],
+    groups.get(props.value)?.children.toSorted(compareBy({ key: 'name' })) ??
+    [],
 );
 const apps = computed(
-  () => groups.get(props.value)?.apps.sort(compareBy({ key: 'name' })) ?? [],
+  () =>
+    groups.get(props.value)?.apps.toSorted(compareBy({ key: 'name' })) ?? [],
 );
 
 onBeforeMount(async () => {

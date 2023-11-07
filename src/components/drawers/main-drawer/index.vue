@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer :width="300" v-model="appStore.drawerOpen">
+  <v-navigation-drawer :width="300" permanent v-model="appStore.drawerOpen">
     <v-list v-model:opened="open" density="comfortable">
       <v-list-item title="Dashboard" to="/">
         <template v-slot:prepend>
@@ -34,10 +34,10 @@ import { compareBy } from 'compare-by';
 import GroupListItem from './group-list-item.vue';
 
 const appStore = useAppStore();
-const groupsStore = useGroups();
+const { groups: groupsMap } = useGroups();
 
 const groups = computed(() =>
-  Array.from(groupsStore.groups.values())
+  Array.from(groupsMap.values())
     .filter((x) => !x.parent)
     .sort(compareBy({ key: 'name' })),
 );

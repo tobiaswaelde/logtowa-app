@@ -79,7 +79,9 @@ const handleSave = async () => {
     parent: group.value?.id,
   });
   if (createdGroup) {
-    router.push(`/groups/${createdGroup.id}`);
+    // router.push(`/groups/${createdGroup.id}`);
+    console.log(createdGroup);
+    router.push({ name: 'group', params: { id: createdGroup.id } });
     handleClose();
   } else {
     error.value = true;

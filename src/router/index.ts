@@ -19,33 +19,18 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/groups',
-    name: 'groups',
     children: [
       {
         path: '',
-        name: 'groups-list',
-        component: () => import('@/layouts/groups.vue'),
-        children: [
-          {
-            path: '',
-            name: 'groups-list-view',
-            component: () =>
-              import(/* webpackChunkName: "groups" */ '@/views/groups.vue'),
-          },
-        ],
+        name: 'groups',
+        component: () =>
+          import(/* webpackChunkName: "groups" */ '@/views/groups.vue'),
       },
       {
         path: ':id',
         name: 'group',
-        component: () => import('@/layouts/group.vue'),
-        children: [
-          {
-            path: '',
-            name: 'group-view',
-            component: () =>
-              import(/* webpackChunkName: "group" */ '@/views/group.vue'),
-          },
-        ],
+        component: () =>
+          import(/* webpackChunkName: "group" */ '@/views/group.vue'),
       },
     ],
   },
@@ -56,15 +41,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: ':id',
         name: 'app',
-        component: () => import('@/layouts/app.vue'),
-        children: [
-          {
-            path: '',
-            name: 'app-view',
-            component: () =>
-              import(/* webpackChunkName: "app" */ '@/views/app.vue'),
-          },
-        ],
+        component: () =>
+          import(/* webpackChunkName: "app" */ '@/views/app.vue'),
       },
     ],
   },

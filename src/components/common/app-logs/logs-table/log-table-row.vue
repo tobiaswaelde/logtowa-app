@@ -50,6 +50,7 @@
 
 <script setup lang="ts">
 import moment from 'moment';
+import LogLevelChip from '../../project-log/log-level-chip.vue';
 import { LogMessage } from '../../../../types/log';
 import { storeToRefs } from 'pinia';
 import { useLogs } from '../../../../store/logs';

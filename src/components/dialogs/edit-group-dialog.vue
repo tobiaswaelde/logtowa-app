@@ -86,11 +86,7 @@ const updateData = async () => {
 
 watch([props], async () => {
   console.log('UPDATE DATA');
-  const group = await groupsStore.getGroup(props.id);
-  if (group) {
-    data.name = group.name;
-    data.parent = group.parent?.id;
-  }
+  await updateData();
 });
 
 onBeforeMount(async () => {

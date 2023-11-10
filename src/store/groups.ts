@@ -68,6 +68,8 @@ export const useGroupsStore = defineStore('groups', () => {
       const res = await http.post<Group>(`/api/groups`, data);
       const createdGroup = res.data;
 
+      DELAY && (await wait(DELAY));
+
       groups.set(createdGroup.id, createdGroup);
       return createdGroup;
     } catch (err) {
@@ -79,6 +81,8 @@ export const useGroupsStore = defineStore('groups', () => {
       const res = await http.patch<Group>(`/api/groups/${id}`, data);
       const updatedGroup = res.data;
 
+      DELAY && (await wait(DELAY));
+
       groups.set(updatedGroup.id, updatedGroup);
       return updatedGroup;
     } catch (err) {
@@ -89,6 +93,8 @@ export const useGroupsStore = defineStore('groups', () => {
     try {
       const res = await http.delete<Group>(`/api/groups/${id}`);
       const deletedGroup = res.data;
+
+      DELAY && (await wait(DELAY));
 
       groups.delete(deletedGroup.id);
       return deletedGroup;

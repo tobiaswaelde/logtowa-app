@@ -37,3 +37,14 @@ export const getRetentionSeconds = (retentionType: RetentionType) => {
       return null;
   }
 };
+
+export const getRetentionTypeFromSeconds = (seconds: number): RetentionType => {
+  for (const retentionItem of RETENTION_ITEMS) {
+    const retentionSeconds = getRetentionSeconds(retentionItem.value);
+    if (retentionSeconds && seconds === retentionSeconds) {
+      return retentionItem.value;
+    }
+  }
+
+  return 'custom';
+};

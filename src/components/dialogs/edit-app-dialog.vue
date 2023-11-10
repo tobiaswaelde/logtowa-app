@@ -1,13 +1,13 @@
 <template>
-  <v-tooltip text="Create App" location="bottom">
+  <v-tooltip text="Edit App" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="state.open = true">
-        <IconCubePlus />
+        <IconEdit />
       </v-btn>
 
       <v-dialog v-model="state.open" persistent :max-width="500">
         <v-card :loading="state.loading">
-          <v-card-title>Create App</v-card-title>
+          <v-card-title>Edit App</v-card-title>
           <v-divider />
           <v-card-text>
             <v-row>
@@ -96,18 +96,19 @@
 </template>
 
 <script setup lang="ts">
-import { IconCubePlus, IconExclamationCircle } from '@tabler/icons-vue';
-import { reactive, ref, watch } from 'vue';
-import { CreateAppDto } from '@/types/app';
+import { IconEdit, IconExclamationCircle } from '@tabler/icons-vue';
+import { reactive, ref, watch, onBeforeMount } from 'vue';
+import { UpdateAppDto } from '@/types/app';
 import {
   RetentionType,
   RETENTION_ITEMS,
   getRetentionSeconds,
+  getRetentionTypeFromSeconds,
 } from '@/types/log-retention';
 import { useRouter } from 'vue-router';
 import { useAppsStore } from '@/store/apps';
 
-const props = defineProps<{ groupId: string }>();
+const props = defineProps<{ id: string }>();
 
 const router = useRouter();
 const appsStore = useAppsStore();
@@ -119,15 +120,10 @@ const state = reactive<{
 }>({ open: false, loading: false, error: null });
 
 const retentionType = ref<RetentionType>('1-year');
-const data = reactive<CreateAppDto>({
+const data = reactive<UpdateAppDto>({
   name: '',
   retentionSeconds: 60 * 60 * 24 * 365,
   repoUrl: '',
-  group: props.groupId,
-});
-
-watch([props], () => {
-  data.group = props.groupId;
 });
 
 watch([retentionType], () => {
@@ -135,20 +131,38 @@ watch([retentionType], () => {
     getRetentionSeconds(retentionType.value) ?? data.retentionSeconds;
 });
 
+const updateData = async () => {
+  const app = await appsStore.getApp(props.id);
+  if (app) {
+    data.name = app.name;
+    data.repoUrl = app.repoUrl;
+    retentionType.value = getRetentionTypeFromSeconds(app.retentionSeconds);
+  }
+};
+
+watch([props], async () => {
+  await updateData();
+});
+
+onBeforeMount(async () => {
+  await updateData();
+});
+
 const handleClose = () => {
   state.open = false;
   state.loading = false;
   state.error = null;
-  data.name = '';
-  data.repoUrl = '';
-  data.group = props.groupId;
+  updateData();
 };
-
 const handleSave = async () => {
   state.loading = true;
   try {
-    const createdApp = await appsStore.createApp({ ...data });
-    router.push({ name: 'app', params: { id: createdApp.id } });
+    const updatedApp = await appsStore.updateApp(props.id, data);
+    router.replace({
+      name: 'app',
+      params: { id: updatedApp.id },
+      force: true,
+    });
 
     handleClose();
 

@@ -11,7 +11,9 @@
         <EditGroupDialog :id="(route.params.id as string)" />
         <DeleteGroupDialog :id="(route.params.id as string)" />
       </template>
-      <template v-if="route.name === 'app'">app links</template>
+      <template v-if="route.name === 'app'">
+        <EditAppDialog :id="(route.params.id as string)" />
+      </template>
     </template>
   </Navbar>
 
@@ -26,6 +28,7 @@ import MainDrawer from '@/components/layout/drawers/main-drawer/index.vue';
 import AddAppDialog from '@/components/dialogs/add-app-dialog.vue';
 import AddGroupDialog from '@/components/dialogs/add-group-dialog.vue';
 import EditGroupDialog from '@/components/dialogs/edit-group-dialog.vue';
+import EditAppDialog from '@/components/dialogs/edit-app-dialog.vue';
 import DeleteGroupDialog from '@/components/dialogs/delete-group-dialog.vue';
 import { useRoute } from 'vue-router';
 

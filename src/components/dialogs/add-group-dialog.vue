@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip text="Add Group" location="bottom">
+  <v-tooltip text="Create Group" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="state.open = true">
         <IconFolderPlus />
@@ -31,6 +31,7 @@
                   density="compact"
                   label="Name"
                   hint="The name of the group"
+                  persistent-hint
                   required
                   :maxlength="255"
                 />

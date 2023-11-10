@@ -31,6 +31,7 @@
                   density="compact"
                   label="Name"
                   hint="The name of the group"
+                  persistent-hint
                   required
                   :maxlength="255"
                 />

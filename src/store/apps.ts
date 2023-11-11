@@ -11,9 +11,9 @@ export const useAppsStore = defineStore('apps', () => {
   const http = useHttp();
   const { findGroupPath } = useGroupsStore();
 
-  const findProjectPath = (project: App): (Group | App)[] | null => {
-    const groupPath = findGroupPath(project.group.id);
-    return [...groupPath, project];
+  const findAppPath = (app: App): (Group | App)[] | null => {
+    const groupPath = findGroupPath(app.group.id);
+    return [...groupPath, app];
   };
 
   const getApp = async (id: string) => {
@@ -47,7 +47,7 @@ export const useAppsStore = defineStore('apps', () => {
   //#endregion
 
   return {
-    findProjectPath,
+    findAppPath,
     getApp,
     createApp,
     updateApp,

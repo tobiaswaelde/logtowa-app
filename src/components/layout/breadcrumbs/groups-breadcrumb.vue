@@ -1,7 +1,7 @@
 <template>
   <v-breadcrumbs :items="items" density="compact">
     <template v-slot:divider>
-      <IconChevronRight :size="16" />
+      <IconChevronRight :size="18" />
     </template>
   </v-breadcrumbs>
 </template>

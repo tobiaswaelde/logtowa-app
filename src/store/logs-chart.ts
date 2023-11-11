@@ -1,15 +1,14 @@
+import { BarChartData, ChartTimespan } from './../types/chart-data';
 import { defineStore } from 'pinia';
 import { useHttp } from '../composables/http';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { ChartTimespan, PieChartData } from '../types/chart-data';
-import { wait } from 'run-in-sequence';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
 
-export const useLogLevelsChartStore = defineStore('log-levels-chart', () => {
+export const useLogsChartStore = defineStore('logs-chart', () => {
   const http = useHttp();
 
-  const chartData = ref<PieChartData | null>(null);
+  const chartData = ref<BarChartData | null>(null);
 
   const loading = ref<boolean>(false);
   const timespan = ref<ChartTimespan>('hour');
@@ -18,11 +17,8 @@ export const useLogLevelsChartStore = defineStore('log-levels-chart', () => {
   const loadData = async () => {
     loading.value = true;
     try {
-      const url = `/api/charts/levels/${timespan.value}`;
-      const res = await http.get<PieChartData>(url);
-
-      DELAY && (await wait(DELAY));
-
+      const url = `/api/charts/logs/${timespan.value}`;
+      const res = await http.get<BarChartData>(url);
       chartData.value = res.data;
     } catch (err) {
       chartData.value = null;
@@ -68,7 +64,6 @@ export const useLogLevelsChartStore = defineStore('log-levels-chart', () => {
     chartData,
     loading,
     timespan,
-    timer,
     loadData,
   };
 });

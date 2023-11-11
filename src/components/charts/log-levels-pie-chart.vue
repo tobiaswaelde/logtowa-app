@@ -22,13 +22,14 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          width: 100%;
         "
       >
         <div v-if="loading || !chartData">
           <v-progress-circular indeterminate :size="50" />
         </div>
 
-        <div v-else>
+        <div v-else style="width: 100%">
           <ApexCharts
             type="donut"
             :height="400"
@@ -61,11 +62,11 @@
 
 <script setup lang="ts">
 import ApexCharts from 'vue3-apexcharts';
-import { COLORS } from '@/config/colors';
-import { getColorFromLevel } from '@/util/color';
-import { useLogLevelsChartStore } from '../../store/log-levels-chart';
 import { storeToRefs } from 'pinia';
 import { onBeforeMount } from 'vue';
+import { COLORS } from '@/config/colors';
+import { getColorFromLevel } from '@/util/color';
+import { useLogLevelsChartStore } from '@/store/log-levels-chart';
 
 const logLevelsChartStore = useLogLevelsChartStore();
 const { chartData, timespan, loading } = storeToRefs(logLevelsChartStore);

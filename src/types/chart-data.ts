@@ -1,4 +1,4 @@
-export type ChartDuration = 'hour' | 'day' | 'month';
+export type ChartTimespan = 'hour' | 'day' | 'month';
 
 export type PieChartData = {
   labels: string[];

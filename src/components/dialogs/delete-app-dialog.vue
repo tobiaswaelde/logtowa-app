@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip text="Delete Group" location="bottom">
+  <v-tooltip text="Delete App" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" @click="state.open = true">
         <IconTrash />
@@ -7,7 +7,7 @@
 
       <v-dialog v-model="state.open" :max-width="500">
         <v-card :loading="state.loading">
-          <v-card-title>Delete Group</v-card-title>
+          <v-card-title>Delete App</v-card-title>
           <v-divider />
           <v-card-text>
             <v-row>
@@ -25,7 +25,8 @@
               </v-col>
 
               <v-col :cols="12">
-                Dou you really want to delete the group?
+                Dou you really want to delete the app? This will also delete all
+                saved logs of the app.
               </v-col>
             </v-row>
           </v-card-text>
@@ -45,14 +46,14 @@
 
 <script setup lang="ts">
 import { IconExclamationCircle, IconTrash } from '@tabler/icons-vue';
-import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { useGroupsStore } from '@/store/groups';
+import { useAppsStore } from '../../store/apps';
+import { reactive } from 'vue';
 
 const props = defineProps<{ id: string }>();
 
 const router = useRouter();
-const groupsStore = useGroupsStore();
+const appsStore = useAppsStore();
 
 const state = reactive<{
   open: boolean;
@@ -68,16 +69,12 @@ const handleClose = () => {
 const handleDelete = async () => {
   state.loading = true;
   try {
-    const deletedGroup = await groupsStore.deleteGroup(props.id);
-    if (deletedGroup.parent) {
-      router.replace({
-        name: 'group',
-        params: { id: deletedGroup.parent.id },
-        force: true,
-      });
-    } else {
-      router.replace({ name: 'groups', force: true });
-    }
+    const deletedApp = await appsStore.deleteApp(props.id);
+    router.replace({
+      name: 'group',
+      params: { id: deletedApp.group.id },
+      force: true,
+    });
 
     handleClose();
 

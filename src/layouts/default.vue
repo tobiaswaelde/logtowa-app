@@ -13,6 +13,7 @@
       </template>
       <template v-if="route.name === 'app'">
         <EditAppDialog :id="(route.params.id as string)" />
+        <DeleteAppDialog :id="(route.params.id as string)" />
       </template>
     </template>
   </Navbar>
@@ -30,6 +31,7 @@ import AddGroupDialog from '@/components/dialogs/add-group-dialog.vue';
 import EditGroupDialog from '@/components/dialogs/edit-group-dialog.vue';
 import EditAppDialog from '@/components/dialogs/edit-app-dialog.vue';
 import DeleteGroupDialog from '@/components/dialogs/delete-group-dialog.vue';
+import DeleteAppDialog from '@/components/dialogs/delete-app-dialog.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

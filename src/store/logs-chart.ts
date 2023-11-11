@@ -2,6 +2,7 @@ import { BarChartData, ChartTimespan } from './../types/chart-data';
 import { defineStore } from 'pinia';
 import { useHttp } from '../composables/http';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { wait } from 'run-in-sequence';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
 
@@ -19,6 +20,9 @@ export const useLogsChartStore = defineStore('logs-chart', () => {
     try {
       const url = `/api/charts/logs/${timespan.value}`;
       const res = await http.get<BarChartData>(url);
+
+      DELAY && (await wait(DELAY));
+
       chartData.value = res.data;
     } catch (err) {
       chartData.value = null;

@@ -30,31 +30,19 @@ export const useAppsStore = defineStore('apps', () => {
 
   //#region CRUD
   const createApp = async (data: CreateAppDto) => {
-    try {
-      const res = await http.post<App>(`/api/apps`, data);
-      DELAY && (await wait(DELAY));
-      return res.data;
-    } catch (err) {
-      throw new Error('Something went wrong.');
-    }
+    const res = await http.post<App>(`/api/apps`, data);
+    DELAY && (await wait(DELAY));
+    return res.data;
   };
   const updateApp = async (id: string, data: UpdateAppDto) => {
-    try {
-      const res = await http.patch<App>(`/api/apps/${id}`, data);
-      DELAY && (await wait(DELAY));
-      return res.data;
-    } catch (err) {
-      throw new Error('Something went wrong.');
-    }
+    const res = await http.patch<App>(`/api/apps/${id}`, data);
+    DELAY && (await wait(DELAY));
+    return res.data;
   };
   const deleteApp = async (id: string) => {
-    try {
-      const res = await http.delete<App>(`/api/apps/${id}`);
-      DELAY && (await wait(DELAY));
-      return res.data;
-    } catch (err) {
-      throw new Error('Something went wrong.');
-    }
+    const res = await http.delete<App>(`/api/apps/${id}`);
+    DELAY && (await wait(DELAY));
+    return res.data;
   };
   //#endregion
 

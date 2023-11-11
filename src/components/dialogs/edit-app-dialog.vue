@@ -168,7 +168,7 @@ const handleSave = async () => {
 
     state.error = null;
   } catch (err: any) {
-    state.error = err.message;
+    state.error = 'Something went wrong.';
   } finally {
     state.loading = false;
   }

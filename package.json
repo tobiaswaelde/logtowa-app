@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",
+    "@types/deep-equal": "^1.0.4",
     "@types/node": "^18.15.0",
     "@vite-pwa/assets-generator": "^0.0.10",
     "@vitejs/plugin-vue": "^4.0.0",

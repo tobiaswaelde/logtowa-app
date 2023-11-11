@@ -1273,6 +1273,11 @@
   dependencies:
     undici-types "~5.26.4"
 
+"@types/qs@^6.9.10":
+  version "6.9.10"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.10.tgz#0af26845b5067e1c9a622658a51f60a3934d51e8"
+  integrity sha512-3Gnx08Ns1sEoCrWssEgTSJs/rsT2vhGP+Ja9cnnk9k4ALxinORlQneLXFeFKOTJMOeZUFD1s7w+w2AphTpvzZw==
+
 "@types/resolve@1.17.1":
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.17.1.tgz#3afd6ad8967c77e4376c598a82ddd58f46ec45d6"
@@ -3486,6 +3491,13 @@ punycode@^2.1.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
+
+qs@^6.11.2:
+  version "6.11.2"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.2.tgz#64bea51f12c1f5da1bc01496f48ffcff7c69d7d9"
+  integrity sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==
+  dependencies:
+    side-channel "^1.0.4"
 
 queue-microtask@^1.2.2:
   version "1.2.3"

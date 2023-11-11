@@ -1,15 +1,18 @@
 import { defineStore } from 'pinia';
 import { useHttp } from '../composables/http';
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { BarChartData, ChartTimespan } from '../types/chart-data';
 import { wait } from 'run-in-sequence';
+import qs from 'qs';
+import { useLogsFilter } from './log-filter';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
 
-export const useAppLogsChart = defineStore('app-logs-chart', () => {
+export const useAppLogsChartStore = defineStore('app-logs-chart', () => {
   const http = useHttp();
 
   const appId = ref<string | null>(null);
+  const { filter } = useLogsFilter();
   const chartData = ref<BarChartData | null>(null);
 
   const loading = ref<boolean>(false);
@@ -31,5 +34,49 @@ export const useAppLogsChart = defineStore('app-logs-chart', () => {
     } finally {
       loading.value = false;
     }
+  };
+
+  watch([appId], () => {
+    loadData();
+  });
+
+  watch([timespan], () => {
+    updateTimer();
+    loadData();
+  });
+
+  const resetTimer = () => {
+    timer.value && clearInterval(timer.value);
+  };
+  const updateTimer = () => {
+    resetTimer();
+    if (timespan.value === 'hour') {
+      timer.value = setInterval(() => {
+        loadData();
+      }, 1000 * 15); // every 15s
+    } else if (timespan.value === 'day') {
+      timer.value = setInterval(() => {
+        loadData();
+      }, 1000 * 60); // every 60s
+    } else if (timespan.value === 'month') {
+      timer.value = setInterval(() => {
+        loadData();
+      }, 1000 * 120); // every 120s
+    }
+  };
+
+  onMounted(() => {
+    updateTimer();
+  });
+  onBeforeUnmount(() => {
+    resetTimer();
+  });
+
+  return {
+    appId,
+    chartData,
+    loading,
+    timespan,
+    loadData,
   };
 });

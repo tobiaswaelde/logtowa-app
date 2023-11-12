@@ -34,6 +34,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
   //#region socket
   const connected = ref<boolean>(false);
   const listening = ref<boolean>(false);
+  const socketError = ref<boolean>(false);
 
   const connect = async () => {
     return new Promise((resolve, reject) => {
@@ -50,9 +51,11 @@ export const useAppLogsStore = defineStore('app-logs', () => {
       })
         .on('error', (err) => {
           logSocket('connection error', err);
+          socketError.value = true;
           reject(err);
         })
         .on('connect', () => {
+          socketError.value = false;
           connected.value = true;
           logSocket('connected');
 
@@ -62,6 +65,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
           resolve(true);
         })
         .on('disconnect', () => {
+          socketError.value = true;
           stopListening();
           connected.value = false;
           logSocket('disconnected');
@@ -216,6 +220,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
     // socket
     connected,
     listening,
+    socketError,
     connect,
     disconnect,
     startListening,

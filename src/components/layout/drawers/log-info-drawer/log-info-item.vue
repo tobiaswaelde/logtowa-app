@@ -11,7 +11,7 @@
       align-items: center;
     "
   >
-    <template v-if="loading">
+    <template v-if="loading || value === undefined">
       <template v-if="type === 'message'">
         <v-skeleton-loader width="100%" type="paragraph" color="background" />
       </template>
@@ -26,25 +26,26 @@
     <template v-else>
       <template v-if="type === 'date'">
         <span class="font-monospace">
-          {{ moment(value).format('YYYY-MM-DD') }}
+          {{ value ? moment(value).format('YYYY-MM-DD') : 'null' }}
         </span>
       </template>
       <template v-else-if="type === 'time'">
         <span class="font-monospace">
-          {{ moment(value).format('HH:mm:ss.SSS') }}
+          {{ value ? moment(value).format('HH:mm:ss.SSS') : 'null' }}
         </span>
       </template>
       <template v-else-if="type === 'level'">
-        <LogLevelChip :value="value" />
+        <LogLevelChip v-if="value !== null" :value="value" />
+        <span v-else class="font-monospace">null</span>
       </template>
       <template v-else-if="type === 'scope'">
         <span class="font-monospace">
-          {{ value }}
+          {{ value ?? 'null' }}
         </span>
       </template>
       <template v-else-if="type === 'message'">
         <span class="font-monospace">
-          {{ value }}
+          {{ value ?? 'null' }}
         </span>
       </template>
       <template v-else-if="type === 'meta'">
@@ -63,14 +64,26 @@
 import LogLevelChip from '@/components/ui/chips/log-level-chip.vue';
 import moment from 'moment';
 
-type LogInfoType = 'date' | 'time' | 'level' | 'scope' | 'message' | 'meta';
+type LogInfoType =
+  | {
+      type: 'date' | 'time' | 'level' | 'scope' | 'message';
+      value?: string | null;
+    }
+  // | {
+  //     type: 'level';
+  //     value?: string;
+  //   }
+  | {
+      type: 'meta';
+      value?: object | string | null;
+    };
 
-const props = defineProps<{
-  loading?: boolean;
-  type: LogInfoType;
-  title: string;
-  value: any | null;
-}>();
+defineProps<
+  {
+    loading?: boolean;
+    title: string;
+  } & LogInfoType
+>();
 </script>
 
 <style lang="scss">

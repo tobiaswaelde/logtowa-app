@@ -24,8 +24,6 @@ image="${repoPath}/${name}"
 
 # sign in to docker registry
 echo "try docker sign in"
-echo "Username: $username"
-echo "Username: $password"
 if [ -n "$username" ] && [ -n "$password" ]; then
   echo "$password" | docker login -u "$username" --password-stdin
 else

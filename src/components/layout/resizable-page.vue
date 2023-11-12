@@ -40,7 +40,6 @@ const handleResize = () => {
 };
 
 onUpdated(() => {
-  console.log('UPDATED');
   dynamicHeight.value = calculateDynamicHeight();
 });
 </script>

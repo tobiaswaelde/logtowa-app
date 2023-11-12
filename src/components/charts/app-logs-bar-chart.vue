@@ -17,12 +17,11 @@
       width: 100%;
     "
   >
-    <div v-if="loading || !chartData">
+    <div v-if="!chartData && loading">
       <v-progress-circular indeterminate :size="32" />
     </div>
-    <div v-else style="width: 100%">
+    <div v-else-if="chartData" style="width: 100%">
       <ApexCharts
-        v-if="chartData"
         type="bar"
         :height="130"
         :options="{

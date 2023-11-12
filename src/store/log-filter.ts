@@ -6,6 +6,11 @@ import { useStorage } from '@vueuse/core';
 
 const getDefaultFilters = () => ({ ...DEFAUL_LOGS_FILTER });
 
+const serializer = {
+  read: (value: string) => (value ? JSON.parse(value) : getDefaultFilters()),
+  write: (value: LogsFilter) => JSON.stringify({ levels: value.levels }),
+};
+
 export const useLogsFilterStore = defineStore('logs-filter', () => {
   const drawerOpen = ref<boolean>(false);
   const isDefaultFilter = ref<boolean>(true);
@@ -14,16 +19,7 @@ export const useLogsFilterStore = defineStore('logs-filter', () => {
     'logs-filter',
     getDefaultFilters(),
     localStorage,
-    {
-      serializer: {
-        read(value) {
-          return value ? JSON.parse(value) : getDefaultFilters();
-        },
-        write(value) {
-          return JSON.stringify({ levels: value.levels });
-        },
-      },
-    },
+    { mergeDefaults: true, serializer: serializer },
   );
 
   const update = () => {

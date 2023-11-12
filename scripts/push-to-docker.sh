@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # CONFIG
-repoPath="/tobiaswaelde"
+repoPath="tobiaswaelde"
 
 get_env() {
   env_value=$(printenv "$1")
@@ -13,7 +13,7 @@ get_env() {
 }
 
 # get environment variables
-registry=$(get_env "REGISTRY_DOMAIN" "docker.com")
+registry=$(get_env "REGISTRY_DOMAIN" "")
 username=$(get_env "DOCKER_USERNAME" "")
 password=$(get_env "DOCKER_PASSWORD" "")
 

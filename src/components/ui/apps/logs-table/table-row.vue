@@ -10,9 +10,12 @@
       {{ item.scope }}
     </td>
     <td :class="tdClass">
-      <span style="text-wrap: nowrap; text-overflow: ellipsis">{{
-        item.message
-      }}</span>
+      <span
+        style="text-wrap: nowrap; text-overflow: ellipsis"
+        class="font-monospace"
+      >
+        {{ item.message }}
+      </span>
     </td>
   </tr>
 </template>

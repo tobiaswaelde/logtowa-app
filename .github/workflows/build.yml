@@ -17,14 +17,12 @@ jobs:
 
       - name: SonarQube Check
         uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: './'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: tobiaswaelde/jenkins-agent:node-lts
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -41,7 +39,7 @@ jobs:
         run: yarn build
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: tobiaswaelde/jenkins-agent:node-lts
 
     steps:
       - name: Checkout Repository

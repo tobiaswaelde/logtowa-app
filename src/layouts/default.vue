@@ -1,9 +1,7 @@
 <template>
   <Navbar>
     <template v-slot:actions>
-      <!-- <template v-if="route.name === 'dashboard'">
-        dashboard links
-      </template> -->
+      <template v-if="route.name === 'dashboard'"> </template>
       <template v-if="route.name === 'groups'">
         <AddGroupDialog />
       </template>

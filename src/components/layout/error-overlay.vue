@@ -4,15 +4,6 @@
       <v-card-title>Errors</v-card-title>
       <v-divider />
       <v-card-text>
-        <!-- The following errors need to be fixed in order to display the app: -->
-        <!-- <div style="padding-left: 20px">
-          <ul class="font-monospace">
-            <li v-for="error of errors" :key="error" class="font-monospace">
-              {{ error }}
-            </li>
-          </ul>
-        </div> -->
-
         <v-row>
           <v-col :cols="12" v-for="error of errors" :key="error">
             <ErrorMessage title="Error" :text="error" debug />

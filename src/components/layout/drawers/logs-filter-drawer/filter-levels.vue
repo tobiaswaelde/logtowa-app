@@ -27,7 +27,8 @@ import LogLevelChip from '@/components/ui/chips/log-level-chip.vue';
 import { useLogsFilterStore } from '@/store/log-filter';
 import { getColorFromLevel } from '@/util/color';
 import { LOG_LEVELS } from '@/config/levels';
+import { storeToRefs } from 'pinia';
 
 const logsFilterStore = useLogsFilterStore();
-const { filter } = logsFilterStore;
+const { filter } = storeToRefs(logsFilterStore);
 </script>

@@ -38,6 +38,7 @@ export const useLogsFilterStore = defineStore('logs-filter', () => {
 
   const reset = () => {
     filter.value = getDefaultFilters();
+    update();
   };
 
   return {

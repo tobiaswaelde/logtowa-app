@@ -11,7 +11,8 @@
 
 <script setup lang="ts">
 import { useLogsFilterStore } from '@/store/log-filter';
+import { storeToRefs } from 'pinia';
 
 const logsFilterStore = useLogsFilterStore();
-const { filter } = logsFilterStore;
+const { filter } = storeToRefs(logsFilterStore);
 </script>

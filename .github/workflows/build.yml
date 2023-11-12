@@ -41,7 +41,6 @@ jobs:
 
   deploy:
     runs-on: tobiaswaelde/jenkins-agent:node-lts
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -51,6 +50,9 @@ jobs:
           chmod +x ./scripts/push-to-docker.sh
           ./scripts/push-to-docker.sh
         env:
+          DOCKER_DRIVER: overlay2
+          DOCKER_HOST: tcp://docker:2375/
+          DOCKER_TLS_CERTDIR: ''
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 

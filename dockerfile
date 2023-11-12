@@ -43,7 +43,7 @@ COPY --from=builder /app/. .
 
 # fix environment variables
 RUN apk add --no-cache --upgrade bash
-RUN ["chmod", "+x", "./entrypoint.sh"]
+# RUN ["chmod", "+x", "./entrypoint.sh"]
 # ENTRYPOINT ["./entrypoint.sh"]
 
 USER app

@@ -20,6 +20,7 @@
     "roboto-fontface": "*",
     "run-in-sequence": "^1.0.5",
     "sass": "^1.69.5",
+    "socket.io-client": "^4.7.2",
     "vue": "^3.2.0",
     "vue-router": "^4.0.0",
     "vue3-apexcharts": "^1.4.4",

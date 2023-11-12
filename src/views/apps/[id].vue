@@ -15,8 +15,18 @@ import LogsFilterDrawer from '@/components/layout/drawers/logs-filter-drawer/ind
 import AppBreadcrumb from '@/components/layout/breadcrumbs/app-breadcrumb.vue';
 import AppLogsBarChart from '@/components/charts/app-logs-bar-chart.vue';
 import { useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { computed, onBeforeMount, onBeforeUpdate } from 'vue';
+import { useAppLogsStore } from '@/store/app-logs';
 
 const route = useRoute();
 const id = computed(() => route.params.id as string);
+
+const appLogsStore = useAppLogsStore();
+
+onBeforeMount(() => {
+  appLogsStore.appId = id.value;
+});
+onBeforeUpdate(() => {
+  appLogsStore.appId = id.value;
+});
 </script>

@@ -14,6 +14,7 @@
         <DeleteGroupDialog :id="(route.params.id as string)" />
       </template>
       <template v-if="route.name === 'app'">
+        <ToggleListeningButton />
         <ToggleFilterDrawerButton />
         <EditAppDialog :id="(route.params.id as string)" />
         <DeleteAppDialog :id="(route.params.id as string)" />
@@ -36,6 +37,7 @@ import EditAppDialog from '@/components/dialogs/edit-app-dialog.vue';
 import DeleteGroupDialog from '@/components/dialogs/delete-group-dialog.vue';
 import DeleteAppDialog from '@/components/dialogs/delete-app-dialog.vue';
 import ToggleFilterDrawerButton from '@/components/layout/drawers/logs-filter-drawer/toggle-button.vue';
+import ToggleListeningButton from '@/components/ui/apps/toggle-listening-button.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

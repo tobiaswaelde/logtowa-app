@@ -42,11 +42,9 @@ export const useLogsFilterStore = defineStore('logs-filter', () => {
 
   const reset = () => {
     const json = getDefaultFilters();
-    console.log('reset', DEFAUL_LOGS_FILTER, json);
-
-    filter.levels = DEFAUL_LOGS_FILTER.levels.toSorted(undefined);
-    filter.scope = DEFAUL_LOGS_FILTER.scope;
-    filter.message = DEFAUL_LOGS_FILTER.message;
+    filter.levels = json.levels.toSorted(undefined);
+    filter.scope = json.scope;
+    filter.message = json.message;
   };
 
   return {

@@ -13,7 +13,6 @@ get_env() {
 }
 
 # get environment variables
-registry=$(get_env "REGISTRY_DOMAIN" "")
 username=$(get_env "DOCKER_USERNAME" "")
 password=$(get_env "DOCKER_PASSWORD" "")
 
@@ -21,12 +20,12 @@ password=$(get_env "DOCKER_PASSWORD" "")
 version=`npm pkg get version | cut -d"\"" -f 2`
 name=`npm pkg get name | cut -d"\"" -f 2`
 
-image="${registry}${repoPath}/${name}"
+image="${repoPath}/${name}"
 
 # sign in to docker registry
 echo "try docker sign in"
 if [ -n "$username" ] && [ -n "$password" ]; then
-  docker login -u "$username" -p "$password" "$registry"
+  echo "$password" | docker login -u "$username" --password-stdin
 else
   echo "Sign in to docker failed."
   exit 1

@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
-    location="end"
     temporary
+    location="end"
     :elevation="3"
     :width="350"
     v-model="drawerOpen"

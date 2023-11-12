@@ -9,8 +9,20 @@ import { wait } from 'run-in-sequence';
 import { Socket, io } from 'socket.io-client';
 import { computed, ref, watch } from 'vue';
 import { useStorage } from '@vueuse/core';
+import { COLORS } from '@/config/colors';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DEV = Boolean(import.meta.env.DEV);
+
+const logSocket = (message: string, ...args: any[]) => {
+  if (!DEV) return;
+  console.log(
+    '%c[socket] ' + `%c${message} ` + `%c${args.join(' ')}`,
+    `color:${COLORS.blue}`,
+    'color:unset',
+    `color:${COLORS.orange}`,
+  );
+};
 
 export const useAppLogsStore = defineStore('app-logs', () => {
   const http = useHttp();
@@ -25,7 +37,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
 
   const connect = async () => {
     return new Promise((resolve, reject) => {
-      console.log('[socket] try to connect', appId.value);
+      logSocket('try to connect', appId.value);
       if (!appId.value || connected.value) resolve(false);
 
       socket.value = io(import.meta.env.VITE_API_BASE_URL, {
@@ -37,12 +49,12 @@ export const useAppLogsStore = defineStore('app-logs', () => {
         },
       })
         .on('error', (err) => {
-          console.log('[socket] connection error', err);
+          logSocket('connection error', err);
           reject(err);
         })
         .on('connect', () => {
           connected.value = true;
-          console.log('[socket] connected');
+          logSocket('connected');
 
           if (listening.value) {
             startListening();
@@ -51,7 +63,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
         })
         .on('disconnect', () => {
           connected.value = false;
-          console.log('[socket] disconnected');
+          logSocket('disconnected');
         });
       socket.value.connect();
     });
@@ -71,12 +83,12 @@ export const useAppLogsStore = defineStore('app-logs', () => {
   };
 
   const startListening = () => {
-    console.log('[socket] start listening');
+    logSocket('start listening');
     if (socket.value && connected.value && appId.value) {
-      console.log('[socket] subscribe');
+      logSocket('subscribe');
       socket.value.off(appId.value);
       socket.value.on(appId.value, (newLog: LogMessage) => {
-        console.log('[socket] message received');
+        logSocket('message received');
         addLog(newLog);
         logsCount.value++;
       });
@@ -85,12 +97,12 @@ export const useAppLogsStore = defineStore('app-logs', () => {
   };
   const stopListening = () => {
     if (socket.value && appId.value) {
-      console.log('[socket] unsubscribe');
+      logSocket('unsubscribe');
       socket.value.off(appId.value);
     }
     socket.value?.offAny();
 
-    console.log('[socket] stop listening');
+    logSocket('stop listening');
     listening.value = false;
   };
 

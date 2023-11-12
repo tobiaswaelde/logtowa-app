@@ -39,7 +39,7 @@ RUN adduser -S app -u 1001
 # COPY --from=builder /app/node_modules ./node_modules
 # COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/. .
-COPY entrypoint.sh .
+# COPY entrypoint.sh .
 
 # fix environment variables
 RUN apk add --no-cache --upgrade bash

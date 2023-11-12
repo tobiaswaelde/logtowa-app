@@ -1,5 +1,15 @@
 {
   "name": "logtowa-app",
+  "description": "LogTowa Frontend",
+  "keywords": [
+    "logging",
+    "dashboard",
+    "logs",
+    "log tower",
+    "log filtering",
+    "log sorting",
+    "log management"
+  ],
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {

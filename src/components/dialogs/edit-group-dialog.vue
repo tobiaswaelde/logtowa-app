@@ -12,7 +12,7 @@
           <v-card-text>
             <v-row>
               <v-col :cols="12" v-if="state.error">
-                <ErrorMessage :value="state.error" />
+                <ErrorMessage :title="state.error" />
               </v-col>
 
               <v-col :cols="12">

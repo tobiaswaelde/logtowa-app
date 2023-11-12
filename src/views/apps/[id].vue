@@ -2,18 +2,26 @@
   <LogsFilterDrawer />
 
   <v-main>
-    <AppBreadcrumb :id="id" />
-    <v-divider />
-    <AppLogsBarChart :id="id" />
-    <v-divider />
-    <div>app: {{ id }}</div>
+    <ResizablePage :min-height="200">
+      <template v-slot:prepend>
+        <AppBreadcrumb :id="id" />
+        <v-divider />
+        <AppLogsBarChart :id="id" />
+        <v-divider />
+      </template>
+      <template v-slot:dynamic="{ height }">
+        <AppLogsTable :table-height="height" />
+      </template>
+    </ResizablePage>
   </v-main>
 </template>
 
 <script setup lang="ts">
+import ResizablePage from '@/components/layout/resizable-page.vue';
 import LogsFilterDrawer from '@/components/layout/drawers/logs-filter-drawer/index.vue';
 import AppBreadcrumb from '@/components/layout/breadcrumbs/app-breadcrumb.vue';
 import AppLogsBarChart from '@/components/charts/app-logs-bar-chart.vue';
+import AppLogsTable from '@/components/ui/apps/logs-table/index.vue';
 import { useRoute } from 'vue-router';
 import { computed, onBeforeMount, onBeforeUpdate } from 'vue';
 import { useAppLogsStore } from '@/store/app-logs';

@@ -10,6 +10,7 @@
   <div
     style="
       height: 130px;
+      min-height: 130px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -50,11 +51,6 @@
             theme: 'dark',
             shared: false,
             intersect: true,
-            // fixed: {
-            //   enabled: false,
-            //   position: 'bottomRight',
-            //   offsetY: 130,
-            // },
           },
           stroke: {
             colors: chartData.levels.map((level) => getColorFromLevel(level)),

@@ -7,6 +7,9 @@ import { LogMessage } from '../types/log';
 import { SortItem } from '../types/vuetify';
 import qs from 'qs';
 import { Paginated } from '../types/pagination';
+import { wait } from 'run-in-sequence';
+
+const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
 
 export const useAppLogsStore = defineStore('app-logs', () => {
   const http = useHttp();
@@ -136,6 +139,9 @@ export const useAppLogsStore = defineStore('app-logs', () => {
       const res = await http.get<number>(
         `/api/apps/${appId.value}/logs/count?${q}`,
       );
+
+      DELAY && (await wait(DELAY));
+
       logsCount.value = res.data;
     } catch (err) {
       console.log(err);
@@ -159,6 +165,8 @@ export const useAppLogsStore = defineStore('app-logs', () => {
       const res = await http.get<Paginated<LogMessage>>(
         `/api/apps/${appId.value}/logs?${q}`,
       );
+
+      DELAY && (await wait(DELAY));
 
       logs.value = res.data.items;
       logsCount.value = res.data.meta.itemCount;

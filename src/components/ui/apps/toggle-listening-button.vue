@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { IconPlayerPause, IconPlayerPlay } from '@tabler/icons-vue';
-import { useAppLogsStore } from '../../../store/app-logs';
+import { useAppLogsStore } from '@/store/app-logs';
 import { storeToRefs } from 'pinia';
 
 const appLogsStore = useAppLogsStore();

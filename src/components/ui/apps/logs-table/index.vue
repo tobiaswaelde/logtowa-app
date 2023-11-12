@@ -6,10 +6,10 @@
     fixed-header
     fixed-footer
     :items-length="logsCount"
-    :items="logs.slice(0, pagination.itemsPerPage)"
+    :items="logs.slice(0, itemsPerPage)"
     item-value="id"
-    v-model:page="pagination.page"
-    v-model:items-per-page="pagination.itemsPerPage"
+    v-model:page="page"
+    v-model:items-per-page="itemsPerPage"
     v-model:sort-by="sortOptions"
     :loading="loading"
     :items-per-page-options="[10, 15, 20, 25, 50, 100]"
@@ -34,7 +34,7 @@ const PAGINATION_HEIGHT = 48;
 defineProps<{ tableHeight: number }>();
 
 const appLogsStore = useAppLogsStore();
-const { logs, logsCount, pagination, sortOptions, loading } =
+const { logs, logsCount, page, itemsPerPage, sortOptions, loading } =
   storeToRefs(appLogsStore);
 
 const HEADERS = [

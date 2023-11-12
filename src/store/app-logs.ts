@@ -1,13 +1,14 @@
-import { defineStore } from 'pinia';
 import { useHttp } from '@/composables/http';
-import { computed, reactive, ref, watch } from 'vue';
-import { Socket, io } from 'socket.io-client';
-import { useLogsFilterStore } from './log-filter';
 import { LogMessage } from '@/types/log';
 import { SortItem } from '@/types/vuetify';
-import qs from 'qs';
 import { Paginated } from '@/types/pagination';
+import { useLogsFilterStore } from './log-filter';
+import { defineStore } from 'pinia';
+import qs from 'qs';
 import { wait } from 'run-in-sequence';
+import { Socket, io } from 'socket.io-client';
+import { computed, ref, watch } from 'vue';
+import { useStorage } from '@vueuse/core';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
 
@@ -75,6 +76,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
       console.log('[socket] subscribe');
       socket.value.off(appId.value);
       socket.value.on(appId.value, (newLog: LogMessage) => {
+        console.log('[socket] message received');
         addLog(newLog);
         logsCount.value++;
       });
@@ -112,10 +114,9 @@ export const useAppLogsStore = defineStore('app-logs', () => {
   const logsCount = ref<number>(0);
   const loading = ref<boolean>(false);
 
-  const pagination = reactive({
-    page: 1,
-    itemsPerPage: 20,
-  });
+  const page = ref<number>(1);
+  const itemsPerPage = useStorage<number>('logs-items-per-page', 20);
+
   const sortOptions = ref<SortItem[]>([{ key: 'timestamp', order: 'desc' }]);
   const sort = computed(() =>
     sortOptions.value
@@ -129,8 +130,8 @@ export const useAppLogsStore = defineStore('app-logs', () => {
   const getLogCount = async () => {
     try {
       const q = qs.stringify({
-        page: pagination.page,
-        perPage: pagination.itemsPerPage,
+        page: page.value,
+        perPage: itemsPerPage.value,
         filter: {
           scope: filter.scope ? { eq: filter.scope } : undefined,
           level: { in: filter.levels },
@@ -154,8 +155,8 @@ export const useAppLogsStore = defineStore('app-logs', () => {
       loading.value = true;
 
       const q = qs.stringify({
-        page: pagination.page,
-        perPage: pagination.itemsPerPage,
+        page: page.value,
+        perPage: itemsPerPage.value,
         filter: {
           scope: filter.scope ? { eq: filter.scope } : undefined,
           level: { in: filter.levels },
@@ -184,12 +185,12 @@ export const useAppLogsStore = defineStore('app-logs', () => {
       getLogCount();
     }
   });
-  watch([pagination], () => {
-    if (pagination.page > 1 && listening.value) {
+  watch([page], () => {
+    if (page.value > 1 && listening.value) {
       stopListening();
     }
   });
-  watch([appId, pagination, filter, sortOptions], () => {
+  watch([appId, page, itemsPerPage, filter, sortOptions], () => {
     if (appId.value) {
       loadData();
     }
@@ -205,11 +206,12 @@ export const useAppLogsStore = defineStore('app-logs', () => {
     startListening,
     stopListening,
     // data
-    pagination,
+    page,
+    itemsPerPage,
     sortOptions,
     filter,
     loading,
-    logs,
+    logs: computed(() => [...logs.value]),
     logsCount,
     getLogCount,
     loadData,

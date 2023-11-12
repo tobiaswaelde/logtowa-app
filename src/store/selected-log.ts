@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { LogMessageWithMeta } from '@/types/log';
+import { LogMessage, LogMessageWithMeta } from '@/types/log';
 import { useHttp } from '@/composables/http';
 import { wait } from 'run-in-sequence';
 
@@ -9,17 +9,23 @@ const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
 export const useSelectedLogStore = defineStore('selected-log', () => {
   const http = useHttp();
 
+  const drawerOpen = ref<boolean>(false);
+
   const loading = ref<boolean>(false);
   const error = ref<string | null>(null);
-  const log = ref<LogMessageWithMeta | null>(null);
+  const selectedLog = ref<LogMessage | LogMessageWithMeta | null>(null);
 
-  const getLog = async (id: string) => {
+  const getLog = async (log: LogMessage) => {
+    selectedLog.value = log;
+    console.log('get log:', log.id);
+
     try {
+      drawerOpen.value = true;
       loading.value = true;
 
-      const res = await http.get<LogMessageWithMeta>(`/api/logs/${id}`);
+      const res = await http.get<LogMessageWithMeta>(`/api/logs/${log.id}`);
       DELAY && (await wait(DELAY));
-      log.value = res.data;
+      selectedLog.value = res.data;
 
       error.value = null;
     } catch (err) {
@@ -29,10 +35,20 @@ export const useSelectedLogStore = defineStore('selected-log', () => {
     }
   };
 
+  const closeDrawer = () => {
+    drawerOpen.value = false;
+    selectedLog.value = null;
+    error.value = null;
+  };
+
   return {
+    // drawer
+    drawerOpen,
+    closeDrawer,
+    // data
     loading,
     error,
-    log,
+    selectedLog,
     getLog,
   };
 });

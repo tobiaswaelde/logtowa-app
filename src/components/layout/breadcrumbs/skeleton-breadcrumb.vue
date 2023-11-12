@@ -21,7 +21,7 @@ const items = Array.from(new Array(3)).map(() => '');
 </script>
 
 <style lang="scss">
-.v-skeleton-loader__text {
+.v-breadcrumbs .v-skeleton-loader__text {
   margin: 0px 0px;
 }
 </style>

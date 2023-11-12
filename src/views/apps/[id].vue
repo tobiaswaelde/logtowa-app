@@ -1,5 +1,6 @@
 <template>
   <LogsFilterDrawer />
+  <LogInfoDrawer />
 
   <v-main>
     <ResizablePage :min-height="200">
@@ -19,6 +20,7 @@
 <script setup lang="ts">
 import ResizablePage from '@/components/layout/resizable-page.vue';
 import LogsFilterDrawer from '@/components/layout/drawers/logs-filter-drawer/index.vue';
+import LogInfoDrawer from '@/components/layout/drawers/log-info-drawer/index.vue';
 import AppBreadcrumb from '@/components/layout/breadcrumbs/app-breadcrumb.vue';
 import AppLogsBarChart from '@/components/charts/app-logs-bar-chart.vue';
 import AppLogsTable from '@/components/ui/apps/logs-table/index.vue';

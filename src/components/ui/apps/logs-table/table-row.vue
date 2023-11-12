@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr @click="() => handleRowClick(item)">
     <td :class="tdClass">
       {{ getTimestamp(item.timestamp) }}
     </td>
@@ -19,14 +19,19 @@
 import LogLevelChip from '@/components/ui/chips/log-level-chip.vue';
 import moment from 'moment';
 import { LogMessage } from '@/types/log';
+import { useSelectedLogStore } from '@/store/selected-log';
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
 const props = defineProps<{ item: LogMessage }>();
-const selectedLog: any = null;
 
-const tdClass = {
-  'bg-background': props.item.id !== selectedLog?.id,
-  'bg-background-darken1': props.item.id === selectedLog?.id,
-};
+const selectedLogStore = useSelectedLogStore();
+const { selectedLog } = storeToRefs(selectedLogStore);
+
+const tdClass = computed(() => ({
+  'bg-background': props.item.id !== selectedLog.value?.id,
+  'bg-background-darken1': props.item.id === selectedLog.value?.id,
+}));
 
 const getTimestamp = (timestamp: string) => {
   const time = moment(timestamp);
@@ -36,6 +41,14 @@ const getTimestamp = (timestamp: string) => {
     return time.format('ddd, HH:mm:ss.SSS');
   } else {
     return time.format('DD.MM., HH:mm:ss.SSS');
+  }
+};
+
+const handleRowClick = (item: LogMessage) => {
+  if (item.id !== selectedLog.value?.id) {
+    selectedLogStore.getLog(item);
+  } else {
+    selectedLogStore.closeDrawer();
   }
 };
 </script>

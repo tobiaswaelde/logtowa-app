@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { DEFAUL_LOGS_FILTER, LogsFilter } from '@/types/logs-filter';
 import equal from 'deep-equal';
+import { useStorage } from '@vueuse/core';
 
 const getDefaultFilters = () => ({ ...DEFAUL_LOGS_FILTER });
 
@@ -9,42 +10,38 @@ export const useLogsFilterStore = defineStore('logs-filter', () => {
   const drawerOpen = ref<boolean>(false);
   const isDefaultFilter = ref<boolean>(true);
 
-  const filter = reactive<LogsFilter>(getDefaultFilters());
-  const mounted = ref<boolean>(false);
+  const filter = useStorage<LogsFilter>(
+    'logs-filter',
+    getDefaultFilters(),
+    localStorage,
+    {
+      serializer: {
+        read(value) {
+          return value ? JSON.parse(value) : getDefaultFilters();
+        },
+        write(value) {
+          return JSON.stringify({ levels: value.levels });
+        },
+      },
+    },
+  );
 
-  const updateDefaultFilter = () => {
+  const update = () => {
     isDefaultFilter.value = equal(
-      { ...filter, levels: filter.levels.toSorted(undefined) },
+      { ...filter.value, levels: filter.value.levels.toSorted(undefined) },
       getDefaultFilters(),
     );
   };
 
-  watch([filter], () => {
-    if (!mounted.value) return;
-    localStorage.setItem('logs-filter', JSON.stringify(filter));
-    updateDefaultFilter();
-  });
-
-  onBeforeMount(() => {
-    const value = localStorage.getItem('logs-filter');
-    if (value) {
-      const json = JSON.parse(value) as LogsFilter;
-      filter.levels = json.levels.toSorted(undefined);
-      filter.scope = json.scope;
-      filter.message = json.message;
-
-      updateDefaultFilter();
-    }
+  watch([filter.value], () => {
+    update();
   });
   onMounted(() => {
-    mounted.value = true;
+    update();
   });
 
   const reset = () => {
-    const json = getDefaultFilters();
-    filter.levels = json.levels.toSorted(undefined);
-    filter.scope = json.scope;
-    filter.message = json.message;
+    filter.value = getDefaultFilters();
   };
 
   return {

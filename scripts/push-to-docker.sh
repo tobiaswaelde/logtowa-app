@@ -38,3 +38,7 @@ docker build -t ${image}:${version} .
 # push to registry
 docker push ${image}:latest
 docker push ${image}:${version}
+
+# push readme
+cd ..
+docker pushrm ${image}

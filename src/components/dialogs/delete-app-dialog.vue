@@ -12,16 +12,7 @@
           <v-card-text>
             <v-row>
               <v-col :cols="12" v-if="state.error">
-                <v-alert
-                  type="error"
-                  variant="elevated"
-                  density="compact"
-                  :title="state.error"
-                >
-                  <template v-slot:prepend>
-                    <IconExclamationCircle />
-                  </template>
-                </v-alert>
+                <ErrorMessage :value="state.error" />
               </v-col>
 
               <v-col :cols="12">
@@ -45,7 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import { IconExclamationCircle, IconTrash } from '@tabler/icons-vue';
+import ErrorMessage from '@/components/common/error-message.vue';
+import { IconTrash } from '@tabler/icons-vue';
 import { useRouter } from 'vue-router';
 import { useAppsStore } from '@/store/apps';
 import { reactive } from 'vue';

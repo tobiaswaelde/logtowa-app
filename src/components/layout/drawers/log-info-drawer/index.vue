@@ -18,16 +18,7 @@
 
         <v-row>
           <v-col :cols="12" v-if="error">
-            <v-alert
-              type="error"
-              variant="elevated"
-              density="compact"
-              :title="error"
-            >
-              <template v-slot:prepend>
-                <IconExclamationCircle />
-              </template>
-            </v-alert>
+            <ErrorMessage :value="error" />
           </v-col>
 
           <v-col :cols="6">
@@ -84,8 +75,8 @@
 </template>
 
 <script setup lang="ts">
+import ErrorMessage from '@/components/common/error-message.vue';
 import LogInfoItem from './log-info-item.vue';
-import { IconExclamationCircle } from '@tabler/icons-vue';
 import CloseBtn from './close-button.vue';
 import { useSelectedLogStore } from '@/store/selected-log';
 import { storeToRefs } from 'pinia';

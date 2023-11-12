@@ -4,7 +4,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { BarChartData, ChartTimespan } from '../types/chart-data';
 import { wait } from 'run-in-sequence';
 import qs from 'qs';
-import { useLogsFilter } from './log-filter';
+import { useLogsFilterStore } from './log-filter';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
 
@@ -12,7 +12,7 @@ export const useAppLogsChartStore = defineStore('app-logs-chart', () => {
   const http = useHttp();
 
   const appId = ref<string | null>(null);
-  const { filter } = useLogsFilter();
+  const { filter } = useLogsFilterStore();
   const chartData = ref<BarChartData | null>(null);
 
   const loading = ref<boolean>(false);

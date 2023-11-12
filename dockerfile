@@ -40,7 +40,6 @@ RUN adduser -S app -u 1001
 # COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/. .
 COPY entrypoint.sh .
-COPY .env.production .
 
 # fix environment variables
 RUN apk add --no-cache --upgrade bash

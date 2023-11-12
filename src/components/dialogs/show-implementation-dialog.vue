@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import CopyToClipboardBtn from '@/components/common/copy-to-clipboard-button.vue';
-import { IconCode } from '@tabler/icons-vue';
+import { IconCode, IconClock } from '@tabler/icons-vue';
 import { reactive, onBeforeMount, onUpdated } from 'vue';
 import {
   getNodeImplementation,

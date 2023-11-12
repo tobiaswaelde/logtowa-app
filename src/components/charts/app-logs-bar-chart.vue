@@ -69,10 +69,10 @@
 
 <script setup lang="ts">
 import ApexCharts from 'vue3-apexcharts';
-import { useAppLogsChartStore } from '../../store/app-logs-chart';
+import { useAppLogsChartStore } from '@/store/app-logs-chart';
 import { storeToRefs } from 'pinia';
 import { onMounted, watch } from 'vue';
-import { getColorFromLevel } from '../../util/color';
+import { getColorFromLevel } from '@/util/color';
 
 const props = defineProps<{ id: string }>();
 

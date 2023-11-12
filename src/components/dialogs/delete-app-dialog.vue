@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { IconExclamationCircle, IconTrash } from '@tabler/icons-vue';
 import { useRouter } from 'vue-router';
-import { useAppsStore } from '../../store/apps';
+import { useAppsStore } from '@/store/apps';
 import { reactive } from 'vue';
 
 const props = defineProps<{ id: string }>();

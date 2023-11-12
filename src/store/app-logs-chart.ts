@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { useHttp } from '../composables/http';
+import { useHttp } from '@/composables/http';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { BarChartData, ChartTimespan } from '../types/chart-data';
+import { BarChartData, ChartTimespan } from '@/types/chart-data';
 import { wait } from 'run-in-sequence';
 import qs from 'qs';
 import { useLogsFilterStore } from './log-filter';

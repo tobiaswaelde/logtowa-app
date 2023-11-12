@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue';
-import { DEFAUL_LOGS_FILTER, LogsFilter } from '../types/logs-filter';
+import { DEFAUL_LOGS_FILTER, LogsFilter } from '@/types/logs-filter';
 import equal from 'deep-equal';
 
 const getDefaultFilters = () => ({ ...DEFAUL_LOGS_FILTER });

@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
-import { useHttp } from '../composables/http';
+import { useHttp } from '@/composables/http';
 import { computed, reactive, ref, watch } from 'vue';
 import { Socket, io } from 'socket.io-client';
 import { useLogsFilterStore } from './log-filter';
-import { LogMessage } from '../types/log';
-import { SortItem } from '../types/vuetify';
+import { LogMessage } from '@/types/log';
+import { SortItem } from '@/types/vuetify';
 import qs from 'qs';
-import { Paginated } from '../types/pagination';
+import { Paginated } from '@/types/pagination';
 import { wait } from 'run-in-sequence';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { useHttp } from '../composables/http';
-import { App, CreateAppDto, UpdateAppDto } from '../types/app';
+import { useHttp } from '@/composables/http';
+import { App, CreateAppDto, UpdateAppDto } from '@/types/app';
 import { useGroupsStore } from './groups';
-import { Group } from '../types/group';
+import { Group } from '@/types/group';
 import { wait } from 'run-in-sequence';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);

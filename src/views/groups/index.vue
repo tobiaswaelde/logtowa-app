@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import GroupsBreadcrumb from '@/components/layout/breadcrumbs/groups-breadcrumb.vue';
 import GroupItem from '@/components/ui/groups/group-item.vue';
-import { useGroupsStore } from '../../store/groups';
+import { useGroupsStore } from '@/store/groups';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import compareBy from 'compare-by';

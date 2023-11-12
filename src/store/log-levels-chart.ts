@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { useHttp } from '../composables/http';
+import { useHttp } from '@/composables/http';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { ChartTimespan, PieChartData } from '../types/chart-data';
+import { ChartTimespan, PieChartData } from '@/types/chart-data';
 import { wait } from 'run-in-sequence';
 
 const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);

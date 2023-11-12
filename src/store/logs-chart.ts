@@ -1,6 +1,6 @@
-import { BarChartData, ChartTimespan } from './../types/chart-data';
+import { BarChartData, ChartTimespan } from '@/types/chart-data';
 import { defineStore } from 'pinia';
-import { useHttp } from '../composables/http';
+import { useHttp } from '@/composables/http';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { wait } from 'run-in-sequence';
 

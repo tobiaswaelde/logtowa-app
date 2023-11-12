@@ -22,7 +22,7 @@ import {
 import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
 
 // theme
-import { COLORS } from '../config/colors';
+import { COLORS } from '@/config/colors';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({

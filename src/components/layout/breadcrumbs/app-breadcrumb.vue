@@ -12,7 +12,7 @@ import SkeletonBreadcrumb from './skeleton-breadcrumb.vue';
 import { IconChevronRight } from '@tabler/icons-vue';
 import { useAppsStore } from '@/store/apps';
 import { computed, ref, onMounted, watch } from 'vue';
-import { App } from '../../../types/app';
+import { App } from '@/types/app';
 
 const props = defineProps<{ id: string }>();
 

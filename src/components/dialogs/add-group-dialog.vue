@@ -59,8 +59,8 @@
 <script setup lang="ts">
 import { IconExclamationCircle, IconFolderPlus } from '@tabler/icons-vue';
 import { reactive, watch } from 'vue';
-import { CreateGroupDto } from '../../types/group';
-import { useGroupsStore } from '../../store/groups';
+import { CreateGroupDto } from '@/types/group';
+import { useGroupsStore } from '@/store/groups';
 import { useRouter } from 'vue-router';
 
 const props = defineProps<{ groupId?: string }>();

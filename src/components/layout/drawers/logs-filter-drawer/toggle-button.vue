@@ -1,6 +1,6 @@
 <template>
   <v-btn icon @click="drawerOpen = !drawerOpen">
-    <v-badge color="error" dot v-if="!isDefaultFilter">
+    <v-badge color="info" dot v-if="!isDefaultFilter">
       <IconFilter />
     </v-badge>
     <IconFilter v-else />

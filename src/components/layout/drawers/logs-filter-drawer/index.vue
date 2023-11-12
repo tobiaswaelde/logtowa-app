@@ -18,7 +18,7 @@
       <v-col :cols="12">
         <v-btn
           width="100%"
-          color="error"
+          color="info"
           variant="outlined"
           @click="() => logsFilterStore.reset()"
         >

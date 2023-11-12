@@ -18,7 +18,7 @@
 
         <v-row>
           <v-col :cols="12" v-if="error">
-            <ErrorMessage :value="error" />
+            <ErrorMessage :title="error" />
           </v-col>
 
           <v-col :cols="6">

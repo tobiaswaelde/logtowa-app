@@ -10,7 +10,9 @@
       {{ item.scope }}
     </td>
     <td :class="tdClass">
-      {{ item.message }}
+      <span style="text-wrap: nowrap; text-overflow: ellipsis">{{
+        item.message
+      }}</span>
     </td>
   </tr>
 </template>

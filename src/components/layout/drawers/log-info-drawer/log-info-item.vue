@@ -69,10 +69,6 @@ type LogInfoType =
       type: 'date' | 'time' | 'level' | 'scope' | 'message';
       value?: string | null;
     }
-  // | {
-  //     type: 'level';
-  //     value?: string;
-  //   }
   | {
       type: 'meta';
       value?: object | string | null;

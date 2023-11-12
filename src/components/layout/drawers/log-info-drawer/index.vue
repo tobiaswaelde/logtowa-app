@@ -17,12 +17,12 @@
         </v-row>
 
         <v-row>
-          <v-col :cols="12">
+          <v-col :cols="12" v-if="error">
             <v-alert
               type="error"
               variant="elevated"
               density="compact"
-              title="Something went wrong"
+              :title="error"
             >
               <template v-slot:prepend>
                 <IconExclamationCircle />

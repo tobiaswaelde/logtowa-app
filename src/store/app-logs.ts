@@ -62,6 +62,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
           resolve(true);
         })
         .on('disconnect', () => {
+          stopListening();
           connected.value = false;
           logSocket('disconnected');
         });
@@ -69,6 +70,8 @@ export const useAppLogsStore = defineStore('app-logs', () => {
     });
   };
   const disconnect = () => {
+    stopListening();
+
     if (socket.value) {
       if (socket.value.connected) {
         socket.value.disconnect();

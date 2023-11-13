@@ -36,16 +36,16 @@ services:
     ports:
       - '3000:3000'
     environment:
-      VITE_APP_TITLE: LogTowa # optional
-      VITE_API_BASE_URL: http://localhost:3001
-      VITE_API_TOKEN: secret
-      VITE_SOCKET_TOKEN: secret
+      APP_TITLE: LogTowa # optional
+      API_BASE_URL: http://localhost:3001
+      API_TOKEN: secret
+      SOCKET_TOKEN: secret
 ```
 
 ## Environment
-| Variable          | Description                               | Required | Default Value |
-| ----------------- | ----------------------------------------- | -------- | ------------- |
-| VITE_APP_TITLE    | Custom app title.                         | no       | LogTowa       |
-| VITE_API_BASE_URL | The API URL.                              | yes      |               |
-| VITE_API_TOKEN    | Token to authenticate API requests.       | yes      |               |
-| VITE_SOCKET_TOKEN | Token to authenticate socket connections. | yes      |               |
+| Variable     | Description                               | Required | Default Value |
+| ------------ | ----------------------------------------- | -------- | ------------- |
+| APP_TITLE    | Custom app title.                         | no       | LogTowa       |
+| API_BASE_URL | The API URL.                              | yes      |               |
+| API_TOKEN    | Token to authenticate API requests.       | yes      |               |
+| SOCKET_TOKEN | Token to authenticate socket connections. | yes      |               |

@@ -23,5 +23,5 @@ import { useAppStore } from '@/store/app';
 
 const appStore = useAppStore();
 
-const appTitle = import.meta.env.VITE_APP_TITLE || 'LogTowa';
+const appTitle = import.meta.env.APP_TITLE || 'LogTowa';
 </script>

@@ -22,14 +22,14 @@ const open = ref<boolean>(true);
 const errors = ref<string[]>([]);
 
 onBeforeMount(() => {
-  if (!import.meta.env.VITE_API_BASE_URL) {
-    errors.value.push(`Environment Variable 'VITE_API_BASE_URL' is not set.`);
+  if (!import.meta.env.API_BASE_URL) {
+    errors.value.push(`Environment Variable 'API_BASE_URL' is not set.`);
   }
-  if (!import.meta.env.VITE_API_TOKEN) {
-    errors.value.push(`Environment Variable 'VITE_API_TOKEN' is not set.`);
+  if (!import.meta.env.API_TOKEN) {
+    errors.value.push(`Environment Variable 'API_TOKEN' is not set.`);
   }
-  if (!import.meta.env.VITE_SOCKET_TOKEN) {
-    errors.value.push(`Environment Variable 'VITE_SOCKET_TOKEN' is not set.`);
+  if (!import.meta.env.SOCKET_TOKEN) {
+    errors.value.push(`Environment Variable 'SOCKET_TOKEN' is not set.`);
   }
 
   open.value = errors.value.length > 0;

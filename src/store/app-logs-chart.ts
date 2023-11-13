@@ -6,7 +6,7 @@ import { wait } from 'run-in-sequence';
 import qs from 'qs';
 import { useLogsFilterStore } from './log-filter';
 
-const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 
 export const useAppLogsChartStore = defineStore('app-logs-chart', () => {
   const http = useHttp();

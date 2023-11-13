@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
 import { wait } from 'run-in-sequence';
 
-const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 
 export const useGroupsStore = defineStore('groups', () => {
   const http = useHttp();

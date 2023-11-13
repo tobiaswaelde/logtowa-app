@@ -1,5 +1,5 @@
-const apiEndpoint = import.meta.env.VITE_API_BASE_URL;
-const apiToken = import.meta.env.VITE_API_TOKEN;
+const apiEndpoint = import.meta.env.API_BASE_URL;
+const apiToken = import.meta.env.API_TOKEN;
 
 export const getNodeImplementation = (appKey: string) => {
   return `import { LogTowaTransport } from 'logtowa-winston-transport';

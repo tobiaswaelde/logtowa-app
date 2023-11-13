@@ -2,9 +2,9 @@ import axios from 'axios';
 
 export const useHttp = () => {
   const http = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: import.meta.env.API_BASE_URL,
     headers: {
-      Authorization: import.meta.env.VITE_API_TOKEN,
+      Authorization: import.meta.env.API_TOKEN,
     },
   });
 

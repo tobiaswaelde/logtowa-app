@@ -5,7 +5,7 @@ import { useGroupsStore } from './groups';
 import { Group } from '@/types/group';
 import { wait } from 'run-in-sequence';
 
-const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 
 export const useAppsStore = defineStore('apps', () => {
   const http = useHttp();

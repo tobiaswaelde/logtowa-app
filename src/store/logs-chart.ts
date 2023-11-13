@@ -4,7 +4,7 @@ import { useHttp } from '@/composables/http';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { wait } from 'run-in-sequence';
 
-const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 
 export const useLogsChartStore = defineStore('logs-chart', () => {
   const http = useHttp();

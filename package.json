@@ -1,6 +1,6 @@
 {
   "name": "logtowa-app",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "LogTowa Frontend",
   "keywords": [
     "logging",
@@ -21,9 +21,11 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "start": "vite preview --host --port 3000"
+    "start": "import-meta-env -e .env.local -x .env.example && vite preview --host --port 3000"
   },
   "dependencies": {
+    "@import-meta-env/cli": "^0.6.8",
+    "@import-meta-env/unplugin": "^0.5.1",
     "@mdi/font": "7.0.96",
     "@tabler/icons-vue": "^2.40.0",
     "@vueuse/core": "^10.6.0",
@@ -31,6 +33,7 @@
     "axios": "^1.6.0",
     "compare-by": "^2.1.0",
     "deep-equal": "^2.2.3",
+    "dotenv": "^16.3.1",
     "moment": "^2.29.4",
     "pinia": "^2.0.23",
     "qs": "^6.11.2",
@@ -46,6 +49,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",
+    "@import-meta-env/typescript": "^0.3.2",
     "@types/deep-equal": "^1.0.4",
     "@types/node": "^18.15.0",
     "@types/qs": "^6.9.10",

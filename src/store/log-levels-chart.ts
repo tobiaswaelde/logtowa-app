@@ -4,7 +4,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { ChartTimespan, PieChartData } from '@/types/chart-data';
 import { wait } from 'run-in-sequence';
 
-const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 
 export const useLogLevelsChartStore = defineStore('log-levels-chart', () => {
   const http = useHttp();

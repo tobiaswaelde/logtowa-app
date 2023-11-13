@@ -4,7 +4,7 @@ import { LogMessage, LogMessageWithMeta } from '@/types/log';
 import { useHttp } from '@/composables/http';
 import { wait } from 'run-in-sequence';
 
-const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 
 export const useSelectedLogStore = defineStore('selected-log', () => {
   const http = useHttp();

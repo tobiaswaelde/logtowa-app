@@ -11,7 +11,7 @@ import { computed, ref, watch } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { COLORS } from '@/config/colors';
 
-const DELAY = Number(import.meta.env.VITE_DEBUG_LOADING_DELAY);
+const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 const DEV = Boolean(import.meta.env.DEV);
 
 const logSocket = (message: string, ...args: any[]) => {
@@ -41,11 +41,11 @@ export const useAppLogsStore = defineStore('app-logs', () => {
       logSocket('try to connect', appId.value);
       if (!appId.value || connected.value) resolve(false);
 
-      socket.value = io(import.meta.env.VITE_API_BASE_URL, {
+      socket.value = io(import.meta.env.API_BASE_URL, {
         autoConnect: true,
         transports: ['websocket'],
         auth: {
-          token: import.meta.env.VITE_SOCKET_TOKEN,
+          token: import.meta.env.SOCKET_TOKEN,
           appkey: appId.value,
         },
       })

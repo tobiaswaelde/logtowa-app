@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  logtowa-app:
+    container_name: logtowa-app
+    image: tobiaswaelde/logtowa-app:latest
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      VITE_APP_TITLE: LogTowa # optional
+      VITE_API_BASE_URL: http://localhost:3001
+      VITE_API_TOKEN: secret
+      VITE_SOCKET_TOKEN: secret

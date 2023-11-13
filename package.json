@@ -1,6 +1,6 @@
 {
   "name": "logtowa-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LogTowa Frontend",
   "keywords": [
     "logging",
@@ -21,7 +21,7 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "start": "vite preview --port 3000"
+    "start": "vite preview --host --port 3000"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",

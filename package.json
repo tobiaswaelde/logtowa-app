@@ -21,7 +21,8 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "start": "import-meta-env -e .env.local -x .env.example && vite preview --host --port 3000"
+    "prestart": "import-meta-env -e .env.local -x .env.example.public",
+    "start": "vite preview --host --port 3000"
   },
   "dependencies": {
     "@import-meta-env/cli": "^0.6.8",

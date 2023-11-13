@@ -17,7 +17,7 @@ export default defineConfig(({ command, mode }) => {
       vue({
         template: { transformAssetUrls },
       }),
-      importMetaEnv.vite({ env: '.env.local', example: '.env.example' }),
+      importMetaEnv.vite({ env: '.env.local', example: '.env.example.public' }),
       // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
       vuetify({
         autoImport: true,

@@ -30,8 +30,8 @@ RUN apk add curl
 WORKDIR /app
 ENV NODE_ENV production
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S app -u 1001
+# RUN addgroup -g 1001 -S nodejs
+# RUN adduser -S app -u 1001
 
 # COPY --from=builder /app/next.config.js ./
 # COPY --from=builder /app/public ./public
@@ -47,7 +47,7 @@ RUN apk add --no-cache --upgrade bash
 # RUN ["chmod", "+x", "./entrypoint.sh"]
 # ENTRYPOINT ["./entrypoint.sh"]
 
-USER app
+# USER app
 EXPOSE 3000
 
 ENV PORT 3000

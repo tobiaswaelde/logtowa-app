@@ -1,5 +1,5 @@
 const apiEndpoint = import.meta.env.API_BASE_URL;
-const apiToken = import.meta.env.API_TOKEN;
+const token = import.meta.env.SOCKET_TOKEN;
 
 export const getNodeImplementation = (appKey: string) => {
   return `import { LogTowaTransport } from 'logtowa-winston-transport';
@@ -7,13 +7,13 @@ import winston from 'winston'
 
 // This information can be found in the web UI
 const HOST = '${apiEndpoint}';
-const API_TOKEN = '${apiToken}';
+const TOKEN = '${token}';
 const APP_KEY = '${appKey}';
 
 // create the transport
 const logtowaTransport = new LogTowaTransport({
   host: HOST,
-  token: API_TOKEN,
+  token: TOKEN,
   appKey: APP_KEY,
 });
 

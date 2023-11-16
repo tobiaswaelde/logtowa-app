@@ -22,7 +22,11 @@
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "prestart": "import-meta-env -e .env.local -x .env.example.public",
-    "start": "vite preview --host --port 3000"
+    "start": "vite preview --host --port 3000",
+    "deploy": "git checkout deploy && git merge main && git push && git checkout main",
+    "deploy:major": "git checkout main && npm version major && git push && git checkout deploy && git merge main && git push && git checkout main",
+    "deploy:minor": "git checkout main && npm version minor && git push && git checkout deploy && git merge main && git push && git checkout main",
+    "deploy:patch": "git checkout main && npm version patch && git push && git checkout deploy && git merge main && git push && git checkout main"
   },
   "dependencies": {
     "@import-meta-env/cli": "^0.6.8",

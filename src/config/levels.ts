@@ -4,6 +4,7 @@ export const LOG_LEVELS = [
   'info',
   'success',
   'http',
+  'db',
   'verbose',
   'debug',
   'silly',

@@ -12,6 +12,8 @@ export const getColorFromLevel = (level: string) => {
       return COLORS.blue;
     case 'http':
       return COLORS.purple;
+    case 'db':
+      return COLORS.cyan;
     case 'verbose':
       return COLORS.text;
     case 'debug':

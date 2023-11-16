@@ -181,7 +181,7 @@ export const useAppLogsStore = defineStore('app-logs', () => {
           scope: filter.scope ? { eq: filter.scope } : undefined,
           level: { in: filter.levels },
         },
-        sort: sort.value,
+        sort: sort,
       });
       const res = await http.get<Paginated<LogMessage>>(
         `/api/apps/${appId.value}/logs?${q}`,

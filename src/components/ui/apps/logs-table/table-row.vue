@@ -1,6 +1,9 @@
 <template>
   <tr @click="() => handleRowClick(item)">
-    <td :class="tdClass">
+    <td
+      :class="tdClass"
+      :title="getTimestamp(item.timestamp) + ` (${item.ns}ns)`"
+    >
       {{ getTimestamp(item.timestamp) }}
     </td>
     <td :class="tdClass">

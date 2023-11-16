@@ -1,6 +1,7 @@
 export type LogMessage = {
   id: string;
   timestamp: string;
+  ns: number;
   level: string;
   scope: string;
   message: string;

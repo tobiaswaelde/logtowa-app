@@ -14,6 +14,17 @@ import { COLORS } from '@/config/colors';
 const DELAY = Number(import.meta.env.DEBUG_LOADING_DELAY);
 const DEV = Boolean(import.meta.env.DEV);
 
+const sortOptions: SortItem[] = [
+  { key: 'timestamp', order: 'desc' },
+  { key: 'ns', order: 'desc' },
+];
+const sort = sortOptions
+  .filter((x) => x.order !== undefined)
+  .map((x) => ({
+    field: x.key,
+    direction: x.order === 'asc' ? 'ASC' : 'DESC',
+  }));
+
 const logSocket = (message: string, ...args: any[]) => {
   if (!DEV) return;
   console.log(
@@ -135,16 +146,6 @@ export const useAppLogsStore = defineStore('app-logs', () => {
 
   const page = ref<number>(1);
   const itemsPerPage = useStorage<number>('logs-items-per-page', 20);
-
-  const sortOptions = ref<SortItem[]>([{ key: 'timestamp', order: 'desc' }]);
-  const sort = computed(() =>
-    sortOptions.value
-      .filter((x) => x.order !== undefined)
-      .map((x) => ({
-        field: x.key,
-        direction: x.order === 'asc' ? 'ASC' : 'DESC',
-      })),
-  );
 
   const getLogCount = async () => {
     try {

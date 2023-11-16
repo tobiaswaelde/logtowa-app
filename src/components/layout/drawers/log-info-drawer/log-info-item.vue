@@ -34,6 +34,11 @@
           {{ value ? moment(value).format('HH:mm:ss.SSS') : 'null' }}
         </span>
       </template>
+      <template v-else-if="type === 'ns'">
+        <span class="font-monospace">
+          {{ value }}
+        </span>
+      </template>
       <template v-else-if="type === 'level'">
         <LogLevelChip v-if="value !== null" :value="value" />
         <span v-else class="font-monospace">null</span>
@@ -68,6 +73,10 @@ type LogInfoType =
   | {
       type: 'date' | 'time' | 'level' | 'scope' | 'message';
       value?: string | null;
+    }
+  | {
+      type: 'ns';
+      value?: number;
     }
   | {
       type: 'meta';

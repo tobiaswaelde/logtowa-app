@@ -10,7 +10,6 @@
     item-value="id"
     v-model:page="page"
     v-model:items-per-page="itemsPerPage"
-    v-model:sort-by="sortOptions"
     :loading="loading"
     :items-per-page-options="[10, 15, 20, 25, 50, 100]"
     @click:row="() => {}"
@@ -34,14 +33,14 @@ const PAGINATION_HEIGHT = 48;
 defineProps<{ tableHeight: number }>();
 
 const appLogsStore = useAppLogsStore();
-const { logs, logsCount, page, itemsPerPage, sortOptions, loading } =
+const { logs, logsCount, page, itemsPerPage, loading } =
   storeToRefs(appLogsStore);
 
 const HEADERS = [
   { key: 'timestamp', title: 'Timestamp', sortable: true, width: 220 },
-  { key: 'level', title: 'Level', sortable: true, width: 120 },
-  { key: 'scope', title: 'Scope', sortable: true, width: 200 },
-  { key: 'message', title: 'Message', sortable: true, width: 'auto' },
+  { key: 'level', title: 'Level', sortable: false, width: 120 },
+  { key: 'scope', title: 'Scope', sortable: false, width: 200 },
+  { key: 'message', title: 'Message', sortable: false, width: 'auto' },
 ];
 
 const update = async () => {

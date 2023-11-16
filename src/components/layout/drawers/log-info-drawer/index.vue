@@ -23,6 +23,13 @@
 
           <v-col :cols="6">
             <LogInfoItem
+              type="level"
+              title="Level"
+              :value="selectedLog?.level"
+            />
+          </v-col>
+          <v-col :cols="6">
+            <LogInfoItem
               type="date"
               title="Date"
               :value="selectedLog?.timestamp"
@@ -35,16 +42,11 @@
               :value="selectedLog?.timestamp"
             />
           </v-col>
-
           <v-col :cols="6">
-            <LogInfoItem
-              type="level"
-              title="Level"
-              :value="selectedLog?.level"
-            />
+            <LogInfoItem type="ns" title="Time [ns]" :value="selectedLog?.ns" />
           </v-col>
 
-          <v-col :cols="6">
+          <v-col :cols="12">
             <LogInfoItem
               type="scope"
               title="Scope"

@@ -9,9 +9,6 @@
 [![Duplicated Lines (%)](https://sq.srv.tobiaswaelde.com/api/project_badges/measure?project=tobiaswaelde_cloud-logger-frontend_AYs6866NPhYnLbS8eM8p&metric=duplicated_lines_density&token=sqb_5d156e965ad4fe1bb6b2563f262cf9dc268ca7a7)](https://sq.srv.tobiaswaelde.com/dashboard?id=tobiaswaelde_cloud-logger-frontend_AYs6866NPhYnLbS8eM8p)
 <!-- #endregion -->
 
-> [!WARNING]  
-> This project is still in development. It will be usable as soon as it reaches v1.x
-
 This is the frontend of LogTowa.
 
 ### Dashboard

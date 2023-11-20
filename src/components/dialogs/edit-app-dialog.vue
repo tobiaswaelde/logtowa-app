@@ -120,7 +120,7 @@ const data = reactive<UpdateAppDto>({
 
 watch([retentionType], () => {
   data.retentionSeconds =
-    getRetentionSeconds(retentionType.value) ?? data.retentionSeconds;
+    getRetentionSeconds(retentionType.value) ?? Number(data.retentionSeconds);
 });
 
 const updateData = async () => {

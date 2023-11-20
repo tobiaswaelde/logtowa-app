@@ -35,7 +35,12 @@ export const useAppsStore = defineStore('apps', () => {
     return res.data;
   };
   const updateApp = async (id: string, data: UpdateAppDto) => {
-    const res = await http.patch<App>(`/api/apps/${id}`, data);
+    const res = await http.patch<App>(`/api/apps/${id}`, {
+      ...data,
+      retentionSeconds: data.retentionSeconds
+        ? Number(data.retentionSeconds)
+        : undefined,
+    });
     DELAY && (await wait(DELAY));
     return res.data;
   };
